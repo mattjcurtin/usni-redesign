@@ -1,7 +1,7 @@
 import proceedingsLogo from '@/assets/images/Proceedings_logo_white.png'
 
 const secondaryNav = [
-  { label: 'Current Issue', href: '/proceedings/current' },
+  { label: 'Current Issue', href: '/proceedings/apr-2026' },
   { label: 'All Issues', href: '/proceedings/all-issues' },
   { label: 'Proceedings Podcast', href: '/proceedings/podcast' },
   { label: 'Essay Contests', href: '/essay-contests' },
@@ -14,7 +14,7 @@ export default function ProceedingsHero() {
   return (
     <>
       {/* Secondary navigation */}
-      <div className="border-b-4 border-navy-boldest" style={{ backgroundColor: '#E0E0CC' }}>
+      <div className="border-b border-[#B8B49A]" style={{ backgroundColor: '#E0E0CC' }}>
         <div className="container-site">
           <div className="flex items-center justify-center h-[62px] gap-0">
             <a href="/proceedings" className="font-headline text-lg text-navy-bolder pr-6 mr-6 border-r border-navy-bolder/30 shrink-0 h-full flex items-center whitespace-nowrap">

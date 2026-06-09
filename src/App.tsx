@@ -8,6 +8,7 @@ import Donate from '@/pages/Donate'
 import ProceedingsCurrentIssue from '@/pages/ProceedingsCurrentIssue'
 import BooksAndPress from '@/pages/BooksAndPress'
 import ProceedingsArticle from '@/pages/ProceedingsArticle'
+import ProceedingsContact from '@/pages/ProceedingsContact'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/giving" element={<Giving />} />
         <Route path="/giving/donate" element={<Donate />} />
         <Route path="/proceedings/apr-2026" element={<ProceedingsCurrentIssue />} />
+        <Route path="/proceedings/contact" element={<ProceedingsContact />} />
         <Route path="/books" element={<BooksAndPress />} />
         <Route path="/proceedings/three-mefs" element={<ProceedingsArticle />} />
       </Routes>
