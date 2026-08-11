@@ -91,7 +91,7 @@ export default function ProceedingsContactContent() {
         </div>
 
         {/* Submission Guidelines alert banner */}
-        <div className="bg-[#fff8d6] border-l-4 border-[#ffaa00] flex flex-col lg:flex-row lg:items-center gap-6 px-6 py-6 lg:px-8 lg:py-8">
+        <div className="bg-[#fff8d6] border border-l-4 border-[#ffaa00] flex flex-col lg:flex-row lg:items-center gap-6 px-6 py-6 lg:px-8 lg:py-8">
           <div className="flex-1 min-w-0 flex flex-col gap-4">
             <h2 className="font-headline text-[36px] text-[#1d2535] leading-[1.2]">
               Proceedings Submission Guidelines

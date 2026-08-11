@@ -6,6 +6,7 @@ import FeaturedEvent from '@/sections/FeaturedEvent'
 import LatestNews from '@/sections/LatestNews'
 import ProceedingsMagazine from '@/sections/ProceedingsMagazine'
 import NavalHistory from '@/sections/NavalHistory'
+import FromThePress from '@/sections/FromThePress'
 import PromoRow from '@/sections/PromoRow'
 import SplitFeature from '@/sections/SplitFeature'
 import AdUnit from '@/components/ui/AdUnit'
@@ -22,10 +23,10 @@ export default function Home() {
         <div className="pt-8">
           <LatestNews />
         </div>
+        <FromThePress />
         <AdUnit />
         <ProceedingsMagazine />
         <NavalHistory />
-        <AdUnit />
         <PromoRow />
         <SplitFeature />
       </main>

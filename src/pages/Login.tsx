@@ -41,7 +41,7 @@ export default function Login() {
                 </p>
 
                 {/* Alert block */}
-                <div className="bg-[#fff8d6] border-l-4 border-[#ffaa00] px-8 py-6 flex flex-col gap-2">
+                <div className="bg-[#fff8d6] border border-l-4 border-[#ffaa00] px-8 py-6 flex flex-col gap-2">
                   <h3 className="font-headline text-[22px] text-[#1d2535] leading-[1.1]">
                     Need additional assistance?
                   </h3>

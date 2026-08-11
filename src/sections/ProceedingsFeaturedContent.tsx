@@ -60,7 +60,7 @@ export default function ProceedingsFeaturedContent() {
             title="Essay Contests"
             body="On 13 June 1878, with Commander Alfred Thayer Mahan as acting Chair, the Naval Institute adopted rules for the first essay contest — the General Prize Essay Contest. This contest continues to this day."
             ctaLabel="See the latest contests"
-            ctaHref="/proceedings/essay-contests"
+            ctaHref="/essay-contests"
           />
         </div>
       </div>

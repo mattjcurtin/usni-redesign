@@ -95,6 +95,94 @@
   .group\/nav:hover .article-link--nav {
     background-size: 100% 2px;
   }
+
+  /* ── Animated underline links ──────────────────────────────────────────
+     Two variants sharing one gradient-underline mechanic. currentColor means
+     the rule follows whatever hover colour the caller sets.
+
+     `--always` is underlined at rest and needs a keyframe animation rather
+     than a transition: a transition from 100% to 100% has nothing to animate,
+     so it could never replay. A keyframe restarts on every hover. */
+  .link-underline-hover,
+  .link-underline-always {
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+  }
+
+  /* Hidden at rest, sweeps in on hover — nav items and breadcrumbs.
+     Selector is `a.` deliberately: callers pair this with Tailwind's
+     `transition-colors`, which lives in a later layer at equal specificity and
+     would otherwise win `transition-property` and drop background-size from the
+     transition, making the underline snap instead of sweep. The element
+     qualifier outranks it; colour is folded in so nothing is lost. */
+  a.link-underline-hover {
+    background-size: 0% 1px;
+    transition: background-size 0.3s ease-out, color 0.2s ease;
+  }
+
+  a.link-underline-hover:hover {
+    background-size: 100% 1px;
+  }
+
+  /* Underlined at rest, redraws on each hover — inline links, active nav item */
+  .link-underline-always {
+    background-size: 100% 1px;
+  }
+
+  .link-underline-always:hover {
+    animation: link-underline-sweep 0.32s ease-out;
+  }
+
+  /* ── Select fields ──────────────────────────────────────────────────────
+     One chevron treatment for every <select> on the site. Replaces three
+     competing approaches (the native browser arrow, an absolutely-positioned
+     chevron div, and per-component inline background SVG), all of which sat the
+     arrow too tight to the right edge.
+
+     Element-qualified so it outranks single-class Tailwind padding utilities
+     that would otherwise win `padding-right` and re-crowd the arrow. */
+  select.select-field {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231D2535' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    /* 1rem of breathing room from the right edge, and enough reserved padding
+       that a long option label never runs under the chevron */
+    background-position: right 1rem center;
+    background-size: 1.05rem;
+    padding-right: 3rem;
+    cursor: pointer;
+  }
+
+  select.select-field:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Breadcrumb trails: every ancestor link gets the hover sweep. Applied
+     structurally so each breadcrumb component doesn't repeat the class. */
+  [aria-label='Breadcrumb'] a {
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 0.3s ease-out;
+  }
+
+  [aria-label='Breadcrumb'] a:hover {
+    background-size: 100% 1px;
+  }
+}
+
+@keyframes link-underline-sweep {
+  from {
+    background-size: 0% 1px;
+  }
+  to {
+    background-size: 100% 1px;
+  }
 }
 
 /* Unlayered — wins over all @layer utilities regardless of Tailwind's generated value */

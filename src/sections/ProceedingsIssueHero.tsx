@@ -11,7 +11,7 @@ export default function ProceedingsIssueHero() {
 
             {/* Breadcrumb */}
             <div className="pb-4 border-b border-[#C2DDFF]">
-              <nav className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body font-bold text-sm lg:text-base text-white">
+              <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body font-bold text-sm lg:text-base text-white">
                 <a href="/" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
                   <i className="fa-solid fa-house text-[10px]" aria-hidden="true" />
                   Home

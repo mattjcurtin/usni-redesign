@@ -74,8 +74,8 @@ export default function ArchivesSubNav() {
               href={item.href}
               className={`font-body font-semibold text-sm whitespace-nowrap transition-colors
                 ${isActive
-                  ? 'text-navy-boldest underline underline-offset-4'
-                  : 'text-navy-bolder hover:text-navy-subtle'
+                  ? 'text-navy-boldest link-underline-always'
+                  : 'text-navy-bolder hover:text-navy-subtle link-underline-hover'
                 }`}
             >
               {item.label}

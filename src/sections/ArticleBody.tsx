@@ -3,6 +3,7 @@ import ArticleComments from '@/sections/ArticleComments'
 import ArticleInBrief from '@/sections/ArticleInBrief'
 import ArticleAudioPlayer from '@/sections/ArticleAudioPlayer'
 import AdUnit from '@/components/ui/AdUnit'
+import ArticlePaywall from '@/components/ui/ArticlePaywall'
 
 import iwoJimaImg from '@/assets/images/proceedings-articles/mefs/iwo-jima-briefing.jpg'
 import hornetsImg from '@/assets/images/proceedings-articles/mefs/fa18-hornets.jpg'
@@ -78,10 +79,20 @@ function ArticleTopics() {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-export default function ArticleBody() {
+interface ArticleBodyProps {
+  /**
+   * Demo of the metered-paywall experience: renders only the opening
+   * paragraphs, fades the last one out into an ArticlePaywall block, and
+   * hides everything else (In Brief, audio, photos, references, topics,
+   * author bio, comments).
+   */
+  restricted?: boolean
+}
+
+export default function ArticleBody({ restricted = false }: ArticleBodyProps) {
   return (
     <>
-      <section className="bg-white pt-10 pb-0 overflow-x-clip">
+      <section className={`bg-white pt-10 overflow-x-clip ${restricted ? 'pb-16 lg:pb-20' : 'pb-0'}`}>
 
         {/* ── Article band: left-aligned reading column + ads-only rail ── */}
         <div className="max-w-[1194px] mx-auto w-full px-4 lg:px-8">
@@ -89,20 +100,24 @@ export default function ArticleBody() {
 
           <div className="max-w-[864px] mx-auto xl:mx-0 w-full">
 
-            <div className="bg-[#EBF4FF] p-6 lg:p-8">
-              <ArticleInBrief
-                readTime="8 min read"
-                items={[
-                  <>To prepare for mass casualties in a great power war, the Marine Corps should reactivate the 5th and 6th Marine Division headquarters as the ground combat elements of new V and VI MEFs.</>,
-                  <>From Kitchener's Army to Ukraine and Israel, history shows professional militaries deplete quickly&mdash;and that framework units built in advance absorb new troops fastest.</>,
-                  <>Both divisions went from scratch to combat-ready in about 11 months during World War II&mdash;evidence the timeline works without sacrificing quality.</>,
-                ]}
-              />
-            </div>
+            {!restricted && (
+              <>
+                <div className="bg-[#EBF4FF] p-6 lg:p-8">
+                  <ArticleInBrief
+                    readTime="8 min read"
+                    items={[
+                      <>To prepare for mass casualties in a great power war, the Marine Corps should reactivate the 5th and 6th Marine Division headquarters as the ground combat elements of new V and VI MEFs.</>,
+                      <>From Kitchener's Army to Ukraine and Israel, history shows professional militaries deplete quickly&mdash;and that framework units built in advance absorb new troops fastest.</>,
+                      <>Both divisions went from scratch to combat-ready in about 11 months during World War II&mdash;evidence the timeline works without sacrificing quality.</>,
+                    ]}
+                  />
+                </div>
 
-            <div className="mt-6">
-              <ArticleAudioPlayer />
-            </div>
+                <div className="mt-6">
+                  <ArticleAudioPlayer />
+                </div>
+              </>
+            )}
 
             <div className="font-body text-[16px] lg:text-[18px] text-[#1d2535] leading-[1.5] space-y-8 article-body mt-6">
 
@@ -126,12 +141,26 @@ export default function ArticleBody() {
                 </p>
               </div>
 
-              <p className="clear-left">
-                These divisions should comprise the ground combat elements of newly created V and VI Marine
-                Expeditionary Forces (MEFs), giving the Marine Corps&mdash;at least on paper&mdash;a strength of six
-                MEFs (if a potential IV MEF is organized from Marine Forces Reserve).
-              </p>
+              {/* When restricted, this is the last visible paragraph — it fades
+                  out under a white gradient and the paywall takes over. */}
+              <div className="relative">
+                <p className="clear-left">
+                  These divisions should comprise the ground combat elements of newly created V and VI Marine
+                  Expeditionary Forces (MEFs), giving the Marine Corps&mdash;at least on paper&mdash;a strength of six
+                  MEFs (if a potential IV MEF is organized from Marine Forces Reserve).
+                </p>
+                {restricted && (
+                  <div
+                    className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/60 to-white pointer-events-none"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
 
+              {restricted && <ArticlePaywall />}
+
+              {!restricted && (
+                <>
               <h2 className="font-headline text-[32px] text-[#060a0a] leading-[1.2] pt-2">
                 History Rhymes
               </h2>
@@ -388,11 +417,17 @@ export default function ArticleBody() {
                   <li>Joel Thacker, &ldquo;The History of the 1st Division through World War II,&rdquo; <em>Leatherneck</em>, 2021.</li>
                 </ol>
               </div>
+                </>
+              )}
 
             </div>
 
-            <div className="bg-[#c4c9d4] h-px w-full mt-10" />
-            <ArticleTopics />
+            {!restricted && (
+              <>
+                <div className="bg-[#c4c9d4] h-px w-full mt-10" />
+                <ArticleTopics />
+              </>
+            )}
 
           </div>
 
@@ -401,20 +436,28 @@ export default function ArticleBody() {
               leaderboard (same contract as GrubbArticleBody). ── */}
           <aside className="hidden xl:flex xl:flex-col" aria-label="Advertisements">
             <AdUnit size="rectangle" />
-            <div className="flex-[3]" aria-hidden="true" />
-            <AdUnit size="rectangle" />
-            <div className="flex-[4]" aria-hidden="true" />
-            <AdUnit size="rectangle" />
-            <div className="flex-[4]" aria-hidden="true" />
-            <AdUnit size="rectangle" />
+            {!restricted && (
+              <>
+                <div className="flex-[3]" aria-hidden="true" />
+                <AdUnit size="rectangle" />
+                <div className="flex-[4]" aria-hidden="true" />
+                <AdUnit size="rectangle" />
+                <div className="flex-[4]" aria-hidden="true" />
+                <AdUnit size="rectangle" />
+              </>
+            )}
           </aside>
 
           </div>
         </div>
       </section>
 
-      <ArticleAuthorBio authors={articleAuthors} />
-      <ArticleComments />
+      {!restricted && (
+        <>
+          <ArticleAuthorBio authors={articleAuthors} />
+          <ArticleComments />
+        </>
+      )}
     </>
   )
 }

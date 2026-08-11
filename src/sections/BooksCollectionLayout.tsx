@@ -484,7 +484,7 @@ export default function BooksCollectionLayout({
               <select
                 value={sort}
                 onChange={e => setSort(e.target.value)}
-                className="font-body text-sm text-navy-bolder border border-border-light px-3 py-1.5 outline-none focus:border-navy-subtle bg-white cursor-pointer"
+                className="select-field font-body text-sm text-navy-bolder border border-border-light px-3 py-1.5 outline-none focus:border-navy-subtle bg-white cursor-pointer"
               >
                 {SORT_OPTIONS.map(o => (
                   <option key={o.value} value={o.value}>{o.label}</option>

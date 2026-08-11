@@ -61,7 +61,7 @@ export const navItems: NavItem[] = [
     href: '/proceedings',
     children: [
       { label: 'Browse Proceedings', href: '/proceedings' },
-      { label: 'Current Issue', href: '/proceedings/current' },
+      { label: 'Current Issue', href: '/proceedings/apr-2026' },
       { label: 'All Issues', href: '/proceedings/all-issues' },
       { label: 'Proceedings Podcast', href: '/proceedings/podcast' },
       { label: 'Essay Contests', href: '/essay-contests' },
@@ -132,12 +132,11 @@ export const navItems: NavItem[] = [
     alignRight: true,
     children: [
       { label: 'Overview', href: '/about' },
-      { label: 'Mission & Vision', href: '/about/mission' },
       { label: 'History', href: '/about/history' },
       { label: 'Strategic Plan', href: '/about/strategic-plan' },
       { label: 'State of the Institution', href: '/about/state-of-institution' },
       { label: 'Leadership', href: '/about/leadership' },
-      { label: 'Taylor Conference Center', href: '/about/taylor-conference-center' },
+      { label: 'Jack C. Taylor Conference Center', href: '/about/taylor-conference-center' },
       { label: 'Media Inquiries', href: '/about/media' },
       { label: 'Contact USNI', href: '/about/contact' },
     ],
@@ -156,7 +155,6 @@ export const navItems: NavItem[] = [
     alignRight: true,
     children: [
       { label: 'Overview', href: '/giving' },
-      { label: 'About the Naval Institute Foundation', href: '/giving/foundation' },
       { label: 'Ways to Give', href: '/giving/ways-to-give' },
       { label: 'Giving Opportunities', href: '/giving/opportunities' },
       { label: 'Leadership & Staff', href: '/giving/leadership' },

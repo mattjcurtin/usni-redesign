@@ -86,16 +86,11 @@ function SelectInput({
         <select
           value={value}
           onChange={e => onChange(e.target.value)}
-          className={`w-full appearance-none bg-white border px-4 py-3 font-body text-[16px] text-[#4e576a] focus:outline-none focus:ring-2 focus:ring-[#023e7d]/30 focus:border-[#023e7d] min-h-[44px] pr-10 rounded-none ${error ? 'border-red-500' : 'border-[#4e576a]'}`}
+          className={`select-field w-full bg-white border px-4 py-3 font-body text-[16px] text-[#4e576a] focus:outline-none focus:ring-2 focus:ring-[#023e7d]/30 focus:border-[#023e7d] min-h-[44px] pr-10 rounded-none ${error ? 'border-red-500' : 'border-[#4e576a]'}`}
         >
           <option value="" disabled>{placeholder}</option>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-          <svg className="w-3 h-3 text-[#33415c]" viewBox="0 0 12 10" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M1 3l5 5 5-5" />
-          </svg>
-        </div>
       </div>
       {error && <span className="font-body text-sm text-red-600 mt-1">{error}</span>}
     </div>
@@ -285,7 +280,7 @@ export default function CartItems() {
       <div className="container-site flex flex-col gap-8">
 
         {/* Alert banner */}
-        <div className="bg-[#fff8d6] border-l-4 border-[#ffaa00] px-8 py-6 flex flex-col gap-4">
+        <div className="bg-[#fff8d6] border border-l-4 border-[#ffaa00] px-8 py-6 flex flex-col gap-4">
           <h2 className="font-headline text-[36px] text-[#1d2535] leading-[1.2]">
             Finalize your USNI membership
           </h2>

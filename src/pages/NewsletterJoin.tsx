@@ -157,7 +157,7 @@ export default function NewsletterJoin() {
                       value={form.email}
                       onChange={e => set('email', e.target.value)}
                       placeholder="your@email.com"
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     />
                   </div>
 
@@ -221,7 +221,7 @@ export default function NewsletterJoin() {
                       value={form.firstName}
                       onChange={e => set('firstName', e.target.value)}
                       placeholder="First"
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     />
                   </div>
 
@@ -234,7 +234,7 @@ export default function NewsletterJoin() {
                       value={form.lastName}
                       onChange={e => set('lastName', e.target.value)}
                       placeholder="Last"
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     />
                   </div>
 
@@ -245,7 +245,7 @@ export default function NewsletterJoin() {
                       id="nl-salutation"
                       value={form.salutation}
                       onChange={e => set('salutation', e.target.value)}
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     >
                       <option value="">Select…</option>
                       {SALUTATIONS.map(s => <option key={s} value={s}>{s}</option>)}
@@ -259,7 +259,7 @@ export default function NewsletterJoin() {
                       id="nl-suffix"
                       value={form.suffix}
                       onChange={e => set('suffix', e.target.value)}
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     >
                       <option value="">Select…</option>
                       {SUFFIXES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -275,7 +275,7 @@ export default function NewsletterJoin() {
                       value={form.title}
                       onChange={e => set('title', e.target.value)}
                       placeholder="e.g. Director, Captain"
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     />
                   </div>
 
@@ -286,7 +286,7 @@ export default function NewsletterJoin() {
                       id="nl-age"
                       value={form.ageRange}
                       onChange={e => set('ageRange', e.target.value)}
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     >
                       <option value="">Select…</option>
                       {AGE_RANGES.map(a => <option key={a} value={a}>{a}</option>)}
@@ -300,7 +300,7 @@ export default function NewsletterJoin() {
                       id="nl-country"
                       value={form.country}
                       onChange={e => set('country', e.target.value)}
-                      className={inputCls}
+                      className={`select-field ${inputCls}`}
                     >
                       <option value="">Select a country…</option>
                       {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}

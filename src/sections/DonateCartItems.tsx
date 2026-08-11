@@ -118,7 +118,7 @@ export default function DonateCartItems() {
       <div className="container-site flex flex-col gap-8">
 
         {/* Alert banner */}
-        <div className="bg-[#fefde8] border-l-4 border-[#ffaa00] px-8 py-6 flex flex-col gap-3">
+        <div className="bg-[#fefde8] border border-l-4 border-[#ffaa00] px-8 py-6 flex flex-col gap-3">
           <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Review your donation</h2>
           <p className="font-body text-[16px] text-[#1d2535] leading-[1.5]">
             Thank you for supporting the U.S. Naval Institute! You can adjust your donation amount or frequency

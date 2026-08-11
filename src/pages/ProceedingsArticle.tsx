@@ -34,11 +34,12 @@ export default function ProceedingsArticle() {
           caption="A mass casualty exercise with U.S. Marines and soldiers from the Australian Defence Force during Southern Jackaroo at Shoalwater Bay Training Area, Queensland, Australia."
           photoCredit="U.S. Marine Corps (Cedar Barnes)"
         />
-        <ArticleBody />
+        {/* Paywall demo: visitor has hit their free-article limit */}
+        <ArticleBody restricted />
         <ArticleRelated />
       </main>
       <Footer />
-      <ArticleMeterBanner magazine="Proceedings" />
+      <ArticleMeterBanner magazine="Proceedings" articlesRead={3} />
     </div>
   )
 }

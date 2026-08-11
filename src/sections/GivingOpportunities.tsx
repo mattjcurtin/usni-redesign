@@ -101,7 +101,7 @@ const opportunities: Opportunity[] = [
     primaryLabel: 'Make a gift',
     primaryHref: '/giving/donate',
     secondaryLabel: 'View essay contests',
-    secondaryHref: '/proceedings/essay-contests',
+    secondaryHref: '/essay-contests',
   },
   {
     id: 'usni-news',

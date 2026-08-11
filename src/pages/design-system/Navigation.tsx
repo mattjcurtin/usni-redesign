@@ -6,6 +6,7 @@ import BreakpointLabel from '@/components/design-system/BreakpointLabel'
 import PreviewFrame from '@/components/design-system/PreviewFrame'
 import { Button } from '@/components/ui/Button'
 import ArticleMeterBanner from '@/components/ui/ArticleMeterBanner'
+import ArticlePaywall from '@/components/ui/ArticlePaywall'
 
 export default function Navigation() {
   const [meterVisible, setMeterVisible] = useState(false)
@@ -127,6 +128,18 @@ export default function Navigation() {
           {meterVisible && (
             <ArticleMeterBannerDemo onDismiss={() => setMeterVisible(false)} />
           )}
+        </DocSection>
+
+        <DocSection title="Article Paywall">
+          <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-6 max-w-2xl">
+            An in-article block shown in place of restricted content once a visitor has used all their
+            free articles — the article body fades out above it. Photo background with a navy scrim,
+            membership CTA, and sign-in link. Live on{' '}
+            <a href="/proceedings/three-mefs" className="text-navy-subtle underline">/proceedings/three-mefs</a>.
+          </p>
+          <div className="border border-border-light bg-white p-8 max-w-[864px]">
+            <ArticlePaywall />
+          </div>
         </DocSection>
       </div>
     </DesignSystemLayout>

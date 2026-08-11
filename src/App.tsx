@@ -18,6 +18,8 @@ import Donate from '@/pages/Donate'
 import DonateCart from '@/pages/DonateCart'
 import DonateCheckout from '@/pages/DonateCheckout'
 import ProceedingsCurrentIssue from '@/pages/ProceedingsCurrentIssue'
+import ProceedingsAllIssues from '@/pages/ProceedingsAllIssues'
+import ProceedingsPodcast from '@/pages/ProceedingsPodcast'
 import BooksAndPress from '@/pages/BooksAndPress'
 import ProceedingsArticle from '@/pages/ProceedingsArticle'
 import ProceedingsContact from '@/pages/ProceedingsContact'
@@ -36,6 +38,13 @@ import NavalHistoryArticle from '@/pages/NavalHistoryArticle'
 import ProceedingsArticleFortifying from '@/pages/ProceedingsArticleFortifying'
 import ProceedingsArticleGrubb from '@/pages/ProceedingsArticleGrubb'
 import NewsletterJoin from '@/pages/NewsletterJoin'
+import EssayContests from '@/pages/EssayContests'
+import EssayContestPage from '@/pages/EssayContestPage'
+import EssaySubmit from '@/pages/EssaySubmit'
+import EssayContestsArchivePage from '@/pages/EssayContestsArchivePage'
+import About from '@/pages/About'
+import AboutHistory from '@/pages/AboutHistory'
+import AboutStrategicPlan from '@/pages/AboutStrategicPlan'
 import DesignSystemHome from '@/pages/design-system/DesignSystemHome'
 import StyleGuide from '@/pages/design-system/StyleGuide'
 import DesignSystemButtons from '@/pages/design-system/Buttons'
@@ -64,6 +73,8 @@ export default function App() {
         <Route path="/giving/donate/cart" element={<DonateCart />} />
         <Route path="/giving/donate/checkout" element={<DonateCheckout />} />
         <Route path="/proceedings/apr-2026" element={<ProceedingsCurrentIssue />} />
+        <Route path="/proceedings/all-issues" element={<ProceedingsAllIssues />} />
+        <Route path="/proceedings/podcast" element={<ProceedingsPodcast />} />
         <Route path="/proceedings/contact" element={<ProceedingsContact />} />
         <Route path="/books" element={<BooksAndPress />} />
         <Route path="/books/collection" element={<BooksCollection />} />
@@ -79,6 +90,27 @@ export default function App() {
         <Route path="/archives" element={<Archives />} />
         <Route path="/naval-history/mitscher-at-midway" element={<NavalHistoryArticle />} />
         <Route path="/newsletter" element={<NewsletterJoin />} />
+        <Route path="/essay-contests" element={<EssayContests />} />
+        <Route path="/essay-contests/archive" element={<EssayContestsArchivePage />} />
+        {/* One submission page for every contest — see ?contest=<slug> */}
+        <Route path="/essay-contests/submit" element={<EssaySubmit />} />
+        <Route
+          path="/essay-contests/cno-naval-history-midshipmen-cadets"
+          element={<EssayContestPage slug="cno-naval-history-midshipmen-cadets" />}
+        />
+        <Route
+          path="/essay-contests/cno-naval-history-rising-historian"
+          element={<EssayContestPage slug="cno-naval-history-rising-historian" />}
+        />
+        <Route
+          path="/essay-contests/cno-naval-history-professional-historian"
+          element={<EssayContestPage slug="cno-naval-history-professional-historian" />}
+        />
+        <Route path="/essay-contests/coast-guard" element={<EssayContestPage slug="coast-guard" />} />
+        <Route path="/essay-contests/enlisted-prize" element={<EssayContestPage slug="enlisted-prize" />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/about/history" element={<AboutHistory />} />
+        <Route path="/about/strategic-plan" element={<AboutStrategicPlan />} />
         <Route path="/design-system" element={<DesignSystemHome />} />
         <Route path="/design-system/style-guide" element={<StyleGuide />} />
         <Route path="/design-system/buttons" element={<DesignSystemButtons />} />

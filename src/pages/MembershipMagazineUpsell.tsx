@@ -144,16 +144,11 @@ export default function MembershipMagazineUpsell() {
               <select
                 value={magRegion}
                 onChange={e => setMagRegion(e.target.value as Region)}
-                className="appearance-none bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 pr-10 py-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
+                className="select-field bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
               >
                 <option value="us">in the U.S.</option>
                 <option value="international">outside the U.S.</option>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                <svg className="w-5 h-5 text-navy-subtle" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 8l5 5 5-5" />
-                </svg>
-              </div>
             </div>
 
             <span className="font-headline text-[28px] lg:text-[36px] text-neutral-subtle leading-[1.2]">and want to add a</span>
@@ -162,16 +157,11 @@ export default function MembershipMagazineUpsell() {
               <select
                 value={magTerm}
                 onChange={e => setMagTerm(e.target.value as Term)}
-                className="appearance-none bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 pr-10 py-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
+                className="select-field bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
               >
                 <option value="1">1-year</option>
                 <option value="3">3-year</option>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                <svg className="w-5 h-5 text-navy-subtle" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 8l5 5 5-5" />
-                </svg>
-              </div>
             </div>
 
             <span className="font-headline text-[28px] lg:text-[36px] text-neutral-subtle leading-[1.2]">subscription to Naval History magazine.</span>

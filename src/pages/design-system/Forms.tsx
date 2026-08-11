@@ -101,7 +101,7 @@ const [open, setOpen] = useState(false)
               <label className="block font-body font-semibold text-xs text-navy-bolder uppercase tracking-[0.06em] mb-1.5">
                 Select
               </label>
-              <select className="w-full font-body text-sm text-navy-bolder border border-[#94A3B8] px-3 py-2.5 outline-none focus:border-navy-bright focus:shadow-[0_0_0_3px_rgba(4,102,200,0.15)] bg-white transition">
+              <select className="select-field w-full font-body text-sm text-navy-bolder border border-[#94A3B8] px-3 py-2.5 outline-none focus:border-navy-bright focus:shadow-[0_0_0_3px_rgba(4,102,200,0.15)] bg-white transition">
                 <option>Select…</option>
               </select>
             </div>

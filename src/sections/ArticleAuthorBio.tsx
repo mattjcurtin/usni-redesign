@@ -26,7 +26,7 @@ export default function ArticleAuthorBio({ authors, showDisclaimer = true }: Pro
 
         {/* Disclaimer */}
         {showDisclaimer && (
-          <div className="flex gap-3 items-start border-l-4 border-[#FFAA00] bg-[#FFF8D6] px-5 py-3.5 mb-4">
+          <div className="flex gap-3 items-start border border-l-4 border-[#FFAA00] bg-[#FFF8D6] px-5 py-3.5 mb-4">
             <i className="fa-solid fa-circle-info text-[#1D2535] text-sm mt-[2px] flex-shrink-0" aria-hidden="true" />
             <div>
               <p className="font-body font-bold text-[11px] uppercase tracking-[0.08em] text-[#1D2535] mb-0.5">Disclaimer</p>

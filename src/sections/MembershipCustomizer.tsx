@@ -279,7 +279,7 @@ function DropdownSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 pr-10 py-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
+        className="select-field bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 pr-10 py-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>

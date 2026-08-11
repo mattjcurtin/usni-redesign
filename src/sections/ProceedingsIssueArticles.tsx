@@ -1,20 +1,10 @@
 import { useState } from 'react'
 import type { Article } from '@/types'
-import {
-  featuredArticlesLeft,
-  featuredArticleCenter,
-  featuredArticlesRight,
-  latestIssueCol1,
-  latestIssueCol2,
-} from '@/data/proceedings'
+import { aprilIssueArticles } from '@/data/proceedingsApril2026'
 
-const articles: Article[] = [
-  ...featuredArticlesLeft,
-  featuredArticleCenter,
-  ...featuredArticlesRight,
-  ...latestIssueCol1,
-  ...latestIssueCol2,
-]
+// The full April 2026 table of contents — all 34 items, transcribed from the
+// issue page on usni.org.
+const articles: Article[] = aprilIssueArticles
 
 type ViewMode = 'grid' | 'list'
 

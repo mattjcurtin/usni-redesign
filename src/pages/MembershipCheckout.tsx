@@ -35,7 +35,7 @@ function FormInput({
   type?: string; className?: string; required?: boolean; error?: boolean
 }) {
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
+    <div className={`select-field flex flex-col gap-1.5 ${className}`}>
       <label className="font-body font-bold text-[14px] text-[#1d2535]">
         {label}{required && <span className="text-red-500"> *</span>}
       </label>
@@ -71,7 +71,7 @@ function FormSelect({
           value={value}
           onChange={e => onChange(e.target.value)}
           aria-invalid={error || undefined}
-          className={`w-full appearance-none bg-white border px-4 py-3 pr-10 font-body text-[16px] text-[#4e576a] focus:outline-none focus:ring-2 min-h-[44px] rounded-none ${
+          className={`select-field w-full bg-white border px-4 py-3 font-body text-[16px] text-[#4e576a] focus:outline-none focus:ring-2 min-h-[44px] rounded-none ${
             error
               ? 'border-red-600 focus:ring-red-600/30 focus:border-red-600'
               : 'border-[#4e576a] focus:ring-[#023e7d]/30 focus:border-[#023e7d]'
@@ -80,11 +80,6 @@ function FormSelect({
           <option value="" disabled>{placeholder}</option>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-          <svg className="w-3 h-3 text-[#33415c]" viewBox="0 0 12 10" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M1 3l5 5 5-5" />
-          </svg>
-        </div>
       </div>
     </div>
   )
@@ -99,7 +94,7 @@ function RequiredFieldsAlert({
     <div
       ref={alertRef}
       role="alert"
-      className="flex gap-3 items-start border-l-4 border-red-600 bg-red-50 px-5 py-4 scroll-mt-28"
+      className="flex gap-3 items-start border border-l-4 border-red-600 bg-red-50 px-5 py-4 scroll-mt-28"
     >
       <i className="fa-solid fa-circle-exclamation text-red-600 text-[15px] mt-[3px] flex-shrink-0" aria-hidden="true" />
       <div>

@@ -2,9 +2,11 @@ interface ButtonLinkCTAProps {
   href: string
   children: React.ReactNode
   className?: string
+  /** Use on dark backgrounds — swaps the label and underline to white */
+  dark?: boolean
 }
 
-export default function ButtonLinkCTA({ href, children, className = '' }: ButtonLinkCTAProps) {
+export default function ButtonLinkCTA({ href, children, className = '', dark = false }: ButtonLinkCTAProps) {
   return (
     <a
       href={href}
@@ -26,9 +28,9 @@ export default function ButtonLinkCTA({ href, children, className = '' }: Button
       </div>
 
       {/* Label with animated underline */}
-      <span className="relative font-body font-bold text-base text-navy-bolder px-3 py-2.5 leading-none">
+      <span className={`relative font-body font-bold text-base px-3 py-2.5 leading-none ${dark ? 'text-white' : 'text-navy-bolder'}`}>
         {children}
-        <span className="absolute bottom-1 left-3 right-3 h-px bg-[#0466C8] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+        <span className={`absolute bottom-1 left-3 right-3 h-px origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out ${dark ? 'bg-white' : 'bg-[#0466C8]'}`} />
       </span>
     </a>
   )
