@@ -1,6 +1,8 @@
 import {
+  contestEntryStat,
   essayContests,
   essaySubmitPath,
+  isPhotoEntry,
   type EssayContest,
   type EssayContestBlock,
 } from '@/data/essayContests'
@@ -83,6 +85,8 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
     (c) => c.title === contest.title && c.year === contest.year && c.slug !== contest.slug,
   )
 
+  const entryStat = contestEntryStat(contest)
+
   return (
     <section className="bg-white py-12 lg:py-16">
       <div className="container-site">
@@ -101,7 +105,7 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
             )}
 
             <div className="flex flex-col gap-4">
-              <Heading>The Challenge</Heading>
+              <Heading>{contest.challengeHeading ?? 'The Challenge'}</Heading>
               <Paragraphs items={contest.challenge.paragraphs} />
               {contest.challenge.bulletsLead && (
                 <p className="font-body text-base lg:text-[17px] text-neutral-subtle leading-[1.75]">
@@ -191,9 +195,11 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
                   </dd>
                 </div>
                 <div className="flex justify-between gap-3 pb-3 border-b border-border-light">
-                  <dt className="font-body font-semibold text-sm text-navy-bolder">Word limit</dt>
+                  <dt className="font-body font-semibold text-sm text-navy-bolder">
+                    {entryStat.label}
+                  </dt>
                   <dd className="font-body text-sm text-neutral-subtle text-right">
-                    {contest.wordLimit}
+                    {entryStat.value}
                   </dd>
                 </div>
                 <div className="flex justify-between gap-3">
@@ -208,12 +214,17 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
                 href={essaySubmitPath(contest)}
                 className="flex items-center justify-center gap-2 bg-gold text-navy-bolder font-body font-bold text-base px-5 py-3.5 border border-gold hover:bg-gold-dark transition-colors"
               >
-                <i className="fa-solid fa-pen-nib" aria-hidden="true" />
-                Submit Your Essay
+                <i
+                  className={`fa-solid ${isPhotoEntry(contest) ? 'fa-camera' : 'fa-pen-nib'}`}
+                  aria-hidden="true"
+                />
+                {contest.submitLabel ?? 'Submit Your Essay'}
               </a>
 
               <p className="font-body text-sm text-neutral-subtle leading-relaxed">
-                Word document, judged in the blind. See{' '}
+                {isPhotoEntry(contest)
+                  ? 'High-resolution tiff or jpg, no AI or manipulation. See '
+                  : 'Word document, judged in the blind. See '}
                 <a href="#submission-guidelines" className="text-[#023E7D] underline hover:no-underline">
                   submission guidelines
                 </a>
@@ -237,7 +248,7 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
                         {s.division}
                       </a>
                       <span className="font-body text-sm text-neutral-subtle">
-                        {' '}— {s.wordLimit}, {s.prizes[0].amount}
+                        {' '}— {contestEntryStat(s).value}, {s.prizes[0].amount}
                       </span>
                     </li>
                   ))}
@@ -248,7 +259,7 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
             {contest.fundedBy && contest.fundedBy.length > 0 && (
               <div className="border border-border-light p-6 flex flex-col gap-1.5">
                 <p className="font-body font-semibold text-xs uppercase tracking-[0.1em] text-neutral-subtle">
-                  Funded by
+                  {contest.fundedByLabel ?? 'Funded by'}
                 </p>
                 {contest.fundedBy.map((funder) => (
                   <p key={funder} className="font-body text-base text-navy-bolder leading-snug">

@@ -27,10 +27,11 @@ export default function EssayContestPage({ slug }: { slug: string }) {
           description={contest.summary}
           breadcrumbLabel={contestFullTitle(contest)}
           image={contest.heroImage}
+          panelSide={contest.heroPanelSide}
           actions={
             contest.heroImage ? (
               <ButtonLink href={essaySubmitPath(contest)} variant="primary" size="md">
-                Submit Your Essay
+                {contest.submitLabel ?? 'Submit Your Essay'}
               </ButtonLink>
             ) : undefined
           }

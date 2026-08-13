@@ -190,8 +190,11 @@ export function Fieldset({
 }) {
   return (
     <fieldset className={`flex flex-col gap-5 ${className}`}>
-      <legend className="w-full">
-        <span className="block font-headline text-2xl lg:text-[28px] text-navy-bolder leading-tight border-b border-navy-subtle pb-3 w-full">
+      {/* A <legend> is taken out of the fieldset's flow, so the parent's flex
+          `gap` never applies below it — the margin here is what separates the
+          rule from the first field's label. */}
+      <legend className="w-full mb-6">
+        <span className="block font-headline text-2xl lg:text-[28px] text-navy-bolder leading-tight border-b border-navy-subtle pb-4 w-full">
           {legend}
         </span>
         {description && (

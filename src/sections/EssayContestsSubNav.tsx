@@ -10,14 +10,9 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Essay Contests', href: '/essay-contests' },
-  {
-    label: 'CNO Naval History',
-    href: '/essay-contests/cno-naval-history-midshipmen-cadets',
-    // One tab stands for all three divisions of the CNO contest.
-    matchPrefix: '/essay-contests/cno-naval-history',
-  },
-  { label: 'Coast Guard', href: '/essay-contests/coast-guard' },
-  { label: 'Enlisted Prize', href: '/essay-contests/enlisted-prize' },
+  { label: 'General Prize', href: '/essay-contests/general-prize' },
+  { label: 'Leadership', href: '/essay-contests/leadership' },
+  { label: 'Photo Contest', href: '/essay-contests/naval-maritime-photo' },
   { label: 'Archive', href: '/essay-contests/archive' },
 ]
 

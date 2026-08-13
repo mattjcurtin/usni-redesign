@@ -96,6 +96,23 @@
     background-size: 100% 2px;
   }
 
+  /* Card headlines: the link wraps the whole card, so a hover anywhere on it
+     (group) sweeps the underline on the inner headline span. `clone` gives each
+     line of a wrapped headline its own underline rather than one rule under the
+     whole box. Descendant selector rather than a bare class: it outranks
+     Tailwind's `transition-colors`, which sits in a later layer at equal
+     specificity and would otherwise drop background-size from the transition,
+     making the underline snap instead of sweep. */
+  .group .article-link--card {
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: background-size 0.3s ease-out, color 0.2s ease;
+  }
+
+  .group:hover .article-link--card {
+    background-size: 100% 1px;
+  }
+
   /* ── Animated underline links ──────────────────────────────────────────
      Two variants sharing one gradient-underline mechanic. currentColor means
      the rule follows whatever hover colour the caller sets.

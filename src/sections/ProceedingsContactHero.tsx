@@ -13,7 +13,7 @@ export default function ProceedingsContactHero() {
         </nav>
 
         {/* Page title */}
-        <h1 className="font-headline text-[32px] lg:text-[48px] xl:text-[64px] text-navy-bolder leading-[1.1]">
+        <h1 className="font-headline text-[32px] lg:text-[64px] text-navy-bolder leading-[1.1]">
           Contact Proceedings
         </h1>
 

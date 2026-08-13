@@ -1,4 +1,4 @@
-import { essayContests, type EssayContest } from '@/data/essayContests'
+import { contestEntryStat, essayContests, type EssayContest } from '@/data/essayContests'
 
 /**
  * Current contests, as cards.
@@ -9,14 +9,17 @@ import { essayContests, type EssayContest } from '@/data/essayContests'
  * word limit, and top prize on the face of every card.
  */
 
+// Light grounds with dark type, so the badge reads as a quiet label on the
+// photo rather than competing with the gold CTAs elsewhere on the page.
 const statusBadge: Record<EssayContest['status'], { label: string; className: string }> = {
-  open: { label: 'Open', className: 'bg-[#0a5c2e] text-white' },
-  'closing-soon': { label: 'Closing soon', className: 'bg-[#8a5a00] text-white' },
-  closed: { label: 'Closed', className: 'bg-neutral-bold text-white' },
+  open: { label: 'Open', className: 'bg-[#d9f2e3] text-[#0a5c2e]' },
+  'closing-soon': { label: 'Closing soon', className: 'bg-[#fbe7c2] text-[#6b4400]' },
+  closed: { label: 'Closed', className: 'bg-neutral-subtlest text-neutral-bold' },
 }
 
 function ContestCard({ contest }: { contest: EssayContest }) {
   const badge = statusBadge[contest.status]
+  const entryStat = contestEntryStat(contest)
 
   return (
     <a
@@ -42,7 +45,7 @@ function ContestCard({ contest }: { contest: EssayContest }) {
             {contest.year}
           </p>
           <h3 className="font-headline text-xl lg:text-[22px] text-navy-bolder leading-[1.2] group-hover:text-[#0466c8] transition-colors">
-            {contest.title}
+            <span className="article-link article-link--card">{contest.title}</span>
           </h3>
           {contest.division && (
             <p className="font-body font-semibold text-sm text-navy-subtle">{contest.division}</p>
@@ -65,10 +68,10 @@ function ContestCard({ contest }: { contest: EssayContest }) {
           </div>
           <div className="flex flex-col gap-0.5">
             <dt className="font-body text-[10px] font-semibold uppercase tracking-[0.1em] text-neutral-subtle">
-              Length
+              {entryStat.shortLabel}
             </dt>
             <dd className="font-body font-bold text-sm text-navy-bolder">
-              {contest.wordLimit.replace(' words', 'w')}
+              {entryStat.value.replace(' words', 'w')}
             </dd>
           </div>
           <div className="flex flex-col gap-0.5">

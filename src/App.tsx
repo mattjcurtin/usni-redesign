@@ -94,20 +94,12 @@ export default function App() {
         <Route path="/essay-contests/archive" element={<EssayContestsArchivePage />} />
         {/* One submission page for every contest — see ?contest=<slug> */}
         <Route path="/essay-contests/submit" element={<EssaySubmit />} />
+        <Route path="/essay-contests/general-prize" element={<EssayContestPage slug="general-prize" />} />
+        <Route path="/essay-contests/leadership" element={<EssayContestPage slug="leadership" />} />
         <Route
-          path="/essay-contests/cno-naval-history-midshipmen-cadets"
-          element={<EssayContestPage slug="cno-naval-history-midshipmen-cadets" />}
+          path="/essay-contests/naval-maritime-photo"
+          element={<EssayContestPage slug="naval-maritime-photo" />}
         />
-        <Route
-          path="/essay-contests/cno-naval-history-rising-historian"
-          element={<EssayContestPage slug="cno-naval-history-rising-historian" />}
-        />
-        <Route
-          path="/essay-contests/cno-naval-history-professional-historian"
-          element={<EssayContestPage slug="cno-naval-history-professional-historian" />}
-        />
-        <Route path="/essay-contests/coast-guard" element={<EssayContestPage slug="coast-guard" />} />
-        <Route path="/essay-contests/enlisted-prize" element={<EssayContestPage slug="enlisted-prize" />} />
         <Route path="/about" element={<About />} />
         <Route path="/about/history" element={<AboutHistory />} />
         <Route path="/about/strategic-plan" element={<AboutStrategicPlan />} />

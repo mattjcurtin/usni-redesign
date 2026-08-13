@@ -19,7 +19,12 @@ import {
   FILE_MAX_MB,
   ALLOWED_FILE_EXT,
 } from '@/data/essaySubmission'
-import { contestFullTitle, type EssayContest } from '@/data/essayContests'
+import { contestFullTitle, isPhotoEntry, type EssayContest } from '@/data/essayContests'
+
+/** Upload rules per entry kind. Photos come in batches; an essay is one file. */
+const PHOTO_FILE_EXT = '.jpg, .jpeg, .tif, .tiff'
+const PHOTO_ACCEPT = '.jpg,.jpeg,.tif,.tiff,image/jpeg,image/tiff'
+const PHOTO_MAX_FILES = 5
 
 /**
  * Essay submission form, shared by every contest.
@@ -392,13 +397,16 @@ function PersonFields({
 }
 
 export default function EssaySubmitForm({ contest }: { contest: EssayContest }) {
+  const isPhoto = isPhotoEntry(contest)
+  const wordLimitMax = contest.wordLimitMax
+
   const [author, setAuthor] = useState<Person>(emptyPerson)
   const [hasCoAuthor, setHasCoAuthor] = useState(false)
   const [coAuthor, setCoAuthor] = useState<Person>(emptyPerson)
 
   const [title, setTitle] = useState('')
   const [wordCount, setWordCount] = useState('')
-  const [file, setFile] = useState<File | null>(null)
+  const [files, setFiles] = useState<File[]>([])
   const [acknowledged, setAcknowledged] = useState(false)
 
   const [errors, setErrors] = useState<Errors>({})
@@ -410,10 +418,12 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
   const setCoAuthorField = (patch: Partial<Person>) => setCoAuthor((p) => ({ ...p, ...patch }))
 
   const wordCountNum = Number(wordCount.replace(/[^0-9]/g, ''))
-  const overLimit = wordCount !== '' && wordCountNum > contest.wordLimitMax
+  const overLimit = wordLimitMax !== undefined && wordCount !== '' && wordCountNum > wordLimitMax
   // "2,500-word limit" rather than "2,500 words limit" — wordLimit already
   // carries the noun, so it can't be interpolated in front of "limit".
-  const overLimitMessage = `${(wordCountNum - contest.wordLimitMax).toLocaleString()} words over the ${contest.wordLimitMax.toLocaleString()}-word limit for this contest.`
+  const overLimitMessage = wordLimitMax
+    ? `${(wordCountNum - wordLimitMax).toLocaleString()} words over the ${wordLimitMax.toLocaleString()}-word limit for this contest.`
+    : ''
 
   function validatePerson(p: Person, prefix: string, withAddress: boolean, next: Errors) {
     const req = (key: keyof Person, label: string) => {
@@ -449,21 +459,43 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
     validatePerson(author, 'author', true, next)
     if (hasCoAuthor) validatePerson(coAuthor, 'coAuthor', false, next)
 
-    if (!title.trim()) next.title = 'Essay title is required.'
-    if (!wordCount.trim()) {
-      next.wordCount = 'Essay word count is required.'
-    } else if (!Number.isFinite(wordCountNum) || wordCountNum <= 0) {
-      next.wordCount = 'Enter the word count as a number.'
-    } else if (wordCountNum > contest.wordLimitMax) {
-      next.wordCount = overLimitMessage
+    if (!title.trim()) next.title = `${isPhoto ? 'Entry' : 'Essay'} title is required.`
+
+    // Word count only applies where the contest sets a limit — the photo
+    // contest has none
+    if (wordLimitMax !== undefined) {
+      if (!wordCount.trim()) {
+        next.wordCount = 'Essay word count is required.'
+      } else if (!Number.isFinite(wordCountNum) || wordCountNum <= 0) {
+        next.wordCount = 'Enter the word count as a number.'
+      } else if (wordCountNum > wordLimitMax) {
+        next.wordCount = overLimitMessage
+      }
     }
 
-    if (!file) {
-      next.file = 'Attach your essay as a .docx file.'
-    } else if (!file.name.toLowerCase().endsWith(ALLOWED_FILE_EXT)) {
-      next.file = `Only ${ALLOWED_FILE_EXT} files are accepted.`
-    } else if (file.size > FILE_MAX_MB * 1024 * 1024) {
-      next.file = `That file is over the ${FILE_MAX_MB} MB limit.`
+    const oversize = files.find((f) => f.size > FILE_MAX_MB * 1024 * 1024)
+    if (isPhoto) {
+      const badType = files.find(
+        (f) => !/\.(jpe?g|tiff?)$/i.test(f.name),
+      )
+      if (files.length === 0) {
+        next.file = 'Attach at least one photograph.'
+      } else if (files.length > PHOTO_MAX_FILES) {
+        next.file = `Up to ${PHOTO_MAX_FILES} photographs per person — you attached ${files.length}.`
+      } else if (badType) {
+        next.file = `Only ${PHOTO_FILE_EXT} files are accepted.`
+      } else if (oversize) {
+        next.file = `“${oversize.name}” is over the ${FILE_MAX_MB} MB limit.`
+      }
+    } else {
+      const file = files[0]
+      if (!file) {
+        next.file = `Attach your essay as a ${ALLOWED_FILE_EXT} file.`
+      } else if (!file.name.toLowerCase().endsWith(ALLOWED_FILE_EXT)) {
+        next.file = `Only ${ALLOWED_FILE_EXT} files are accepted.`
+      } else if (oversize) {
+        next.file = `That file is over the ${FILE_MAX_MB} MB limit.`
+      }
     }
 
     if (!acknowledged) next.acknowledged = 'Please acknowledge the screening notice.'
@@ -490,7 +522,7 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
               <i className="fa-solid fa-check text-2xl text-[#0a5c2e]" aria-hidden="true" />
             </div>
             <h2 className="font-headline text-3xl lg:text-4xl text-navy-bolder leading-tight">
-              Your essay is in
+              {isPhoto ? 'Your photos are in' : 'Your essay is in'}
             </h2>
             <p className="font-body text-base lg:text-lg text-neutral-subtle leading-relaxed">
               Thank you for entering the {contest.year} {contestFullTitle(contest)}. We've sent a
@@ -498,26 +530,32 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
             </p>
             <dl className="flex flex-col gap-3 border-t border-b border-border-light py-5">
               <div className="flex flex-wrap justify-between gap-x-6 gap-y-1">
-                <dt className="font-body font-semibold text-sm text-navy-bolder">Essay</dt>
+                <dt className="font-body font-semibold text-sm text-navy-bolder">
+                  {isPhoto ? 'Entry' : 'Essay'}
+                </dt>
                 <dd className="font-body text-sm text-neutral-subtle text-right">{title}</dd>
               </div>
+              {wordLimitMax !== undefined && (
+                <div className="flex flex-wrap justify-between gap-x-6 gap-y-1">
+                  <dt className="font-body font-semibold text-sm text-navy-bolder">Word count</dt>
+                  <dd className="font-body text-sm text-neutral-subtle text-right">
+                    {wordCountNum.toLocaleString()} of {contest.wordLimit} allowed
+                  </dd>
+                </div>
+              )}
               <div className="flex flex-wrap justify-between gap-x-6 gap-y-1">
-                <dt className="font-body font-semibold text-sm text-navy-bolder">Word count</dt>
-                <dd className="font-body text-sm text-neutral-subtle text-right">
-                  {wordCountNum.toLocaleString()} of {contest.wordLimit} allowed
-                </dd>
-              </div>
-              <div className="flex flex-wrap justify-between gap-x-6 gap-y-1">
-                <dt className="font-body font-semibold text-sm text-navy-bolder">File</dt>
+                <dt className="font-body font-semibold text-sm text-navy-bolder">
+                  {files.length > 1 ? 'Files' : 'File'}
+                </dt>
                 <dd className="font-body text-sm text-neutral-subtle text-right break-all">
-                  {file?.name}
+                  {files.map((f) => f.name).join(', ')}
                 </dd>
               </div>
             </dl>
             <p className="font-body text-sm text-neutral-subtle leading-relaxed">
-              Essays are judged in the blind. Because we receive more than 100 submissions a month,
-              notification can take 4–6 months. We'll email you if your essay is selected for a
-              prize or for publication.
+              {isPhoto
+                ? 'Winning and runner-up photos are featured in Proceedings and on usni.org. We’ll email you if yours is selected.'
+                : 'Essays are judged in the blind. Because we receive more than 100 submissions a month, notification can take 4–6 months. We’ll email you if your essay is selected for a prize or for publication.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 pt-1">
               <a
@@ -544,13 +582,6 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
     <section className="bg-white py-12 lg:py-16">
       <div className="container-site">
         <div className="max-w-[760px] mx-auto">
-          <h2 className="font-headline text-4xl lg:text-5xl text-navy-bolder leading-[1.1] mb-3">
-            Submit your Essay
-          </h2>
-          <p className="font-body text-base lg:text-lg text-neutral-subtle leading-relaxed mb-8">
-            All fields marked with <span className="text-[#c1121f]">*</span> are required. Your essay
-            must be a {ALLOWED_FILE_EXT} file of no more than {contest.wordLimit}.
-          </p>
 
           {/* Error summary — keyboard and screen-reader users land here on a failed submit */}
           <div ref={summaryRef}>
@@ -570,6 +601,26 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
           </div>
 
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-10">
+
+            <Fieldset legend="Instructions">
+              <p className="font-body text-base lg:text-[17px] text-neutral-subtle leading-[1.75]">
+                Enter your {isPhoto ? 'photo' : 'essay'} submission content below. Everything is
+                judged in the blind, so leave your name off the{' '}
+                {isPhoto ? 'image metadata' : 'manuscript itself'}.{' '}
+                {isPhoto
+                  ? `Entries must be ${PHOTO_FILE_EXT} files, up to ${PHOTO_MAX_FILES} per person.`
+                  : `Your essay must be a ${ALLOWED_FILE_EXT} file of no more than ${contest.wordLimit}.`}{' '}
+                If you need help submitting your {isPhoto ? 'photos' : 'essay'}, email{' '}
+                <a
+                  href="mailto:essayquestions@usni.org"
+                  className="text-[#023E7D] underline hover:no-underline"
+                >
+                  essayquestions@usni.org
+                </a>
+                .
+              </p>
+              <p className="font-body font-bold text-base text-[#c1121f]">* Required fields</p>
+            </Fieldset>
 
             <Fieldset legend="Author Information">
               <PersonFields
@@ -609,9 +660,9 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
               )}
             </div>
 
-            <Fieldset legend="Essay Information">
+            <Fieldset legend={isPhoto ? 'Entry Information' : 'Essay Information'}>
               <Field
-                label="Essay Title"
+                label={isPhoto ? 'Entry Title' : 'Essay Title'}
                 htmlFor="essay-title"
                 required
                 error={errors.title}
@@ -628,44 +679,51 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
                 />
               </Field>
 
-              <Field
-                label="Essay Word Count"
-                htmlFor="essay-word-count"
-                required
-                // Flag an over-length count as soon as it's typed, not just on
-                // submit — the live form never checks this at all.
-                error={errors.wordCount || (overLimit ? overLimitMessage : undefined)}
-                help={`Excluding footnotes, endnotes, and sources. This contest allows ${contest.wordLimit}.`}
-                hint={
-                  wordCount && !overLimit && wordCountNum > 0
-                    ? `${(contest.wordLimitMax - wordCountNum).toLocaleString()} under the limit`
-                    : undefined
-                }
-              >
-                <TextInput
-                  id="essay-word-count"
-                  inputMode="numeric"
-                  value={wordCount}
-                  hasError={!!errors.wordCount || overLimit}
-                  onChange={(e) => setWordCount(e.target.value)}
-                />
-              </Field>
+              {wordLimitMax !== undefined && (
+                <Field
+                  label="Essay Word Count"
+                  htmlFor="essay-word-count"
+                  required
+                  // Flag an over-length count as soon as it's typed, not just on
+                  // submit — the live form never checks this at all.
+                  error={errors.wordCount || (overLimit ? overLimitMessage : undefined)}
+                  help={`Excluding footnotes, endnotes, and sources. This contest allows ${contest.wordLimit}.`}
+                  hint={
+                    wordCount && !overLimit && wordCountNum > 0
+                      ? `${(wordLimitMax - wordCountNum).toLocaleString()} under the limit`
+                      : undefined
+                  }
+                >
+                  <TextInput
+                    id="essay-word-count"
+                    inputMode="numeric"
+                    value={wordCount}
+                    hasError={!!errors.wordCount || overLimit}
+                    onChange={(e) => setWordCount(e.target.value)}
+                  />
+                </Field>
+              )}
 
               <Field
-                label="Essay File"
+                label={isPhoto ? 'Photographs' : 'Essay File'}
                 htmlFor="essay-file"
                 required
                 error={errors.file}
-                help={`One file only. ${FILE_MAX_MB} MB limit. Allowed type: ${ALLOWED_FILE_EXT}.`}
+                help={
+                  isPhoto
+                    ? `Up to ${PHOTO_MAX_FILES} files. ${FILE_MAX_MB} MB each. Allowed types: ${PHOTO_FILE_EXT}. 300 dpi minimum preferred; no AI or manipulation beyond colour enhancement and cropping.`
+                    : `One file only. ${FILE_MAX_MB} MB limit. Allowed type: ${ALLOWED_FILE_EXT}.`
+                }
               >
                 <div className="flex flex-col gap-3">
                   <input
                     ref={fileInputRef}
                     id="essay-file"
                     type="file"
-                    accept={ALLOWED_FILE_EXT}
+                    multiple={isPhoto}
+                    accept={isPhoto ? PHOTO_ACCEPT : ALLOWED_FILE_EXT}
                     aria-invalid={errors.file ? true : undefined}
-                    onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                    onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
                     className={`w-full font-body text-base text-navy-bolder border px-3.5 py-3 bg-white
                       file:mr-4 file:py-2 file:px-4 file:border-0 file:font-body file:font-bold
                       file:text-sm file:bg-navy-bolder file:text-white file:cursor-pointer
@@ -673,14 +731,24 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
                       focus:border-navy-bright focus:shadow-[0_0_0_3px_rgba(4,102,200,0.15)]
                       ${errors.file ? 'border-[#c1121f] bg-[#fef6f6]' : 'border-[#94A3B8]'}`}
                   />
-                  {file && !errors.file && (
-                    <p className="flex items-center gap-2 font-body text-sm text-[#0a5c2e]">
-                      <i className="fa-solid fa-file-word" aria-hidden="true" />
-                      <span className="break-all">{file.name}</span>
-                      <span className="text-neutral-subtle">
-                        ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                      </span>
-                    </p>
+                  {files.length > 0 && !errors.file && (
+                    <ul className="flex flex-col gap-1.5">
+                      {files.map((f) => (
+                        <li
+                          key={`${f.name}-${f.size}`}
+                          className="flex items-center gap-2 font-body text-sm text-[#0a5c2e]"
+                        >
+                          <i
+                            className={`fa-solid ${isPhoto ? 'fa-file-image' : 'fa-file-word'}`}
+                            aria-hidden="true"
+                          />
+                          <span className="break-all">{f.name}</span>
+                          <span className="text-neutral-subtle">
+                            ({(f.size / 1024 / 1024).toFixed(1)} MB)
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
               </Field>
@@ -699,42 +767,16 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
               </div>
             </Fieldset>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-t border-border-light pt-8">
+            <div className="flex justify-end border-t border-border-light pt-8">
               <button
                 type="submit"
                 className="inline-flex items-center justify-center gap-2 bg-gold text-navy-bolder font-body font-bold text-base px-8 py-4 border border-gold hover:bg-gold-dark transition-colors"
               >
-                <i className="fa-solid fa-pen-nib" aria-hidden="true" />
-                Submit Essay
+                <i className={`fa-solid ${isPhoto ? 'fa-camera' : 'fa-pen-nib'}`} aria-hidden="true" />
+                {isPhoto ? 'Submit Photos' : 'Submit Essay'}
               </button>
-              <a
-                href={contest.href}
-                className="font-body font-bold text-base text-[#0466c8] hover:text-navy-bolder transition-colors"
-              >
-                Cancel and return to the contest
-              </a>
             </div>
           </form>
-
-          <p className="font-body text-sm text-neutral-subtle leading-relaxed mt-10 pt-8 border-t border-border-light">
-            If you need help submitting your essay, email{' '}
-            <a
-              href="mailto:essayquestions@usni.org"
-              className="text-[#023E7D] underline hover:no-underline"
-            >
-              essayquestions@usni.org
-            </a>
-            . If you are seeing an error message, please include it.
-          </p>
-
-          {contest.fundedBy && contest.fundedBy.length > 0 && (
-            <p className="font-body text-sm text-neutral-subtle text-center mt-8">
-              Funded by{' '}
-              <span className="font-bold italic text-navy-bolder">
-                {contest.fundedBy.join(' and ')}
-              </span>
-            </p>
-          )}
         </div>
       </div>
     </section>
