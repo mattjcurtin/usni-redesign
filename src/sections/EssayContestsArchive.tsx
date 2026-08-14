@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { ResultsCount } from '@/components/ui/ResultsList'
 import Pagination from '@/components/ui/Pagination'
+import FilterPanel from '@/components/ui/FilterPanel'
 import { essayContestSeries } from '@/data/essayContests'
 import { archiveImage, essayArchive, type EssayArchiveEntry } from '@/data/essayArchive'
 
@@ -130,7 +131,7 @@ export default function EssayContestsArchive() {
     reset()
   }
 
-  const hasFilters = query.trim() !== '' || categories.length > 0
+  const activeCount = categories.length + (query.trim() ? 1 : 0)
 
   // A checked category stays visible when the list is collapsed, so clearing one
   // never means hunting for it behind "See more"
@@ -177,21 +178,7 @@ export default function EssayContestsArchive() {
           the results on mobile, so reading order and focus order agree at both */}
       <div className="container-site flex flex-col lg:flex-row lg:items-start gap-8 xl:gap-12">
 
-        <aside className="w-full lg:w-[300px] xl:w-[320px] lg:flex-shrink-0 lg:sticky lg:top-8 flex flex-col gap-5">
-
-          <div className="flex items-center justify-between gap-3 border-b-4 border-[#0466c8] pb-3">
-            <h2 className="font-headline text-[28px] lg:text-[32px] text-navy-bolder leading-[1.15]">
-              Filters
-            </h2>
-            {hasFilters && (
-              <button
-                onClick={clearAll}
-                className="font-body text-sm text-[#023E7D] underline hover:no-underline"
-              >
-                Clear all
-              </button>
-            )}
-          </div>
+        <FilterPanel activeCount={activeCount} onClearAll={clearAll}>
 
           {/* Rule closes the keyword facet, matching the one under Categories */}
           <div className="flex flex-col gap-1.5 border-b border-border-light pb-5">
@@ -279,7 +266,7 @@ export default function EssayContestsArchive() {
             )}
           </div>
 
-        </aside>
+        </FilterPanel>
 
         <div className="flex-1 min-w-0">
 

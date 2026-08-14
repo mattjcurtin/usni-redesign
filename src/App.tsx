@@ -11,6 +11,8 @@ function ScrollToTop() {
 import { CartProvider } from '@/context/CartContext'
 import Home from '@/pages/Home'
 import Membership from '@/pages/Membership'
+import Events from '@/pages/Events'
+import EventsPast from '@/pages/EventsPast'
 import MembershipJoin from '@/pages/MembershipJoin'
 import Proceedings from '@/pages/Proceedings'
 import Giving from '@/pages/Giving'
@@ -63,6 +65,8 @@ export default function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/events/past" element={<EventsPast />} />
         <Route path="/membership" element={<Membership />} />
         <Route path="/membership/join" element={<MembershipJoin />} />
         <Route path="/membership/cart" element={<MembershipCart />} />
