@@ -15,11 +15,11 @@ export default function About() {
       <main className="flex-1">
         <AboutSubNav />
         <AboutHero />
+        <AdUnit />
         {/* The retired Mission & Vision page's content now lives here */}
         <AboutMissionVision />
-        <AboutPillars />
         <AboutQuickLinks />
-        <AdUnit />
+        <AboutPillars />
         <AboutGetInvolved />
       </main>
       <Footer />

@@ -24,7 +24,7 @@ const featureImages = [
  * The contests' origin story, opening the landing page.
  *
  * Previously its own page at /essay-contests/about. It now sits at the top of
- * the overview with only the first paragraph showing, so the history is
+ * the overview with only the first two paragraphs showing, so the history is
  * available without pushing the open contests below the fold.
  *
  * The image mosaic beside it is decorative — it gives the collapsed state
@@ -34,10 +34,9 @@ const featureImages = [
 export default function EssayContestsAbout() {
   const [expanded, setExpanded] = useState(false)
 
-  const [firstParagraph, ...restParagraphs] = [
-    ...essayContestsHistory,
-    essayContestsIntro.commitment,
-  ]
+  const allParagraphs = [...essayContestsHistory, essayContestsIntro.commitment]
+  const visibleParagraphs = allParagraphs.slice(0, 2)
+  const restParagraphs = allParagraphs.slice(2)
 
   return (
     <section className="bg-white pt-12 lg:pt-16 pb-10 lg:pb-12">
@@ -48,11 +47,18 @@ export default function EssayContestsAbout() {
             About the Essay Contests
           </h2>
 
-          <p className="font-body text-base lg:text-[17px] text-neutral-subtle leading-[1.75]">
-            {firstParagraph}
-          </p>
+          <div className="flex flex-col gap-4">
+            {visibleParagraphs.map((para, i) => (
+              <p
+                key={i}
+                className="font-body text-base lg:text-[17px] text-neutral-subtle leading-[1.75]"
+              >
+                {para}
+              </p>
+            ))}
+          </div>
 
-          {/* Everything past the opening paragraph is behind the toggle */}
+          {/* Everything past the opening two paragraphs is behind the toggle */}
           {expanded && (
             <div className="flex flex-col gap-4">
               {restParagraphs.map((para, i) => (

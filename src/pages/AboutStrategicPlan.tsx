@@ -13,9 +13,9 @@ export default function AboutStrategicPlan() {
       <main className="flex-1">
         <AboutSubNav />
         <AboutPageHero
-          eyebrow="Looking Ahead"
           title="Strategic Plan 2030"
-          deck="How the Naval Institute intends to grow its reach and influence through the next decade of maritime competition."
+          subtitle="U.S. Naval Institute’s Strategic Plan"
+          deck="We are extending the Institute’s reach and broadening its community, seeking a greater diversity of informed perspective from all professionals—young and old, enlisted and officers, civilians, and international professionals—to maintain the best, most effective forum possible."
           breadcrumbLabel="Strategic Plan"
         />
         <AboutStrategicPlanForeword />

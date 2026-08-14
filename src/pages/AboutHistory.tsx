@@ -1,10 +1,10 @@
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import AboutSubNav from '@/sections/AboutSubNav'
-import AboutPageHero from '@/sections/AboutPageHero'
+import AboutHistoryHero from '@/sections/AboutHistoryHero'
 import AboutHistoryIntro from '@/sections/AboutHistoryIntro'
 import AboutHistoryActivities from '@/sections/AboutHistoryActivities'
-import AboutGetInvolved from '@/sections/AboutGetInvolved'
+import AboutHistoryMoreInfo from '@/sections/AboutHistoryMoreInfo'
 
 export default function AboutHistory() {
   return (
@@ -12,15 +12,10 @@ export default function AboutHistory() {
       <Header />
       <main className="flex-1">
         <AboutSubNav />
-        <AboutPageHero
-          eyebrow="Since 1873"
-          title="Our History"
-          deck="Fifteen naval officers, a post–Civil War Navy, and the forum they founded on the grounds of the U.S. Naval Academy."
-          breadcrumbLabel="History"
-        />
+        <AboutHistoryHero />
         <AboutHistoryIntro />
         <AboutHistoryActivities />
-        <AboutGetInvolved />
+        <AboutHistoryMoreInfo />
       </main>
       <Footer />
     </div>

@@ -1,8 +1,27 @@
-/** Signatories as they appear at the foot of the foreword. */
+import imgPace from '@/assets/images/leadership/signature-gen-peter-pace.png'
+import imgHarris from '@/assets/images/leadership/signature-adm-harry-harris.png'
+import imgSpicer from '@/assets/images/leadership/signature-radm-ray-spicer.png'
+
+/** Signatories as they appear at the foot of the foreword on the current page. */
 const signatories = [
-  { name: 'Gen Peter Pace, USMC (Ret.)', role: 'Chair, Board of Trustees' },
-  { name: 'ADM Harry B. Harris, USN (Ret.)', role: 'Chair, Board of Directors' },
-  { name: 'RADM Raymond A. Spicer, USN (Ret.)', role: 'Chief Executive Officer and Publisher' },
+  {
+    name: 'Gen Peter Pace, USMC (Ret.)',
+    role: 'Chair, Board of Trustees',
+    image: imgPace,
+    href: '/about/leadership/gen-peter-pace-usmc-ret',
+  },
+  {
+    name: 'ADM Harry B. Harris, USN (Ret.)',
+    role: 'Chair, Board of Directors',
+    image: imgHarris,
+    href: '/about/leadership/adm-harry-harris',
+  },
+  {
+    name: 'RADM Raymond A. Spicer, USN (Ret.)',
+    role: 'Chief Executive Officer and Publisher',
+    image: imgSpicer,
+    href: '/about/leadership/radm-ray-spicer-usn-ret',
+  },
 ]
 
 /**
@@ -10,15 +29,17 @@ const signatories = [
  *
  * The source page runs this as five long unbroken paragraphs with the three
  * signatories stranded at the bottom as loose lines. Here the opening paragraph
- * leads at display size and the signatories become an attributed block.
+ * leads at display size and the signatories sit alongside the text, in the same
+ * tan-ringed circles used by the Leadership & Staff roster.
  */
 export default function AboutStrategicPlanForeword() {
   return (
     <section className="py-16 lg:py-20 bg-white">
       <div className="container-site">
-        {/* Centred: a foreword reads as a document, not a left-hung column */}
-        <div className="max-w-[760px] mx-auto flex flex-col gap-6">
-          <div className="border-t-2 border-navy-bold pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px] gap-10 lg:gap-10 xl:gap-12 items-start">
+
+        <div className="flex flex-col gap-6">
+          <div>
             <p className="font-body font-semibold text-sm uppercase tracking-[0.08em] text-navy-subtle mb-2">
               Foreword
             </p>
@@ -86,16 +107,42 @@ export default function AboutStrategicPlanForeword() {
           <p className="font-body text-base lg:text-[17px] text-neutral-subtle leading-[1.75]">
             Thank you for your continued support and dedication to our shared mission.
           </p>
+        </div>
 
-          {/* Signatories */}
-          <ul className="grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-border-light pt-6 mt-2">
-            {signatories.map((s) => (
-              <li key={s.name} className="flex flex-col gap-1">
-                <span className="font-headline text-lg text-navy-bolder leading-snug">{s.name}</span>
-                <span className="font-body text-sm text-neutral-subtle leading-snug">{s.role}</span>
-              </li>
-            ))}
-          </ul>
+        {/* Signatories — alongside the foreword rather than stranded beneath it */}
+        <ul className="flex flex-col sm:flex-row lg:flex-col gap-8 sm:gap-6 lg:gap-10">
+          {signatories.map((s) => (
+            <li
+              key={s.name}
+              className="group relative flex flex-col items-center text-center gap-4 sm:flex-1"
+            >
+              <div className="w-[150px] h-[150px] lg:w-[190px] lg:h-[190px] rounded-full overflow-hidden border-[6px] border-tan bg-white flex-shrink-0">
+                <img
+                  src={s.image}
+                  alt={s.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover scale-[1.08] group-hover:scale-[1.18] transition-transform duration-300 ease-out"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-headline text-lg lg:text-xl leading-snug">
+                  {/* Stretched hit area, matching the Leadership & Staff roster */}
+                  <a
+                    href={s.href}
+                    className="link-underline-hover text-navy-bolder hover:text-navy-bright transition-colors
+                               after:absolute after:inset-0"
+                  >
+                    {s.name}
+                  </a>
+                </span>
+                <span className="font-body font-bold text-sm text-neutral-subtle leading-snug">
+                  {s.role}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+
         </div>
       </div>
     </section>

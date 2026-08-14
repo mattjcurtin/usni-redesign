@@ -8,17 +8,14 @@
 const pillars = [
   {
     title: 'Independent',
-    icon: 'fa-solid fa-scale-balanced',
     body: 'A non-profit member association, with no government support, that does not lobby for special interests.',
   },
   {
     title: 'Non-Partisan',
-    icon: 'fa-solid fa-handshake-angle',
     body: 'An independent, professional military association with a mission, goals, and objectives that transcend political affiliations.',
   },
   {
     title: 'Innovative',
-    icon: 'fa-solid fa-lightbulb',
     body: 'Ideas and debate flourish through its respected journals, Proceedings and Naval History, its conferences, its books, and its online content, in support of those who serve.',
   },
 ]
@@ -39,9 +36,6 @@ export default function AboutPillars() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {pillars.map((pillar) => (
             <div key={pillar.title} className="bg-white p-8 flex flex-col gap-5">
-              <div className="w-12 h-12 bg-[#EBF4FF] flex items-center justify-center text-[#0466c8] flex-shrink-0">
-                <i className={pillar.icon} style={{ fontSize: '1.25rem' }} aria-hidden="true" />
-              </div>
               <div className="flex flex-col gap-2">
                 <h3 className="font-headline text-2xl text-navy-bolder leading-[1.2]">
                   {pillar.title}

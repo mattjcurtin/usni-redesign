@@ -45,6 +45,7 @@ import EssayContestsArchivePage from '@/pages/EssayContestsArchivePage'
 import About from '@/pages/About'
 import AboutHistory from '@/pages/AboutHistory'
 import AboutStrategicPlan from '@/pages/AboutStrategicPlan'
+import AboutLeadership from '@/pages/AboutLeadership'
 import DesignSystemHome from '@/pages/design-system/DesignSystemHome'
 import StyleGuide from '@/pages/design-system/StyleGuide'
 import DesignSystemButtons from '@/pages/design-system/Buttons'
@@ -103,6 +104,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/about/history" element={<AboutHistory />} />
         <Route path="/about/strategic-plan" element={<AboutStrategicPlan />} />
+        <Route path="/about/leadership" element={<AboutLeadership />} />
         <Route path="/design-system" element={<DesignSystemHome />} />
         <Route path="/design-system/style-guide" element={<StyleGuide />} />
         <Route path="/design-system/buttons" element={<DesignSystemButtons />} />

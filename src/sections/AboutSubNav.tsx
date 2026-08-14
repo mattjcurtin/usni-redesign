@@ -9,10 +9,10 @@ import { useLocation } from 'react-router-dom'
  * its content now lives on the About landing page.
  */
 const navItems = [
-  { label: 'About USNI', href: '/about' },
+  { label: 'Overview', href: '/about' },
   { label: 'History', href: '/about/history' },
   { label: 'Strategic Plan', href: '/about/strategic-plan' },
-  { label: 'Leadership', href: '/about/leadership' },
+  { label: 'Leadership & Staff', href: '/about/leadership' },
   { label: 'Jack C. Taylor Conference Center', href: '/about/taylor-conference-center' },
   { label: 'Media Inquiries', href: '/about/media' },
   { label: 'Contact USNI', href: '/about/contact' },

@@ -1,74 +1,77 @@
+import imgHistory from '@/assets/images/our-histroy-feature-image.png'
+import imgStrategicPlan from '@/assets/images/giving-feature-2.jpg'
+import imgLeadership from '@/assets/images/giving-opps-modal-hero-Conferences GO.jpg'
+import imgTaylorCenter from '@/assets/images/Daylight-Outside-Zoomed-In-e1639073841206.jpeg'
+
 /**
- * Wayfinding into the rest of the About section — same card pattern as
- * GivingQuickLinks, on white rather than navy so it doesn't collide with the
- * navy pillars block above it.
+ * Wayfinding into the rest of the About section — the PlainCard treatment used
+ * by "The Naval Institute at work" on the homepage, with a photo added above
+ * the headline. Sits on the light blue band between the white mission block
+ * above and the navy pillars below.
+ *
+ * Only the history image is final; the other three are stand-ins pending final
+ * art from USNI.
  */
 const links = [
   {
-    eyebrow: 'Since 1873',
     headline: 'Our History',
     body: 'Fifteen naval officers, a post–Civil War Navy, and the forum they founded on the grounds of the Naval Academy.',
-    cta: 'Read our history',
+    cta: 'Discover our story',
     href: '/about/history',
-    icon: 'fa-solid fa-landmark',
+    image: imgHistory,
+    alt: 'Historical illustration of the Naval Institute’s founding era',
   },
   {
-    eyebrow: 'Looking Ahead',
     headline: 'Strategic Plan 2030',
     body: 'How the Institute intends to grow its reach and influence through the next decade of maritime competition.',
     cta: 'View the strategic plan',
     href: '/about/strategic-plan',
-    icon: 'fa-solid fa-compass',
+    image: imgStrategicPlan,
+    alt: 'An aircraft carrier under way at sea',
   },
   {
-    eyebrow: 'Governance',
-    headline: 'Leadership',
-    body: 'The Board of Trustees, Board of Directors, and staff who steward the Institute and its mission.',
+    headline: 'Leadership & Staff',
+    body: 'The executives, directors, trustees, and editors who steward the Institute and its mission.',
     cta: 'Meet our leadership',
     href: '/about/leadership',
-    icon: 'fa-solid fa-people-group',
+    image: imgLeadership,
+    alt: 'Attendees at a U.S. Naval Institute conference',
   },
   {
-    eyebrow: 'Annapolis',
     headline: 'Jack C. Taylor Conference Center',
     body: 'The Institute’s conference and event venue on the grounds of the U.S. Naval Academy.',
     cta: 'Visit the center',
     href: '/about/taylor-conference-center',
-    icon: 'fa-solid fa-building-columns',
+    image: imgTaylorCenter,
+    alt: 'Exterior signage on the Jack C. Taylor Conference Center in Annapolis',
   },
 ]
 
 export default function AboutQuickLinks() {
   return (
-    <section className="py-16 lg:py-20 bg-white">
+    <section className="py-16 lg:py-20 bg-[#ebf4ff]">
       <div className="container-site">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {links.map((item) => (
-            <a
-              key={item.headline}
-              href={item.href}
-              className="group bg-white border border-navy-subtle p-8 flex flex-col gap-5 hover:shadow-md transition-shadow"
-            >
-              <div className="w-12 h-12 bg-[#EBF4FF] flex items-center justify-center text-[#0466c8] flex-shrink-0">
-                <i className={item.icon} style={{ fontSize: '1.25rem' }} aria-hidden="true" />
+            <div key={item.href} className="flex flex-col border border-navy-subtle bg-white">
+              <div className="overflow-hidden aspect-[3/2]">
+                <img src={item.image} alt={item.alt} className="w-full h-full object-cover" />
               </div>
-              <div className="flex flex-col gap-2">
-                <p className="font-body font-medium text-xs uppercase tracking-[0.08em] text-[#0466c8]">
-                  {item.eyebrow}
-                </p>
-                <h3 className="font-headline text-xl text-navy-bolder leading-[1.2]">
+              <div className="flex flex-col flex-1 p-6 lg:p-7">
+                <h3 className="font-headline text-2xl text-navy-bolder leading-[1.1] mb-4">
                   {item.headline}
                 </h3>
-                <p className="font-body text-sm text-neutral-subtle leading-relaxed">{item.body}</p>
+                <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-8 flex-1">
+                  {item.body}
+                </p>
+                <a
+                  href={item.href}
+                  className="inline-flex items-center justify-center gap-2 bg-navy-bolder text-white font-body font-bold text-sm tracking-[-0.3px] px-5 py-3.5 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors duration-150 w-full"
+                >
+                  {item.cta} →
+                </a>
               </div>
-              <div className="mt-auto flex items-center gap-2 font-body font-semibold text-sm text-[#0466c8] group-hover:gap-3 transition-all">
-                <span className="relative">
-                  {item.cta}
-                  <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#0466c8] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out" />
-                </span>
-                <i className="fa-solid fa-arrow-right" style={{ fontSize: '0.75rem' }} aria-hidden="true" />
-              </div>
-            </a>
+            </div>
           ))}
         </div>
       </div>

@@ -1,56 +1,55 @@
 interface AboutPageHeroProps {
-  eyebrow?: string
   title: string
+  /** Secondary line under the title, where the source page carries one. */
+  subtitle?: string
   deck?: string
   /** Trailing breadcrumb label. Omit on the About landing page itself. */
   breadcrumbLabel: string
 }
 
 /**
- * Compact dark hero for About sub-pages (History, Strategic Plan).
+ * Light blue hero for About sub-pages (Leadership & Staff, Strategic Plan).
  *
- * The landing page gets the full split photo hero; interior pages use this
- * lighter-weight header so the section reads with a clear hierarchy, matching
- * how Essay Contests handles its own interior pages.
+ * Matches the interior hero banner used across Proceedings, Books, and Naval
+ * History — breadcrumb over a rule, then a left-aligned page title. The About
+ * landing and History pages get the full split photo hero instead.
  */
 export default function AboutPageHero({
-  eyebrow,
   title,
+  subtitle,
   deck,
   breadcrumbLabel,
 }: AboutPageHeroProps) {
   return (
-    <section
-      className="flex flex-col items-center justify-center py-12 lg:py-20 px-6"
-      style={{ background: 'linear-gradient(to bottom, #1d2535, #0e121a)' }}
-    >
-      <div className="w-full max-w-[820px] flex flex-col items-center text-center gap-4">
-        <nav
-          className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-body font-bold text-sm text-white"
-          aria-label="Breadcrumb"
-        >
-          <a href="/" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-            <i className="fa-solid fa-house text-[10px]" aria-hidden="true" /> Home
-          </a>
-          <span className="text-white/40">/</span>
-          <a href="/about" className="hover:text-white/80 transition-colors">About</a>
-          <span className="text-white/40">/</span>
-          <span className="font-normal italic text-[#f4f4f6]">{breadcrumbLabel}</span>
+    <section className="bg-[#ebf4ff] pt-12 pb-16">
+      <div className="container-site flex flex-col gap-4">
+
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="border-b border-[#C2DDFF] pb-4 flex items-center gap-2 text-sm">
+          <a href="/" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">Home</a>
+          <span className="text-neutral-subtle">/</span>
+          <a href="/about" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">About USNI</a>
+          <span className="text-neutral-subtle">/</span>
+          <span className="font-body italic text-neutral-subtle">{breadcrumbLabel}</span>
         </nav>
 
-        {eyebrow && (
-          <p className="font-body font-medium text-sm uppercase tracking-[0.08em] text-light-blue">
-            {eyebrow}
-          </p>
-        )}
+        {/* Page title */}
+        <div className="flex flex-col gap-3">
+          <h1 className="font-headline text-[32px] lg:text-[64px] text-navy-bolder leading-[1.1]">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="font-headline text-[22px] lg:text-[32px] text-navy-subtle leading-[1.15]">
+              {subtitle}
+            </p>
+          )}
+          {deck && (
+            <p className="font-body text-base lg:text-lg text-neutral-subtle leading-[1.5] max-w-[820px]">
+              {deck}
+            </p>
+          )}
+        </div>
 
-        <h1 className="font-headline text-[32px] lg:text-5xl xl:text-[56px] text-white leading-[1.1]">
-          {title}
-        </h1>
-
-        {deck && (
-          <p className="font-body text-white/80 text-base lg:text-lg leading-[1.5]">{deck}</p>
-        )}
       </div>
     </section>
   )
