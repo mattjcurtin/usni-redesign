@@ -39,23 +39,23 @@ export default function AboutMissionVision() {
               The U.S. Naval Institute is a non-profit membership association serving a community of
               individuals who participate in an open forum to debate key issues in the Sea Services.
               We serve our members by providing a monthly journal,{' '}
-              <a href="/proceedings" className="text-[#023E7D] underline hover:no-underline">
+              <a href="/proceedings" className="text-link">
                 Proceedings
               </a>
               , and other benefits such as our daily news service{' '}
-              <a href="/news" className="text-[#023E7D] underline hover:no-underline">
+              <a href="/news" className="text-link">
                 USNI News
               </a>
               ; blogs, newsletters, and mobile apps; discounts off all titles from the{' '}
-              <a href="/books" className="text-[#023E7D] underline hover:no-underline">
+              <a href="/books" className="text-link">
                 Naval Institute Press
               </a>
               ; as well as a discounted subscription rate on our award-winning bi-monthly{' '}
-              <a href="/naval-history" className="text-[#023E7D] underline hover:no-underline">
+              <a href="/naval-history" className="text-link">
                 Naval History
               </a>{' '}
               magazine. Naval Institute members also have access to our{' '}
-              <a href="/archives" className="text-[#023E7D] underline hover:no-underline">
+              <a href="/archives" className="text-link">
                 archive
               </a>
               , and networking and professional development programs via our conferences and events.

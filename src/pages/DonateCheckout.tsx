@@ -1,20 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useState, useEffect, useId, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
 import CreditCardModal from '@/components/ui/CreditCardModal'
-
-const PRIORITY_LABELS: Record<string, string> = {
-  'usni-news':         'USNI News',
-  'proceedings':       'Proceedings Magazine',
-  'sponsored-student': 'Sponsored Student Program',
-  'naval-history':     'Naval History',
-  'oral-history':      'Oral History Program',
-  'photo-archives':    'Photo Archives',
-  'taylor-center':     'Jack C. Taylor Conference Center',
-}
+import { AcceptedCards } from '@/components/ui/CardBrandIcons'
+import { PRIORITY_LABELS, makeOrderNumber } from '@/data/transactions'
+import { countries, militaryStatuses, services, suffixes, usStates } from '@/data/essaySubmission'
 
 // ─── Field components ──────────────────────────────────────────────────────────
 
@@ -24,12 +17,14 @@ function FormInput({
   label: string; placeholder: string; value: string; onChange: (v: string) => void
   type?: string; className?: string; required?: boolean; error?: boolean
 }) {
+  const id = useId()
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
-      <label className="font-body font-bold text-[14px] text-[#1d2535]">
+      <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
         {label}{required && <span className="text-red-500"> *</span>}
       </label>
       <input
+        id={id}
         type={type}
         placeholder={placeholder}
         value={value}
@@ -46,13 +41,16 @@ function FormInput({
 }
 
 function InlineSelect({
-  placeholder, options, value, onChange, className = '', error = false,
+  placeholder, options, value, onChange, className = '', error = false, id, ariaLabel,
 }: {
-  placeholder: string; options: string[]; value: string; onChange: (v: string) => void; className?: string; error?: boolean
+  placeholder: string; options: string[]; value: string; onChange: (v: string) => void
+  className?: string; error?: boolean; id?: string; ariaLabel?: string
 }) {
   return (
     <div className={`relative ${className}`}>
       <select
+        id={id}
+        aria-label={ariaLabel}
         value={value}
         onChange={e => onChange(e.target.value)}
         aria-invalid={error || undefined}
@@ -65,6 +63,51 @@ function InlineSelect({
         <option value="" disabled>{placeholder}</option>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
       </select>
+    </div>
+  )
+}
+
+/** Street / City / State / ZIP / Country — matches the membership checkout. */
+function AddressFields({
+  street, setStreet, city, setCity, state, setState, zip, setZip, country, setCountry,
+  fieldError, showErrors,
+}: {
+  street: string; setStreet: (v: string) => void
+  city: string;   setCity:   (v: string) => void
+  state: string;  setState:  (v: string) => void
+  zip: string;    setZip:    (v: string) => void
+  country: string; setCountry: (v: string) => void
+  fieldError: (v: string) => boolean
+  showErrors: boolean
+}) {
+  return (
+    <>
+      <FormInput label="Street Address" placeholder="123 Main Street" value={street} onChange={setStreet} required error={fieldError(street)} />
+      <div className="flex flex-col sm:flex-row gap-4">
+        <FormInput label="City" placeholder="Enter city" value={city} onChange={setCity} className="flex-1" required error={fieldError(city)} />
+        <LabelledSelect label="State" placeholder="Select State" options={usStates} value={state} onChange={setState} className="sm:w-44" required error={showErrors && !state} />
+        <FormInput label="ZIP" placeholder="Enter zip code" value={zip} onChange={setZip} className="sm:w-36" required error={fieldError(zip)} />
+      </div>
+      <LabelledSelect label="Country" placeholder="Select Country" options={countries} value={country} onChange={setCountry} required error={showErrors && !country} />
+    </>
+  )
+}
+
+/** Label + select bound by a generated id. */
+function LabelledSelect({
+  label, placeholder, options, value, onChange, className = '', required = false, error = false,
+}: {
+  label: string; placeholder: string; options: string[]
+  value: string; onChange: (v: string) => void
+  className?: string; required?: boolean; error?: boolean
+}) {
+  const id = useId()
+  return (
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
+        {label}{required && <span className="text-red-500"> *</span>}
+      </label>
+      <InlineSelect id={id} placeholder={placeholder} options={options} value={value} onChange={onChange} error={error} />
     </div>
   )
 }
@@ -95,6 +138,7 @@ function RequiredFieldsAlert({
 
 export default function DonateCheckout() {
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const { setCartCount } = useCart()
 
   const amount      = searchParams.get('amount')    ?? '100'
@@ -128,7 +172,11 @@ export default function DonateCheckout() {
   // ── Payment
   const [cardModalOpen, setCardModalOpen]                 = useState(false)
   const [savedCardLast4, setSavedCardLast4]               = useState<string | null>(null)
-  const [billingSameAsShipping, setBillingSameAsShipping] = useState(true)
+  const [billStreet, setBillStreet]   = useState('')
+  const [billCity, setBillCity]       = useState('')
+  const [billState, setBillState]     = useState('')
+  const [billZip, setBillZip]         = useState('')
+  const [billCountry, setBillCountry] = useState('United States')
 
   // ── Required-field validation
   const [showErrors, setShowErrors] = useState(false)
@@ -151,17 +199,39 @@ export default function DonateCheckout() {
     if (!email.trim())    missingFields.push('Email Address')
     if (!password.trim()) missingFields.push('Password')
   }
+  // Nothing ever ships on a donation, so there is no delivery address to reuse:
+  // the billing address is the only address on the order, and the card cannot be
+  // authorized without it.
+  if (!billStreet.trim()) missingFields.push('Billing Street Address')
+  if (!billCity.trim())   missingFields.push('Billing City')
+  if (!billState)         missingFields.push('Billing State')
+  if (!billZip.trim())    missingFields.push('Billing ZIP')
+  if (!billCountry)       missingFields.push('Billing Country')
   if (!savedCardLast4) missingFields.push('Credit Card Payment')
 
   const fieldError = (value: string) => showErrors && !value.trim()
 
+  /** Mirrors MembershipCheckout: mint a receipt number, hand the gift over. */
   const handleCompleteDonation = () => {
     if (missingFields.length > 0) {
       setShowErrors(true)
       setTimeout(() => errorAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50)
-    } else {
-      setShowErrors(false)
+      return
     }
+    setShowErrors(false)
+
+    const params = new URLSearchParams({
+      amount,
+      frequency,
+      order: makeOrderNumber('NIF'),
+    })
+    if (priorityIds.length > 0) params.set('priorities', priorityIds.join(','))
+    if (anonymous) params.set('anonymous', 'true')
+    if (email.trim()) params.set('email', email.trim())
+    if (firstName.trim()) params.set('name', firstName.trim())
+    if (savedCardLast4) params.set('card', savedCardLast4)
+
+    navigate(`/giving/donate/confirmation?${params.toString()}`)
   }
 
   return (
@@ -250,18 +320,12 @@ export default function DonateCheckout() {
                           <p className="font-body font-bold text-[12px] uppercase tracking-[0.08em] text-[#4e576a] mb-4">Service Information</p>
                           <div className="flex flex-col gap-5">
                             <div className="flex gap-5">
-                              <div className="flex flex-col gap-1.5 flex-1">
-                                <label className="font-body font-bold text-[14px] text-[#1d2535]">Service <span className="text-red-500">*</span></label>
-                                <InlineSelect placeholder="— Select —" options={['Navy', 'Marine Corps', 'Coast Guard', 'Army', 'Air Force', 'Space Force', 'Civilian']} value={service} onChange={setService} error={showErrors && !service} />
-                              </div>
-                              <div className="flex flex-col gap-1.5 flex-1">
-                                <label className="font-body font-bold text-[14px] text-[#1d2535]">Military Status <span className="text-red-500">*</span></label>
-                                <InlineSelect placeholder="— Select —" options={['Active Duty', 'Reserve', 'National Guard', 'Retired', 'Veteran', 'Civilian']} value={militaryStatus} onChange={setMilitary} error={showErrors && !militaryStatus} />
-                              </div>
+                              <LabelledSelect label="Service" placeholder="— Select —" options={services} value={service} onChange={setService} className="flex-1" required error={showErrors && !service} />
+                              <LabelledSelect label="Military Status" placeholder="— Select —" options={militaryStatuses} value={militaryStatus} onChange={setMilitary} className="flex-1" required error={showErrors && !militaryStatus} />
                             </div>
                             <div className="flex gap-5">
                               <FormInput label="Rank / Title" placeholder="Enter rank or title" value={rank} onChange={setRank} className="flex-1" required error={fieldError(rank)} />
-                              <FormInput label="Suffix" placeholder="Jr., Sr., III…" value={suffix} onChange={setSuffix} className="flex-1" />
+                              <LabelledSelect label="Suffix" placeholder="— None —" options={suffixes} value={suffix} onChange={setSuffix} className="flex-1" />
                               <FormInput label="Graduation Year" placeholder="YYYY" value={gradYear} onChange={setGradYear} className="w-36" />
                             </div>
                           </div>
@@ -272,11 +336,32 @@ export default function DonateCheckout() {
                       <div className="flex flex-col gap-5">
                         <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
                         <FormInput label="Password" placeholder="Your password" value={password} onChange={setPassword} type="password" required error={fieldError(password)} />
-                        <a href="/login/forgot" className="font-body text-[15px] text-[#0466c8] hover:underline w-fit">
+                        <a href="/login/forgot" className="font-body text-[15px] w-fit text-link">
                           Forgot your password?
                         </a>
                       </div>
                     )}
+                  </div>
+                </div>
+
+                {/* Card: Billing Address — required to authorize the card */}
+                <div className="border border-[#c4c9d4]">
+                  <div className="p-6 flex flex-col gap-6">
+                    <div className="flex flex-col gap-1">
+                      <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Billing Address</h2>
+                      <p className="font-body text-[15px] text-[#4e576a] leading-[1.5]">
+                        The address on file with your card issuer. Required to verify your payment and to
+                        issue your tax receipt — nothing is mailed to it.
+                      </p>
+                    </div>
+                    <AddressFields
+                      street={billStreet} setStreet={setBillStreet}
+                      city={billCity} setCity={setBillCity}
+                      state={billState} setState={setBillState}
+                      zip={billZip} setZip={setBillZip}
+                      country={billCountry} setCountry={setBillCountry}
+                      fieldError={fieldError} showErrors={showErrors}
+                    />
                   </div>
                 </div>
 
@@ -285,13 +370,7 @@ export default function DonateCheckout() {
                   <div className="p-6 flex flex-col gap-6">
                     <div className="flex items-center justify-between">
                       <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Payment Details</h2>
-                      <div className="flex gap-1.5">
-                        {['VISA', 'MC', 'AMEX', 'DISC'].map(brand => (
-                          <span key={brand} className="border border-[#c4c9d4] px-2 py-1 font-body font-bold text-[11px] text-[#4e576a] tracking-wide leading-none">
-                            {brand}
-                          </span>
-                        ))}
-                      </div>
+                      <AcceptedCards />
                     </div>
 
                     {savedCardLast4 && (
@@ -305,15 +384,10 @@ export default function DonateCheckout() {
                         {savedCardLast4 ? 'Change Your Credit Card Details' : 'Pay with Credit Card'}
                       </Button>
 
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={billingSameAsShipping}
-                          onChange={e => setBillingSameAsShipping(e.target.checked)}
-                          className="w-4 h-4 border border-[#4e576a] accent-[#023e7d] cursor-pointer"
-                        />
-                        <span className="font-body text-[15px] text-[#1d2535]">My billing information is the same as my shipping information.</span>
-                      </label>
+                      <p className="font-body text-[14px] text-[#4e576a]">
+                        Your card is charged once this order is completed. The billing address above is
+                        used to verify it.
+                      </p>
                     </div>
                   </div>
                 </div>

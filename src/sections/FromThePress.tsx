@@ -159,7 +159,7 @@ export default function FromThePress() {
               <div className="pt-1">
                 <a
                   href={featured.href}
-                  className="inline-flex items-center font-body font-bold text-base bg-gold text-navy-bolder px-6 py-3 hover:bg-gold-dark transition-colors"
+                  className="inline-flex items-center font-body font-bold text-base bg-navy-bolder text-white px-6 py-3 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors"
                 >
                   View the Book
                 </a>

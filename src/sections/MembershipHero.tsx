@@ -39,7 +39,7 @@ export default function MembershipHero() {
           <NavyButtonLink href="/membership/join">
             Join USNI today
           </NavyButtonLink>
-          <ButtonLink href="/membership/renew" variant="outline-dark" size="md">
+          <ButtonLink href="/login" variant="outline-dark" size="md">
             Renew existing membership
           </ButtonLink>
         </div>

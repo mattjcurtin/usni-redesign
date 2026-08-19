@@ -1,0 +1,222 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import AccountLayout from '@/components/layout/AccountLayout'
+import { AccountCard, Badge, DataRow, SectionLink, Toggle } from '@/components/ui/AccountCard'
+import {
+  entitlements,
+  giving,
+  givingTotals,
+  membership,
+  memberUpdates,
+  orders,
+  savedArticles,
+  subscriptions,
+} from '@/data/account'
+
+/**
+ * Account landing page.
+ *
+ * The live site opens with a promotional Member Updates feed and, for personal
+ * data, a member number above "Your Membership information is temporarily
+ * unavailable online." This page inverts that: status first, then the member's
+ * own records, with the promo feed last.
+ */
+export default function AccountDashboard() {
+  const [autoRenew, setAutoRenew] = useState(membership.autoRenew)
+  const recentOrders = orders.slice(0, 3)
+  const towardCircle = Math.min(
+    100,
+    Math.round((givingTotals.yearToDate / givingTotals.leadershipCircleThreshold) * 100),
+  )
+
+  return (
+    <AccountLayout
+      title="Dashboard"
+      lede="Your membership, subscriptions, and recent activity at a glance."
+    >
+      {/* ── Membership status ─────────────────────────────────────────── */}
+      {membership.statusAvailable ? (
+        <div className="border border-[#c4c9d4]">
+          <div className="bg-navy-bolder px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="font-body font-medium text-[12px] uppercase tracking-[0.08em] text-light-blue mb-1">
+                Current membership
+              </p>
+              <p className="font-headline text-[28px] text-white leading-tight">{membership.plan}</p>
+            </div>
+            <Badge tone="active">
+              <i className="fa-solid fa-circle-check" aria-hidden="true" />
+              Active
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#e2e8f0] border-b border-[#e2e8f0]">
+            {[
+              { label: 'Term', value: membership.term },
+              { label: 'Renews on', value: membership.renewsOn },
+              { label: 'Dues', value: `$${membership.price}/year` },
+            ].map(stat => (
+              <div key={stat.label} className="px-6 py-4">
+                <p className="font-body font-semibold text-[12px] uppercase tracking-[0.06em] text-neutral-subtle">
+                  {stat.label}
+                </p>
+                <p className="font-body font-bold text-[17px] text-navy-bolder mt-0.5">{stat.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="px-6 py-5 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-start gap-3 max-w-[460px]">
+              <Toggle on={autoRenew} label="Auto-renew membership" onChange={() => setAutoRenew(!autoRenew)} />
+              <p className="font-body text-[14px] text-neutral-subtle leading-relaxed">
+                {autoRenew ? (
+                  <>
+                    Auto-renew is on. We’ll charge your Visa ending 4242 on {membership.renewsOn}.
+                  </>
+                ) : (
+                  <>Auto-renew is off. We’ll email you before your membership lapses on {membership.renewsOn}.</>
+                )}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                to="/membership/join"
+                className="inline-flex items-center justify-center bg-navy-bolder text-white font-body font-bold text-[15px] px-5 py-3 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors"
+              >
+                Renew now
+              </Link>
+              <Link
+                to="/account/payment"
+                className="inline-flex items-center justify-center font-body font-bold text-[15px] text-navy-bolder px-5 py-3 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
+              >
+                Update payment
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Fallback that reproduces the live site's Salesforce-unavailable state. */
+        <div className="border border-l-4 border-[#f0d98a] bg-[#fff8d6] px-6 py-5">
+          <p className="font-body font-bold text-[16px] text-navy-bolder mb-1">
+            Membership information is temporarily unavailable
+          </p>
+          <p className="font-body text-[15px] text-neutral-subtle leading-relaxed">
+            Your member number is {membership.memberNumber}. Please contact Member Services at{' '}
+            <a href="tel:4102686110" className="text-link">410-268-6110</a>{' '}
+            with any membership questions.
+          </p>
+        </div>
+      )}
+
+      {/* ── Entitlements ──────────────────────────────────────────────── */}
+      <AccountCard title="What your membership includes">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+          {entitlements.map(e => (
+            <li key={e.role} className="flex items-start gap-3">
+              <i
+                className={`fa-solid ${e.active ? 'fa-circle-check text-[#0a5c2e]' : 'fa-circle-minus text-[#c4c9d4]'} text-[15px] mt-0.5 flex-shrink-0`}
+                aria-hidden="true"
+              />
+              <div className="min-w-0">
+                <p className={`font-body font-bold text-[15px] ${e.active ? 'text-navy-bolder' : 'text-neutral-subtle'}`}>
+                  {e.label}
+                </p>
+                <p className="font-body text-[13px] text-neutral-subtle leading-snug">{e.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </AccountCard>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* ── Recent orders ───────────────────────────────────────────── */}
+        <AccountCard title="Recent orders" action={<SectionLink to="/account/orders">All orders</SectionLink>}>
+          <ul className="flex flex-col">
+            {recentOrders.map(o => (
+              <li key={o.number} className="py-3 border-b border-[#e8eaed] last:border-b-0 last:pb-0 first:pt-0">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p className="font-body font-bold text-[14px] text-navy-bolder">{o.number}</p>
+                  <p className="font-body font-bold text-[15px] text-navy-bolder">${o.total.toFixed(2)}</p>
+                </div>
+                <p className="font-body text-[13px] text-neutral-subtle leading-snug mt-0.5">
+                  {o.placedOn} · {o.state}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </AccountCard>
+
+        {/* ── Subscriptions ───────────────────────────────────────────── */}
+        <AccountCard
+          title="Your subscriptions"
+          action={<SectionLink to="/account/subscriptions">Manage</SectionLink>}
+        >
+          <dl className="flex flex-col">
+            {subscriptions.map(s => (
+              <DataRow
+                key={s.title}
+                label={s.title}
+                value={
+                  <>
+                    Next issue {s.nextIssue}
+                    <br />
+                    <span className="text-[13px]">Renews {s.renewsOn}</span>
+                  </>
+                }
+              />
+            ))}
+          </dl>
+        </AccountCard>
+
+        {/* ── Saved articles ──────────────────────────────────────────── */}
+        <AccountCard title="Saved articles" action={<SectionLink to="/account/saved">All saved</SectionLink>}>
+          <ul className="flex flex-col">
+            {savedArticles.map(a => (
+              <li key={a.href} className="py-3 border-b border-[#e8eaed] last:border-b-0 last:pb-0 first:pt-0">
+                <Link to={a.href} className="font-body font-bold text-[15px] text-navy-bolder hover:text-navy-bright">
+                  {a.title}
+                </Link>
+                <p className="font-body text-[13px] text-neutral-subtle mt-0.5">
+                  {a.publication} · {a.issue}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </AccountCard>
+
+        {/* ── Giving ──────────────────────────────────────────────────── */}
+        <AccountCard title="Your giving" action={<SectionLink to="/account/giving">Giving history</SectionLink>}>
+          <dl className="flex flex-col mb-4">
+            <DataRow label={`${givingTotals.calendarYear} to date`} value={`$${givingTotals.yearToDate.toLocaleString()}`} />
+            <DataRow label="Lifetime" value={`$${givingTotals.lifetime.toLocaleString()}`} />
+            <DataRow label="Last gift" value={`$${giving[0].amount.toLocaleString()} · ${giving[0].givenOn}`} />
+          </dl>
+          <div className="flex flex-col gap-2">
+            <div className="h-2 bg-[#e2e8f0]">
+              <div className="h-2 bg-[#023e7d]" style={{ width: `${towardCircle}%` }} />
+            </div>
+            <p className="font-body text-[13px] text-neutral-subtle leading-relaxed">
+              ${(givingTotals.leadershipCircleThreshold - givingTotals.yearToDate).toLocaleString()} more in{' '}
+              {givingTotals.calendarYear} qualifies for the Leadership Circle.
+            </p>
+          </div>
+        </AccountCard>
+      </div>
+
+      {/* ── Member updates, demoted to the bottom ─────────────────────── */}
+      <AccountCard title="Member updates">
+        <ul className="flex flex-col">
+          {memberUpdates.map(u => (
+            <li key={u.title} className="py-4 border-b border-[#e8eaed] last:border-b-0 last:pb-0 first:pt-0">
+              <p className="font-body font-medium text-[11px] uppercase tracking-[0.08em] text-[#c1121f] mb-1">
+                Member Update
+              </p>
+              <p className="font-headline text-[19px] text-navy-bolder leading-snug">{u.title}</p>
+              <p className="font-body text-[14px] text-neutral-subtle leading-relaxed mt-1">{u.blurb}</p>
+            </li>
+          ))}
+        </ul>
+      </AccountCard>
+    </AccountLayout>
+  )
+}

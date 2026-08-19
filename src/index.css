@@ -152,6 +152,33 @@
     animation: link-underline-sweep 0.32s ease-out;
   }
 
+  /* ── Inline text links ────────────────────────────────────────────────────
+     One treatment for every inline link on a light background: #0466c8,
+     underlined at rest, underline redrawing on hover. Replaces a scatter of
+     per-instance recipes — `underline hover:no-underline` (which removed the
+     underline on hover, the opposite of this), `hover:underline` (no underline
+     at rest), and three different link colours.
+
+     Not element-qualified, because several of these links are <button>s styled
+     as links. Safe to leave unqualified: the hover effect is a keyframe rather
+     than a transition, so Tailwind's `transition-colors` cannot strip it the
+     way it does for `.link-underline-hover`.
+
+     Links on dark backgrounds are deliberately NOT part of this — the footer
+     and hero links need a light colour for contrast and keep their own. */
+  .text-link {
+    color: #0466c8;
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+  }
+
+  .text-link:hover {
+    animation: link-underline-sweep 0.32s ease-out;
+  }
+
   /* ── Select fields ──────────────────────────────────────────────────────
      One chevron treatment for every <select> on the site. Replaces three
      competing approaches (the native browser arrow, an absolutely-positioned
@@ -218,5 +245,16 @@
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Printed receipts: a confirmation page should print as a document, so the site
+   chrome and the on-page controls drop out. Opt-in via `.print-receipt` on the
+   page root — see `components/ui/Confirmation.tsx`. */
+@media print {
+  .print-receipt header,
+  .print-receipt footer,
+  .print-receipt .print-hide {
+    display: none !important;
   }
 }

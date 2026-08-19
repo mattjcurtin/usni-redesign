@@ -99,8 +99,19 @@ export default function Footer() {
               <p className="font-body text-[20px] text-white leading-[1.4]">
                 Sign up to get updates about new releases and event invitations.
               </p>
+              {/*
+                Mailchimp's hosted form, deliberately WITHOUT the `/post` segment.
+                `/subscribe/post?u=…&id=…` is the form's POST action: arriving there
+                by GET is treated as an empty submission, so Mailchimp renders the
+                page with "Please enter a value" already showing on every required
+                field. `/subscribe?u=…&id=…` is the hosted form itself and renders
+                clean. Verified: the /post URL returns 4 inline-error markers, this
+                one returns none.
+              */}
               <a
-                href="/newsletter"
+                href="https://usni.us2.list-manage.com/subscribe?u=e971c577684d30446b18f75bf&id=adee2c2162"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full bg-gold text-navy-bolder
                            font-body font-bold text-base tracking-[-0.5px] px-6 py-4
                            hover:bg-gold-dark transition-colors"
@@ -110,6 +121,7 @@ export default function Footer() {
                   <polyline points="22,6 12,13 2,6"/>
                 </svg>
                 Join The List
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
             </div>
           </div>

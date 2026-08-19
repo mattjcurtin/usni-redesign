@@ -46,7 +46,7 @@ export default function BooksCartItems() {
             <button
               type="button"
               onClick={() => navigate('/books')}
-              className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#f0f4f8] transition-colors"
+              className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#002b5c] hover:text-white transition-colors"
             >
               <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M10 6H2M6 2L2 6l4 4" />
@@ -84,7 +84,7 @@ export default function BooksCartItems() {
 
           {/* Book info */}
           <div className="flex-1 min-w-0 flex flex-col gap-2">
-            <a href={`/books/${bookId}`} className="font-headline text-[22px] text-[#023e7d] leading-[1.2] hover:underline">
+            <a href={`/books/${bookId}`} className="font-headline text-[22px] leading-[1.2] text-link">
               {book?.title ?? 'Book'}
             </a>
             {book?.subtitle && (
@@ -157,7 +157,7 @@ export default function BooksCartItems() {
           <button
             type="button"
             onClick={() => navigate('/books')}
-            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#f0f4f8] transition-colors"
+            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#002b5c] hover:text-white transition-colors"
           >
             <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 6H2M6 2L2 6l4 4" />

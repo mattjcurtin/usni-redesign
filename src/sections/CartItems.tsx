@@ -1,24 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
-
-const PLAN_LABELS: Record<string, string> = {
-  digital: 'Digital Membership',
-  full: 'Full Membership',
-  student: 'Student Membership',
-  life: 'Life Membership',
-  'full-life': 'Full Life Membership',
-  'online-life': 'Online Life Membership',
-  'senior-life': 'Senior Life Membership',
-  'senior-online-life': 'Senior Online Life Membership',
-}
-
-const TERM_LABELS: Record<string, string> = {
-  '1': '1 year',
-  '3': '3 years',
-  life: 'Lifetime',
-  lifetime: 'Lifetime',
-}
+import { PLAN_LABELS, TERM_LABELS } from '@/data/transactions'
 
 const US_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
@@ -113,7 +96,7 @@ function GiftSummary({ recipient, onEdit }: { recipient: GiftRecipient; onEdit: 
           <button
             type="button"
             onClick={onEdit}
-            className="flex items-center gap-1.5 font-body font-bold text-[16px] text-[#023e7d] underline underline-offset-2 hover:text-[#001845] transition-colors"
+            className="flex items-center gap-1.5 font-body font-bold text-[16px] transition-colors text-link"
           >
             <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -160,6 +143,8 @@ export default function CartItems() {
   const price     = searchParams.get('price')     ?? '75'
   const magTerm   = searchParams.get('magTerm')
   const magPrice  = searchParams.get('magPrice')
+  // 'digital' when the member picked the Online (DIGIT) variation on the upsell
+  const magFormat = searchParams.get('magFormat') === 'digital' ? 'digital' : 'print'
 
   const planLabel  = PLAN_LABELS[plan]  ?? 'Full Membership'
   const termLabel  = TERM_LABELS[term]  ?? '1 year'
@@ -171,6 +156,7 @@ export default function CartItems() {
     : `$${price} for 3 years`
 
   const magTermLabel = magTerm === '3' ? '3 years' : '1 year'
+  const magFormatLabel = magFormat === 'digital' ? 'Digital Only' : 'Print & Digital'
   const magPriceLabel = magTerm === '3' ? `$${magPrice} for 3 years` : `$${magPrice}/yr`
 
   const [magRemoved, setMagRemoved] = useState(false)
@@ -286,7 +272,7 @@ export default function CartItems() {
           </h2>
           <p className="font-body text-[20px] text-black leading-[1.4]">
             Let's finalize checkout – we are excited to welcome you to USNI! If you have any questions with the process, please{' '}
-            <a href="/membership/contact" className="text-[#023e7d] underline underline-offset-2 hover:text-[#001845] transition-colors">
+            <a href="/membership/contact" className="text-link transition-colors">
               contact membership services
             </a>.
           </p>
@@ -313,9 +299,6 @@ export default function CartItems() {
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 pt-1">
             <button
-              type="button"
-              onClick={() => navigate('/membership/join')}
-              className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#f0f4f8] transition-colors"
             >
               <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -511,7 +494,7 @@ export default function CartItems() {
           <>
             <div className="flex items-start justify-between gap-4 border-t border-[#c4c9d4] pt-8">
               <div className="flex flex-col gap-1">
-                <h3 className="font-headline text-[26px] text-[#023e7d] leading-[1.2]">Naval History Magazine — Print &amp; Digital</h3>
+                <h3 className="font-headline text-[26px] text-[#023e7d] leading-[1.2]">Naval History Magazine — {magFormatLabel}</h3>
                 <div className="flex items-center gap-4">
                   <p className="font-body text-[17px] text-[#4e576a]">
                     <span className="font-bold">Term:</span> {magTermLabel}
@@ -526,7 +509,7 @@ export default function CartItems() {
                 <button
                   type="button"
                   onClick={() => navigate('/membership/magazine-upsell')}
-                  className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#f0f4f8] transition-colors"
+                  className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#002b5c] hover:text-white transition-colors"
                 >
                   <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -649,7 +632,7 @@ export default function CartItems() {
           <button
             type="button"
             onClick={() => navigate('/membership/join')}
-            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[17px] sm:text-[20px] py-4 px-5 sm:px-8 hover:bg-[#f0f4f8] transition-colors"
+            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[17px] sm:text-[20px] py-4 px-5 sm:px-8 hover:bg-[#002b5c] hover:text-white transition-colors"
           >
             <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 6H2M6 2L2 6l4 4" />
@@ -666,6 +649,7 @@ export default function CartItems() {
               const params = new URLSearchParams({ plan, term, price })
               if (magTerm && !magRemoved) params.set('magTerm', magTerm)
               if (magPrice && !magRemoved) params.set('magPrice', magPrice)
+              if (magPrice && !magRemoved) params.set('magFormat', magFormat)
               if (donationAmount > 0) params.set('donation', String(donationAmount))
               navigate(`/membership/checkout?${params.toString()}`)
             }}

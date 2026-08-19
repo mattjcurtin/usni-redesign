@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 const navItems = [
   { label: 'Series & Topics', href: '/proceedings/series' },
   { label: 'Latest Issue', href: '/proceedings/apr-2026' },
-  { label: 'Issue Archive', href: '/proceedings/archive' },
+  { label: 'Issue Archive', href: '/proceedings/all-issues' },
   { label: 'Essay Contests', href: '/essay-contests' },
   { label: 'Contact Proceedings', href: '/proceedings/contact' },
 ]

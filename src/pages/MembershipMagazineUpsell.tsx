@@ -6,24 +6,58 @@ import nhMagazineGrid from '@/assets/images/nh-magazine-covers/nh-magazine-grid.
 
 type Region = 'us' | 'international'
 type Term = '1' | '3'
+type Format = 'print' | 'digital'
 
-const PRICING: Record<Region, Record<Term, { price: number; originalPrice: number | null; unit: string }>> = {
-  us: {
-    '1': { price: 32, originalPrice: null, unit: '/ yr' },
-    '3': { price: 90, originalPrice: 96, unit: '/ 3 yrs' },
+interface Price { price: number; originalPrice: number | null; unit: string }
+
+/**
+ * The catalog carries a separate "Online" (DIGIT) variation for every term
+ * alongside the PRINT one — SKUs NH-NH_1 / NH-NH_1_ONL and NH-NH_3 / NH-NH_3_ONL
+ * — so the upsell offers both. Digital carries no shipping, hence one price
+ * worldwide and no region dimension.
+ */
+const PRICING: Record<Format, Record<Region, Record<Term, Price>>> = {
+  print: {
+    us: {
+      '1': { price: 32, originalPrice: null, unit: '/ yr' },
+      '3': { price: 90, originalPrice: 96, unit: '/ 3 yrs' },
+    },
+    international: {
+      '1': { price: 52, originalPrice: null, unit: '/ yr' },
+      '3': { price: 150, originalPrice: 156, unit: '/ 3 yrs' },
+    },
   },
-  international: {
-    '1': { price: 52, originalPrice: null, unit: '/ yr' },
-    '3': { price: 150, originalPrice: 156, unit: '/ 3 yrs' },
+  digital: {
+    us: {
+      '1': { price: 24, originalPrice: null, unit: '/ yr' },
+      '3': { price: 68, originalPrice: 72, unit: '/ 3 yrs' },
+    },
+    international: {
+      '1': { price: 24, originalPrice: null, unit: '/ yr' },
+      '3': { price: 68, originalPrice: 72, unit: '/ 3 yrs' },
+    },
   },
 }
 
-const FEATURES = [
-  'Six issues per year delivered to your door',
-  'Unlimited digital access on all devices',
-  'Complete digital archive included',
-  'Member discount pricing — save 28%',
-]
+const FORMAT_LABELS: Record<Format, string> = {
+  print: 'Print & Digital',
+  digital: 'Digital Only',
+}
+
+const FEATURES: Record<Format, string[]> = {
+  print: [
+    'Six issues per year delivered to your door',
+    'Unlimited digital access on all devices',
+    'Complete digital archive included',
+    'Member discount pricing — save 28%',
+  ],
+  digital: [
+    'Six issues per year, the moment they publish',
+    'Read on any device, nothing to store',
+    'Complete digital archive included',
+    'Same price wherever you live — no shipping',
+  ],
+}
 
 function CheckIcon() {
   return (
@@ -48,12 +82,13 @@ export default function MembershipMagazineUpsell() {
   const [magRegion, setMagRegion] = useState<Region>(defaultMagRegion)
   const [magTerm, setMagTerm] = useState<Term>(defaultMagTerm)
 
-  const { price: magPrice, originalPrice, unit } = PRICING[magRegion][magTerm]
-
   const cartBase = `/membership/cart?plan=${plan}&term=${term}&region=${region}&price=${price}`
 
-  const handleAdd = () => {
-    navigate(`${cartBase}&magTerm=${magTerm}&magRegion=${magRegion}&magPrice=${magPrice}`)
+  const handleAdd = (format: Format) => {
+    const { price: magPrice } = PRICING[format][magRegion][magTerm]
+    navigate(
+      `${cartBase}&magTerm=${magTerm}&magRegion=${magRegion}&magPrice=${magPrice}&magFormat=${format}`,
+    )
   }
 
   const handleSkip = () => {
@@ -74,7 +109,7 @@ export default function MembershipMagazineUpsell() {
               <button
                 type="button"
                 onClick={handleSkip}
-                className="text-[#023e7d] underline underline-offset-2 hover:text-[#001845] transition-colors font-bold"
+                className="transition-colors font-bold text-link"
               >
                 continue to cart
               </button>.
@@ -167,65 +202,84 @@ export default function MembershipMagazineUpsell() {
             <span className="font-headline text-[28px] lg:text-[36px] text-neutral-subtle leading-[1.2]">subscription to Naval History magazine.</span>
           </div>
 
-          {/* Magazine card */}
-          <div className="w-full max-w-[860px] bg-white border border-[#c4c9d4]">
-            <div className="flex flex-col flex-1 px-8 py-8 gap-6">
+          <p className="font-body text-[15px] text-neutral-subtle text-center -mt-4">
+            Choose print with digital access, or digital only. Region affects print delivery only.
+          </p>
 
-              {/* Title + price */}
-              <div className="flex items-start justify-between gap-4">
-                <h2 className="font-headline text-[32px] text-navy-bolder leading-[1.1]">Print &amp; Digital</h2>
+          {/* Format cards — print and digital-only, side by side */}
+          <div className="w-full max-w-[980px] grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            {(['print', 'digital'] as const).map(format => {
+              const { price: magPrice, originalPrice, unit } = PRICING[format][magRegion][magTerm]
+              return (
+                <div key={format} className="bg-white border border-[#c4c9d4] flex flex-col">
+                  <div className="flex flex-col flex-1 px-8 py-8 gap-6">
 
-                <div className="flex flex-col items-end flex-shrink-0">
-                  <span className="bg-gold font-body font-bold text-[11px] uppercase tracking-[0.12em] text-navy-bolder px-2 py-1 mb-2">
-                    Member Price
-                  </span>
-                  <div className="flex items-baseline gap-2">
-                    {originalPrice && (
-                      <span className="font-body text-base text-neutral-subtle line-through">
-                        ${originalPrice}
-                      </span>
-                    )}
-                    <div className="flex items-start">
-                      <span className="font-body font-bold text-base text-navy-bolder mt-[4px]">$</span>
-                      <span className="font-headline text-[48px] text-navy-bolder leading-[1.0]">{magPrice}</span>
+                    {/* Title + price */}
+                    <div className="flex items-start justify-between gap-4">
+                      <h2 className="font-headline text-[30px] text-navy-bolder leading-[1.1]">
+                        {FORMAT_LABELS[format]}
+                      </h2>
+
+                      <div className="flex flex-col items-end flex-shrink-0">
+                        <span className="bg-gold font-body font-bold text-[11px] uppercase tracking-[0.12em] text-navy-bolder px-2 py-1 mb-2">
+                          Member Price
+                        </span>
+                        <div className="flex items-baseline gap-2">
+                          {originalPrice && (
+                            <span className="font-body text-base text-neutral-subtle line-through">
+                              ${originalPrice}
+                            </span>
+                          )}
+                          <div className="flex items-start">
+                            <span className="font-body font-bold text-base text-navy-bolder mt-[4px]">$</span>
+                            <span className="font-headline text-[44px] text-navy-bolder leading-[1.0]">{magPrice}</span>
+                          </div>
+                        </div>
+                        <span className="font-body text-sm text-neutral-subtle">{unit}</span>
+                      </div>
                     </div>
+
+                    {/* Description */}
+                    <p className="font-body text-[17px] text-neutral-subtle leading-[1.5]">
+                      {format === 'print'
+                        ? 'Receive Naval History Magazine in print plus full digital access to every issue.'
+                        : 'Full digital access to every issue and the complete archive. No print edition.'}
+                    </p>
+
+                    {/* CTA */}
+                    <button
+                      type="button"
+                      onClick={() => handleAdd(format)}
+                      className={`flex items-center justify-center w-full font-body font-bold text-base px-6 py-4 transition-colors ${
+                        format === 'print'
+                          ? 'bg-navy-bolder text-white border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright'
+                          : 'bg-white text-navy-bolder border border-navy-bolder hover:bg-[#f0f4f8]'
+                      }`}
+                    >
+                      Add {FORMAT_LABELS[format]} to Cart
+                    </button>
+
+                    {/* Features */}
+                    <ul className="flex flex-col border-t border-[#e4e7ec] pt-5 gap-1 mt-auto">
+                      {FEATURES[format].map(f => (
+                        <li key={f} className="flex items-start gap-2 py-0.5">
+                          <CheckIcon />
+                          <span className="font-body text-[15px] text-neutral-subtle leading-[1.5]">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+
                   </div>
-                  <span className="font-body text-sm text-neutral-subtle">{unit}</span>
                 </div>
-              </div>
-
-              {/* Description */}
-              <p className="font-body text-[18px] text-neutral-subtle leading-[1.5]">
-                Receive Naval History Magazine in print plus full digital access to every issue.
-              </p>
-
-              {/* CTA */}
-              <button
-                type="button"
-                onClick={handleAdd}
-                className="flex items-center justify-center w-full bg-navy-bolder text-white font-body font-bold text-base px-6 py-4 hover:bg-navy-bright transition-colors"
-              >
-                Add to Cart
-              </button>
-
-              {/* Features */}
-              <ul className="flex flex-col border-t border-[#e4e7ec] pt-5 gap-1">
-                {FEATURES.map(f => (
-                  <li key={f} className="flex items-start gap-2 py-0.5">
-                    <CheckIcon />
-                    <span className="font-body text-[15px] text-neutral-subtle leading-[1.5]">{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-            </div>
+              )
+            })}
           </div>
 
           {/* Skip */}
           <button
             type="button"
             onClick={handleSkip}
-            className="font-body font-bold text-[16px] text-[#023e7d] border border-[#023e7d] px-8 py-4 hover:bg-[#f0f4ff] transition-colors"
+            className="font-body font-bold text-[16px] text-[#023e7d] border border-[#023e7d] px-8 py-4 hover:bg-[#023e7d] hover:text-white transition-colors"
           >
             No thanks, continue to cart
           </button>

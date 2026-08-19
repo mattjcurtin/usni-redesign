@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const presetAmounts = [25, 50, 100, 250]
+const presetAmounts = [50, 100, 500, 1000]
 
 
 export default function DonateForm() {
@@ -14,7 +14,7 @@ export default function DonateForm() {
   }
 
   return (
-    <section className="py-16 lg:py-20 bg-white">
+    <section className="pb-16 lg:pb-20 bg-white">
       <div className="container-site">
 
         {/* Heading */}
@@ -30,7 +30,7 @@ export default function DonateForm() {
               className={`border p-5 flex flex-col gap-6 transition-colors
                 ${selected === amount ? 'border-navy-bolder bg-surface-subtle' : 'border-border-light'}`}
             >
-              <p className="font-headline text-4xl lg:text-5xl text-navy-subtle">${amount}</p>
+              <p className="font-headline text-4xl lg:text-5xl text-navy-subtle">${amount.toLocaleString()}</p>
               <button
                 onClick={() => goToCart(amount)}
                 className="flex items-center justify-between w-full bg-navy-bolder text-white font-body font-bold text-sm px-4 py-3 hover:bg-navy-bright transition-colors"
@@ -79,7 +79,7 @@ export default function DonateForm() {
         {/* Pledge note */}
         <p className="font-body text-base text-navy-bolder leading-relaxed max-w-[700px]">
           If you would like to make a payment toward an existing pledge, please contact Amanda Ojeda at{' '}
-          <a href="tel:4102951062" className="text-navy-subtle underline hover:text-navy">(410) 295-1062</a>
+          <a href="tel:4102951062" className="text-link">(410) 295-1062</a>
           {' '}so we can ensure your contribution is properly credited. The online donation portal does not process pledge payments.
         </p>
 

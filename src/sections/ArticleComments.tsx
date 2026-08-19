@@ -16,7 +16,7 @@ export default function ArticleComments() {
               We encourage open conversation. Comments that violate our standards may be removed.
               <br />
               Please read our{' '}
-              <a href="/comment-policy" className="text-[#2b6cb0] underline hover:no-underline">Comment Policy</a>{' '}
+              <a href="/comment-policy" className="text-link">Comment Policy</a>{' '}
               before commenting.
             </p>
           </div>

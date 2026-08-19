@@ -100,7 +100,7 @@ export default function DonateCartItems() {
             <button
               type="button"
               onClick={() => navigate('/giving/donate')}
-              className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#f0f4f8] transition-colors"
+              className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#002b5c] hover:text-white transition-colors"
             >
               <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M10 6H2M6 2L2 6l4 4" />
@@ -123,7 +123,7 @@ export default function DonateCartItems() {
           <p className="font-body text-[16px] text-[#1d2535] leading-[1.5]">
             Thank you for supporting the U.S. Naval Institute! You can adjust your donation amount or frequency
             below before proceeding to checkout. If you have any questions, please{' '}
-            <a href="/giving/contact" className="text-[#023e7d] underline underline-offset-2 hover:text-[#001845] transition-colors">
+            <a href="/giving/contact" className="transition-colors text-link">
               contact us
             </a>.
           </p>
@@ -152,7 +152,7 @@ export default function DonateCartItems() {
             <button
               type="button"
               onClick={() => navigate('/giving/donate')}
-              className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#f0f4f8] transition-colors"
+              className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#002b5c] hover:text-white transition-colors"
             >
               <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -237,7 +237,7 @@ export default function DonateCartItems() {
           <button
             type="button"
             onClick={() => navigate('/giving/donate')}
-            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#f0f4f8] transition-colors"
+            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#002b5c] hover:text-white transition-colors"
           >
             <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 6H2M6 2L2 6l4 4" />

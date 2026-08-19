@@ -566,7 +566,7 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
               </a>
               <a
                 href="/essay-contests"
-                className="inline-flex items-center justify-center gap-2 font-body font-bold text-base text-navy-bolder px-6 py-3.5 border border-navy-bolder hover:bg-surface-subtle transition-colors"
+                className="inline-flex items-center justify-center gap-2 font-body font-bold text-base text-navy-bolder px-6 py-3.5 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
               >
                 See all contests
               </a>
@@ -613,7 +613,7 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
                 If you need help submitting your {isPhoto ? 'photos' : 'essay'}, email{' '}
                 <a
                   href="mailto:essayquestions@usni.org"
-                  className="text-[#023E7D] underline hover:no-underline"
+                  className="text-link"
                 >
                   essayquestions@usni.org
                 </a>

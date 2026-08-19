@@ -168,7 +168,7 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
                       </dt>
                       <dd className="font-body text-base text-neutral-subtle break-words">
                         {c.href ? (
-                          <a href={c.href} className="text-[#023E7D] underline hover:no-underline">
+                          <a href={c.href} className="text-link">
                             {c.value}
                           </a>
                         ) : (
@@ -225,7 +225,7 @@ export default function EssayContestBody({ contest }: { contest: EssayContest })
                 {isPhotoEntry(contest)
                   ? 'High-resolution tiff or jpg, no AI or manipulation. See '
                   : 'Word document, judged in the blind. See '}
-                <a href="#submission-guidelines" className="text-[#023E7D] underline hover:no-underline">
+                <a href="#submission-guidelines" className="text-link">
                   submission guidelines
                 </a>
                 .

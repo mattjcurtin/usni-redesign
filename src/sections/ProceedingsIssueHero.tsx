@@ -36,7 +36,7 @@ export default function ProceedingsIssueHero() {
             {/* CTA */}
             <div className="pt-1">
               <a
-                href="/proceedings/archive"
+                href="/proceedings/all-issues"
                 className="flex lg:inline-flex items-center justify-center bg-gold text-navy-bolder font-body font-bold text-base tracking-[-0.5px] px-5 py-4 hover:bg-gold-dark transition-colors"
               >
                 See the Proceedings Archive

@@ -19,6 +19,7 @@ import Giving from '@/pages/Giving'
 import Donate from '@/pages/Donate'
 import DonateCart from '@/pages/DonateCart'
 import DonateCheckout from '@/pages/DonateCheckout'
+import DonateConfirmation from '@/pages/DonateConfirmation'
 import ProceedingsCurrentIssue from '@/pages/ProceedingsCurrentIssue'
 import ProceedingsAllIssues from '@/pages/ProceedingsAllIssues'
 import ProceedingsPodcast from '@/pages/ProceedingsPodcast'
@@ -27,6 +28,7 @@ import ProceedingsArticle from '@/pages/ProceedingsArticle'
 import ProceedingsContact from '@/pages/ProceedingsContact'
 import MembershipCart from '@/pages/MembershipCart'
 import MembershipCheckout from '@/pages/MembershipCheckout'
+import MembershipConfirmation from '@/pages/MembershipConfirmation'
 import MembershipMagazineUpsell from '@/pages/MembershipMagazineUpsell'
 import BookProduct from '@/pages/BookProduct'
 import BooksCollection from '@/pages/BooksCollection'
@@ -34,6 +36,8 @@ import BooksNewReleases from '@/pages/BooksNewReleases'
 import BooksCart from '@/pages/BooksCart'
 import NavalHistory from '@/pages/NavalHistory'
 import NavalHistorySubscribe from '@/pages/NavalHistorySubscribe'
+import NavalHistorySubscribeCheckout from '@/pages/NavalHistorySubscribeCheckout'
+import NavalHistorySubscribeConfirmation from '@/pages/NavalHistorySubscribeConfirmation'
 import Login from '@/pages/Login'
 import Archives from '@/pages/Archives'
 import NavalHistoryArticle from '@/pages/NavalHistoryArticle'
@@ -57,6 +61,18 @@ import DesignSystemNavigation from '@/pages/design-system/Navigation'
 import DesignSystemIconography from '@/pages/design-system/Iconography'
 import HeaderPreview from '@/pages/design-system/preview/HeaderPreview'
 import FooterPreview from '@/pages/design-system/preview/FooterPreview'
+import AccountDashboard from '@/pages/account/AccountDashboard'
+import AccountProfile from '@/pages/account/AccountProfile'
+import AccountAddresses from '@/pages/account/AccountAddresses'
+import AccountPayment from '@/pages/account/AccountPayment'
+import AccountOrders from '@/pages/account/AccountOrders'
+import AccountSubscriptions from '@/pages/account/AccountSubscriptions'
+import AccountGiving from '@/pages/account/AccountGiving'
+import AccountSaved from '@/pages/account/AccountSaved'
+import AccountPreferences from '@/pages/account/AccountPreferences'
+import AccountBenefits from '@/pages/account/AccountBenefits'
+import AccountApiKeys from '@/pages/account/AccountApiKeys'
+import NotFound from '@/pages/NotFound'
 
 export default function App() {
   return (
@@ -71,12 +87,14 @@ export default function App() {
         <Route path="/membership/join" element={<MembershipJoin />} />
         <Route path="/membership/cart" element={<MembershipCart />} />
         <Route path="/membership/checkout" element={<MembershipCheckout />} />
+        <Route path="/membership/confirmation" element={<MembershipConfirmation />} />
         <Route path="/membership/magazine-upsell" element={<MembershipMagazineUpsell />} />
         <Route path="/proceedings" element={<Proceedings />} />
         <Route path="/giving" element={<Giving />} />
         <Route path="/giving/donate" element={<Donate />} />
         <Route path="/giving/donate/cart" element={<DonateCart />} />
         <Route path="/giving/donate/checkout" element={<DonateCheckout />} />
+        <Route path="/giving/donate/confirmation" element={<DonateConfirmation />} />
         <Route path="/proceedings/apr-2026" element={<ProceedingsCurrentIssue />} />
         <Route path="/proceedings/all-issues" element={<ProceedingsAllIssues />} />
         <Route path="/proceedings/podcast" element={<ProceedingsPodcast />} />
@@ -87,14 +105,32 @@ export default function App() {
         <Route path="/books/cart" element={<BooksCart />} />
         <Route path="/naval-history" element={<NavalHistory />} />
         <Route path="/naval-history/subscribe" element={<NavalHistorySubscribe />} />
+        <Route path="/naval-history/subscribe/checkout" element={<NavalHistorySubscribeCheckout />} />
+        <Route path="/naval-history/subscribe/confirmation" element={<NavalHistorySubscribeConfirmation />} />
         <Route path="/login" element={<Login />} />
+
+        {/* Account section — no auth gate; the prototype has no sessions */}
+        <Route path="/account" element={<AccountDashboard />} />
+        <Route path="/account/profile" element={<AccountProfile />} />
+        <Route path="/account/addresses" element={<AccountAddresses />} />
+        <Route path="/account/payment" element={<AccountPayment />} />
+        <Route path="/account/orders" element={<AccountOrders />} />
+        <Route path="/account/subscriptions" element={<AccountSubscriptions />} />
+        <Route path="/account/giving" element={<AccountGiving />} />
+        <Route path="/account/saved" element={<AccountSaved />} />
+        <Route path="/account/preferences" element={<AccountPreferences />} />
+        <Route path="/account/benefits" element={<AccountBenefits />} />
+        <Route path="/account/api-keys" element={<AccountApiKeys />} />
         <Route path="/proceedings/three-mefs" element={<ProceedingsArticle />} />
         <Route path="/proceedings/fortifying-digital-watch" element={<ProceedingsArticleFortifying />} />
         <Route path="/proceedings/naval-aviation-got-better" element={<ProceedingsArticleGrubb />} />
         <Route path="/books/ai-warfighting" element={<BookProduct />} />
         <Route path="/archives" element={<Archives />} />
         <Route path="/naval-history/mitscher-at-midway" element={<NavalHistoryArticle />} />
-        <Route path="/newsletter" element={<NewsletterJoin />} />
+        {/* Newsletter signup is hidden from the prototype — the footer CTA now
+            goes to the Mailchimp hosted form instead. The page and its import are
+            intact, so re-enabling is a one-line uncomment. */}
+        {/* <Route path="/newsletter" element={<NewsletterJoin />} /> */}
         <Route path="/essay-contests" element={<EssayContests />} />
         <Route path="/essay-contests/archive" element={<EssayContestsArchivePage />} />
         {/* One submission page for every contest — see ?contest=<slug> */}
@@ -118,6 +154,7 @@ export default function App() {
         <Route path="/design-system/iconography" element={<DesignSystemIconography />} />
         <Route path="/design-system/preview/header" element={<HeaderPreview />} />
         <Route path="/design-system/preview/footer" element={<FooterPreview />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
     </CartProvider>

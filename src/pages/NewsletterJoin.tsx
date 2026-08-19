@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
@@ -74,34 +74,81 @@ interface FormState {
   emailFormat: 'html' | 'text'
 }
 
+/** Only the starred fields are validated; everything else on this form is optional. */
+interface Errors {
+  email?: string
+  interests?: string
+}
+
 const EMPTY: FormState = {
   email: '', firstName: '', lastName: '', salutation: '',
   suffix: '', title: '', ageRange: '', country: '',
   emailFormat: 'html',
 }
 
-const inputCls = 'w-full font-body text-sm text-navy-bolder border border-[#94A3B8] px-3 py-2.5 outline-none focus:border-navy-bright focus:shadow-[0_0_0_3px_rgba(4,102,200,0.15)] bg-white placeholder:text-neutral-subtle transition'
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const inputBase = 'w-full font-body text-sm text-navy-bolder border px-3 py-2.5 outline-none focus:border-navy-bright focus:shadow-[0_0_0_3px_rgba(4,102,200,0.15)] placeholder:text-neutral-subtle transition'
+/** Error colours match the shared primitives in `components/ui/FormField.tsx`. */
+const inputCls = (hasError?: boolean) =>
+  `${inputBase} ${hasError ? 'border-[#c1121f] bg-[#fef6f6]' : 'border-[#94A3B8] bg-white'}`
 const labelCls = 'block font-body font-semibold text-xs text-navy-bolder uppercase tracking-[0.06em] mb-1.5'
+const errorCls = 'flex items-start gap-1.5 font-body text-sm text-[#c1121f] mt-1.5'
+const asteriskCls = 'text-[#c1121f]'
 
 export default function NewsletterJoin() {
   const [form, setForm] = useState<FormState>(EMPTY)
   const [interests, setInterests] = useState<Set<string>>(new Set())
+  const [errors, setErrors] = useState<Errors>({})
   const [submitted, setSubmitted] = useState(false)
+  const summaryRef = useRef<HTMLDivElement>(null)
 
-  const set = (field: keyof FormState, value: string) =>
+  /** Fixing a field drops its message, so a corrected control stops reading as an error. */
+  const clearError = (field: keyof Errors) =>
+    setErrors(prev => {
+      if (!prev[field]) return prev
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
+
+  const set = (field: keyof FormState, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }))
+    if (field === 'email') clearError('email')
+  }
 
-  const toggleInterest = (id: string) =>
+  const toggleInterest = (id: string) => {
     setInterests(prev => {
       const next = new Set(prev)
       next.has(id) ? next.delete(id) : next.add(id)
       return next
     })
+    clearError('interests')
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    const next: Errors = {}
+
+    if (!form.email.trim()) {
+      next.email = 'Email address is required.'
+    } else if (!EMAIL_RE.test(form.email.trim())) {
+      next.email = 'Enter a valid email address.'
+    }
+    if (interests.size === 0) {
+      next.interests = 'Select at least one newsletter.'
+    }
+
+    setErrors(next)
+    if (Object.keys(next).length > 0) {
+      summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
     setSubmitted(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  const errorCount = Object.keys(errors).length
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -109,15 +156,12 @@ export default function NewsletterJoin() {
       <main className="flex-1">
 
         {/* Hero */}
-        <div style={{ background: 'radial-gradient(ellipse at 50% 0%, #023E7D 0%, #012B61 50%, #001845 100%)' }}>
+        <div className="bg-[#ebf4ff]">
           <div className="container-site py-14 lg:py-20 text-center">
-            <p className="font-body font-medium text-sm uppercase tracking-[0.08em] text-[#A8C8F0] mb-3">
-              Naval Institute Press
-            </p>
-            <h1 className="font-headline text-4xl lg:text-5xl text-white not-italic leading-[1.1] mb-4">
+            <h1 className="font-headline text-4xl lg:text-5xl text-navy-bolder not-italic leading-[1.1] mb-4">
               Subscribe to Our Newsletter
             </h1>
-            <p className="font-body text-lg text-white/75 leading-relaxed max-w-[560px] mx-auto">
+            <p className="font-body text-lg text-neutral-subtle leading-relaxed max-w-[560px] mx-auto">
               Get updates on new releases, author events, and exclusive member content.
             </p>
           </div>
@@ -127,6 +171,31 @@ export default function NewsletterJoin() {
         <div className="bg-white py-12 lg:py-16">
           <div className="container-site">
             <div className="max-w-[640px] mx-auto">
+
+              {!submitted && (
+                <>
+                  {/* Error summary — keyboard and screen-reader users land here on a failed submit */}
+                  <div ref={summaryRef}>
+                    {errorCount > 0 && (
+                      <div
+                        role="alert"
+                        className="border border-l-4 border-[#c1121f] bg-[#fef6f6] px-5 py-4 mb-6"
+                      >
+                        <p className="font-body font-bold text-base text-navy-bolder mb-1">
+                          {errorCount} {errorCount === 1 ? 'field needs' : 'fields need'} attention
+                        </p>
+                        <p className="font-body text-sm text-neutral-subtle">
+                          Fix the highlighted fields below, then subscribe again.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="font-body text-sm text-neutral-subtle mb-6">
+                    <span className={asteriskCls} aria-hidden="true">*</span> required fields
+                  </p>
+                </>
+              )}
 
               {submitted ? (
                 <div className="flex flex-col items-start gap-5 py-8">
@@ -148,7 +217,8 @@ export default function NewsletterJoin() {
                   {/* Email */}
                   <div>
                     <label htmlFor="nl-email" className={labelCls}>
-                      Email Address <span className="text-red-500">*</span>
+                      Email Address <span className={asteriskCls} aria-hidden="true">*</span>
+                      <span className="sr-only"> (required)</span>
                     </label>
                     <input
                       id="nl-email"
@@ -157,17 +227,35 @@ export default function NewsletterJoin() {
                       value={form.email}
                       onChange={e => set('email', e.target.value)}
                       placeholder="your@email.com"
-                      className={`select-field ${inputCls}`}
+                      aria-invalid={errors.email ? true : undefined}
+                      aria-describedby={errors.email ? 'nl-email-error' : undefined}
+                      className={`select-field ${inputCls(!!errors.email)}`}
                     />
+                    {errors.email && (
+                      <p id="nl-email-error" role="alert" className={errorCls}>
+                        <i className="fa-solid fa-circle-exclamation mt-0.5 flex-shrink-0" aria-hidden="true" />
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
 
                   {/* Interests */}
                   <div>
-                    <p className={labelCls}>Interests</p>
-                    <p className="font-body text-xs text-neutral-subtle mb-3 -mt-1">
-                      Select the newsletters you'd like to receive.
+                    <p className={labelCls}>
+                      Interests <span className={asteriskCls} aria-hidden="true">*</span>
                     </p>
-                    <div className="grid grid-cols-2 gap-3">
+                    <p className="font-body text-xs text-neutral-subtle mb-3 -mt-1">
+                      Select the newsletters you'd like to receive — at least one is required.
+                    </p>
+                    <div
+                      role="group"
+                      aria-label="Newsletters"
+                      aria-invalid={errors.interests ? true : undefined}
+                      aria-describedby={errors.interests ? 'nl-interests-error' : undefined}
+                      className={`grid grid-cols-2 gap-3 ${
+                        errors.interests ? 'border border-[#c1121f] bg-[#fef6f6] p-3' : ''
+                      }`}
+                    >
                       {INTERESTS.map(item => {
                         const selected = interests.has(item.id)
                         return (
@@ -210,6 +298,12 @@ export default function NewsletterJoin() {
                         )
                       })}
                     </div>
+                    {errors.interests && (
+                      <p id="nl-interests-error" role="alert" className={errorCls}>
+                        <i className="fa-solid fa-circle-exclamation mt-0.5 flex-shrink-0" aria-hidden="true" />
+                        {errors.interests}
+                      </p>
+                    )}
                   </div>
 
                   {/* First name */}
@@ -221,7 +315,7 @@ export default function NewsletterJoin() {
                       value={form.firstName}
                       onChange={e => set('firstName', e.target.value)}
                       placeholder="First"
-                      className={`select-field ${inputCls}`}
+                      className={`select-field ${inputCls()}`}
                     />
                   </div>
 
@@ -234,7 +328,7 @@ export default function NewsletterJoin() {
                       value={form.lastName}
                       onChange={e => set('lastName', e.target.value)}
                       placeholder="Last"
-                      className={`select-field ${inputCls}`}
+                      className={`select-field ${inputCls()}`}
                     />
                   </div>
 
@@ -245,7 +339,7 @@ export default function NewsletterJoin() {
                       id="nl-salutation"
                       value={form.salutation}
                       onChange={e => set('salutation', e.target.value)}
-                      className={`select-field ${inputCls}`}
+                      className={`select-field ${inputCls()}`}
                     >
                       <option value="">Select…</option>
                       {SALUTATIONS.map(s => <option key={s} value={s}>{s}</option>)}
@@ -259,7 +353,7 @@ export default function NewsletterJoin() {
                       id="nl-suffix"
                       value={form.suffix}
                       onChange={e => set('suffix', e.target.value)}
-                      className={`select-field ${inputCls}`}
+                      className={`select-field ${inputCls()}`}
                     >
                       <option value="">Select…</option>
                       {SUFFIXES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -275,7 +369,7 @@ export default function NewsletterJoin() {
                       value={form.title}
                       onChange={e => set('title', e.target.value)}
                       placeholder="e.g. Director, Captain"
-                      className={`select-field ${inputCls}`}
+                      className={`select-field ${inputCls()}`}
                     />
                   </div>
 
@@ -286,7 +380,7 @@ export default function NewsletterJoin() {
                       id="nl-age"
                       value={form.ageRange}
                       onChange={e => set('ageRange', e.target.value)}
-                      className={`select-field ${inputCls}`}
+                      className={`select-field ${inputCls()}`}
                     >
                       <option value="">Select…</option>
                       {AGE_RANGES.map(a => <option key={a} value={a}>{a}</option>)}
@@ -300,7 +394,7 @@ export default function NewsletterJoin() {
                       id="nl-country"
                       value={form.country}
                       onChange={e => set('country', e.target.value)}
-                      className={`select-field ${inputCls}`}
+                      className={`select-field ${inputCls()}`}
                     >
                       <option value="">Select a country…</option>
                       {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}

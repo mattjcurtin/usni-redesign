@@ -1,17 +1,19 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, useId } from 'react'
 import { Button } from '@/components/ui/Button'
 
 const MONTHS = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 const YEARS = Array.from({ length: 12 }, (_, i) => String(2025 + i))
 
 function InlineSelect({
-  placeholder, options, value, onChange, className = '',
+  placeholder, options, value, onChange, className = '', ariaLabel,
 }: {
-  placeholder: string; options: string[]; value: string; onChange: (v: string) => void; className?: string
+  placeholder: string; options: string[]; value: string; onChange: (v: string) => void
+  className?: string; ariaLabel?: string
 }) {
   return (
     <div className={`relative ${className}`}>
       <select
+        aria-label={ariaLabel}
         value={value}
         onChange={e => onChange(e.target.value)}
         className="select-field w-full bg-white border border-[#4e576a] px-3 py-3 font-body text-[16px] text-[#4e576a] focus:outline-none focus:ring-2 focus:ring-[#023e7d]/30 focus:border-[#023e7d] min-h-[44px] rounded-none"
@@ -30,6 +32,7 @@ interface CreditCardModalProps {
 }
 
 export default function CreditCardModal({ open, onClose, onSuccess }: CreditCardModalProps) {
+  const fieldId = useId()
   const [cardGroups, setCardGroups] = useState(['', '', '', ''])
   const cardRef0 = useRef<HTMLInputElement>(null)
   const cardRef1 = useRef<HTMLInputElement>(null)
@@ -108,16 +111,19 @@ export default function CreditCardModal({ open, onClose, onSuccess }: CreditCard
             Pay with Credit Card
           </h2>
 
-          {/* Card number */}
+          {/* Card number — four inputs, so the visual label names a group rather
+              than a single control, and each box carries its own name. */}
           <div className="flex flex-col gap-1.5">
-            <label className="font-body font-bold text-[14px] text-[#1d2535]">
+            <span id={`${fieldId}-card-label`} className="font-body font-bold text-[14px] text-[#1d2535]">
               Card Number <span className="text-red-500">*</span>
-            </label>
-            <div className="flex items-center gap-2">
+            </span>
+            <div className="flex items-center gap-2" role="group" aria-labelledby={`${fieldId}-card-label`}>
               {cardGroups.map((grp, i) => (
                 <div key={i} className="flex items-center gap-2 flex-1">
                   <input
                     ref={cardRefs[i]}
+                    id={i === 0 ? `${fieldId}-card` : undefined}
+                    aria-label={`Card number, group ${i + 1} of 4`}
                     type="text"
                     inputMode="numeric"
                     placeholder="0000"
@@ -135,19 +141,20 @@ export default function CreditCardModal({ open, onClose, onSuccess }: CreditCard
           {/* Expiry + Card Code */}
           <div className="flex gap-4">
             <div className="flex flex-col gap-1.5 flex-[2]">
-              <label className="font-body font-bold text-[14px] text-[#1d2535]">
+              <span id={`${fieldId}-exp-label`} className="font-body font-bold text-[14px] text-[#1d2535]">
                 Exp. Date <span className="text-red-500">*</span>
-              </label>
-              <div className="flex gap-2">
-                <InlineSelect placeholder="Month" options={MONTHS} value={expiryMonth} onChange={setExpiryMonth} className="flex-1" />
-                <InlineSelect placeholder="Year" options={YEARS} value={expiryYear} onChange={setExpiryYear} className="flex-1" />
+              </span>
+              <div className="flex gap-2" role="group" aria-labelledby={`${fieldId}-exp-label`}>
+                <InlineSelect ariaLabel="Expiration month" placeholder="Month" options={MONTHS} value={expiryMonth} onChange={setExpiryMonth} className="flex-1" />
+                <InlineSelect ariaLabel="Expiration year" placeholder="Year" options={YEARS} value={expiryYear} onChange={setExpiryYear} className="flex-1" />
               </div>
             </div>
             <div className="flex flex-col gap-1.5 flex-1">
-              <label className="font-body font-bold text-[14px] text-[#1d2535]">
+              <label htmlFor={`${fieldId}-cvv`} className="font-body font-bold text-[14px] text-[#1d2535]">
                 Card Code <span className="text-red-500">*</span>
               </label>
               <input
+                id={`${fieldId}-cvv`}
                 type="text"
                 inputMode="numeric"
                 placeholder="•••"

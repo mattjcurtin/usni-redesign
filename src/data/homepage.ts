@@ -42,7 +42,7 @@ export const navItems: NavItem[] = [
     children: [
       { label: 'Overview', href: '/membership' },
       { label: 'Plans & Pricing', href: '/membership/join' },
-      { label: 'Renew', href: '/membership/renew' },
+      { label: 'Renew', href: '/login' },
       { label: 'Contact Member Services', href: '/membership/contact' },
       { label: 'Join', href: '/membership/join' },
     ],

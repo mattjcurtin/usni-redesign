@@ -1,23 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useState, useEffect, useId, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
 import CreditCardModal from '@/components/ui/CreditCardModal'
-
-const PLAN_LABELS: Record<string, string> = {
-  digital: 'Digital Membership',
-  full: 'Full Membership',
-  student: 'Student Membership',
-  life: 'Life Membership',
-}
-
-const TERM_LABELS: Record<string, string> = {
-  '1': '1 year',
-  '3': '3 years',
-  life: 'Lifetime',
-}
+import { AcceptedCards } from '@/components/ui/CardBrandIcons'
+import { PLAN_LABELS, TERM_LABELS, makeOrderNumber } from '@/data/transactions'
+import { militaryStatuses, services, suffixes } from '@/data/essaySubmission'
 
 const US_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
@@ -34,12 +24,17 @@ function FormInput({
   label: string; placeholder: string; value: string; onChange: (v: string) => void
   type?: string; className?: string; required?: boolean; error?: boolean
 }) {
+  // Generated rather than passed in: the same field can appear twice on a page
+  // (delivery and billing addresses both have a Street Address), and useId keeps
+  // each label bound to its own control without callers inventing names.
+  const id = useId()
   return (
-    <div className={`select-field flex flex-col gap-1.5 ${className}`}>
-      <label className="font-body font-bold text-[14px] text-[#1d2535]">
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
         {label}{required && <span className="text-red-500"> *</span>}
       </label>
       <input
+        id={id}
         type={type}
         placeholder={placeholder}
         value={value}
@@ -61,13 +56,15 @@ function FormSelect({
   label: string; placeholder: string; options: string[]
   value: string; onChange: (v: string) => void; className?: string; required?: boolean; error?: boolean
 }) {
+  const id = useId()
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
-      <label className="font-body font-bold text-[14px] text-[#1d2535]">
+      <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
         {label}{required && <span className="text-red-500"> *</span>}
       </label>
       <div className="relative">
         <select
+          id={id}
           value={value}
           onChange={e => onChange(e.target.value)}
           aria-invalid={error || undefined}
@@ -82,6 +79,29 @@ function FormSelect({
         </select>
       </div>
     </div>
+  )
+}
+
+/** Street / City / State / ZIP, shared by the delivery and billing cards. */
+function AddressFields({
+  street, setStreet, city, setCity, state, setState, zip, setZip, fieldError, showErrors,
+}: {
+  street: string; setStreet: (v: string) => void
+  city: string;   setCity:   (v: string) => void
+  state: string;  setState:  (v: string) => void
+  zip: string;    setZip:    (v: string) => void
+  fieldError: (v: string) => boolean
+  showErrors: boolean
+}) {
+  return (
+    <>
+      <FormInput label="Street Address" placeholder="123 Main Street" value={street} onChange={setStreet} required error={fieldError(street)} />
+      <div className="flex flex-col sm:flex-row gap-4">
+        <FormInput label="City" placeholder="Enter city" value={city} onChange={setCity} className="flex-1" required error={fieldError(city)} />
+        <FormSelect label="State" placeholder="Select State" options={US_STATES} value={state} onChange={setState} className="sm:w-44" required error={showErrors && !state} />
+        <FormInput label="ZIP" placeholder="Enter zip code" value={zip} onChange={setZip} className="sm:w-36" required error={fieldError(zip)} />
+      </div>
+    </>
   )
 }
 
@@ -111,6 +131,7 @@ function RequiredFieldsAlert({
 
 export default function MembershipCheckout() {
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const { setCartCount } = useCart()
 
   const plan      = searchParams.get('plan')     ?? 'full'
@@ -118,12 +139,27 @@ export default function MembershipCheckout() {
   const price     = searchParams.get('price')    ?? '75'
   const magTerm   = searchParams.get('magTerm')
   const magPrice  = searchParams.get('magPrice')
+  const magFormat = searchParams.get('magFormat') === 'digital' ? 'digital' : 'print'
   const donation  = searchParams.get('donation')
 
   const planLabel  = PLAN_LABELS[plan]  ?? 'Full Membership'
   const termLabel  = TERM_LABELS[term]  ?? '1 year'
   const magTermLabel = magTerm === '3' ? '3 years' : '1 year'
+  const magFormatLabel = magFormat === 'digital' ? 'Digital Only' : 'Print & Digital'
   const isPrint    = plan !== 'digital'
+
+  /**
+   * Titles that physically ship, so the Delivery Address card can name them and
+   * appear whenever *anything* is being mailed. A digital membership carrying a
+   * print Naval History add-on ships one magazine and still needs an address.
+   */
+  const printTitles = [
+    ...(isPrint ? ['Proceedings'] : []),
+    ...(magPrice && magFormat === 'print' ? ['Naval History'] : []),
+  ]
+  const needsDelivery = printTitles.length > 0
+  const printTitleList =
+    printTitles.length === 2 ? `${printTitles[0]} and ${printTitles[1]}` : printTitles[0] ?? ''
 
   const membershipPrice = Number(price)
   const magPriceNum     = magPrice ? Number(magPrice) : 0
@@ -146,6 +182,13 @@ export default function MembershipCheckout() {
   const [phone, setPhone]               = useState('')
   const [password, setPassword]         = useState('')
 
+  // ── Service info, collected only when creating an account
+  const [service, setService]           = useState('')
+  const [militaryStatus, setMilitary]   = useState('')
+  const [rank, setRank]                 = useState('')
+  const [suffix, setSuffix]             = useState('')
+  const [gradYear, setGradYear]         = useState('')
+
   // ── Address
   const [street, setStreet] = useState('')
   const [city, setCity]     = useState('')
@@ -156,6 +199,10 @@ export default function MembershipCheckout() {
   const [cardModalOpen, setCardModalOpen]                 = useState(false)
   const [savedCardLast4, setSavedCardLast4]               = useState<string | null>(null)
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true)
+  const [billStreet, setBillStreet] = useState('')
+  const [billCity, setBillCity]     = useState('')
+  const [billState, setBillState]   = useState('')
+  const [billZip, setBillZip]       = useState('')
 
   // ── Gift recipient
   const isGift = searchParams.get('gift') === 'true'
@@ -171,6 +218,15 @@ export default function MembershipCheckout() {
   const [autoRenew, setAutoRenew]       = useState(true)
   const [autoRenewMag, setAutoRenewMag] = useState(true)
 
+  /**
+   * A card can't be authorized without an address to verify against. When
+   * something ships we can reuse the delivery address, but an all-digital order
+   * has no delivery address to reuse — previously that order collected no
+   * address at all, and the "same as my shipping information" checkbox was
+   * offering to copy an address that did not exist.
+   */
+  const needsBilling = !needsDelivery || !billingSameAsShipping
+
   // ── Required-field validation
   const [showErrors, setShowErrors] = useState(false)
   const errorAlertRef = useRef<HTMLDivElement>(null)
@@ -181,15 +237,25 @@ export default function MembershipCheckout() {
     if (!lastName.trim())     missingFields.push('Last Name')
     if (!email.trim())        missingFields.push('Email Address')
     if (!confirmEmail.trim()) missingFields.push('Confirm Email Address')
+    if (!password.trim())     missingFields.push('Password')
+    if (!service)             missingFields.push('Service')
+    if (!militaryStatus)      missingFields.push('Military Status')
+    if (!rank.trim())         missingFields.push('Rank / Title')
   } else {
     if (!email.trim())    missingFields.push('Email Address')
     if (!password.trim()) missingFields.push('Password')
   }
-  if (isPrint) {
+  if (needsDelivery) {
     if (!street.trim()) missingFields.push('Street Address')
     if (!city.trim())   missingFields.push('City')
     if (!state)         missingFields.push('State')
     if (!zip.trim())    missingFields.push('ZIP')
+  }
+  if (needsBilling) {
+    if (!billStreet.trim()) missingFields.push('Billing Street Address')
+    if (!billCity.trim())   missingFields.push('Billing City')
+    if (!billState)         missingFields.push('Billing State')
+    if (!billZip.trim())    missingFields.push('Billing ZIP')
   }
   if (isGift) {
     if (!giftName.trim())   missingFields.push('Recipient Name')
@@ -203,13 +269,38 @@ export default function MembershipCheckout() {
 
   const fieldError = (value: string) => showErrors && !value.trim()
 
+  /**
+   * No payment backend to call, so a successful checkout mints an order number
+   * and hands the whole order to the confirmation page in the query string.
+   */
   const handleCompleteCheckout = () => {
     if (missingFields.length > 0) {
       setShowErrors(true)
       setTimeout(() => errorAlertRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50)
-    } else {
-      setShowErrors(false)
+      return
     }
+    setShowErrors(false)
+
+    const params = new URLSearchParams({
+      plan,
+      term,
+      price,
+      order: makeOrderNumber('USNI'),
+      autoRenew: String(autoRenew),
+    })
+    if (magTerm) params.set('magTerm', magTerm)
+    if (magPrice) params.set('magPrice', magPrice)
+    if (magPrice) params.set('magFormat', magFormat)
+    if (donationNum > 0) params.set('donation', String(donationNum))
+    if (isGift) {
+      params.set('gift', 'true')
+      if (giftName.trim()) params.set('giftName', giftName.trim())
+    }
+    if (email.trim()) params.set('email', email.trim())
+    if (firstName.trim()) params.set('name', firstName.trim())
+    if (savedCardLast4) params.set('card', savedCardLast4)
+
+    navigate(`/membership/confirmation?${params.toString()}`)
   }
 
   return (
@@ -275,6 +366,22 @@ export default function MembershipCheckout() {
                         <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
                         <FormInput label="Confirm Email Address" placeholder="your@email.com" value={confirmEmail} onChange={setConfirmEmail} type="email" required error={fieldError(confirmEmail)} />
                         <FormInput label="Phone Number (Optional)" placeholder="(555) 555-1234" value={phone} onChange={setPhone} type="tel" />
+                        <FormInput label="Password" placeholder="Create a password" value={password} onChange={setPassword} type="password" required error={fieldError(password)} />
+
+                        <div className="border-t border-[#c4c9d4] pt-5">
+                          <p className="font-body font-bold text-[12px] uppercase tracking-[0.08em] text-[#4e576a] mb-4">Service Information</p>
+                          <div className="flex flex-col gap-5">
+                            <div className="flex flex-col sm:flex-row gap-5">
+                              <FormSelect label="Service" placeholder="— Select —" options={services} value={service} onChange={setService} className="flex-1" required error={showErrors && !service} />
+                              <FormSelect label="Military Status" placeholder="— Select —" options={militaryStatuses} value={militaryStatus} onChange={setMilitary} className="flex-1" required error={showErrors && !militaryStatus} />
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-5">
+                              <FormInput label="Rank / Title" placeholder="Enter rank or title" value={rank} onChange={setRank} className="flex-1" required error={fieldError(rank)} />
+                              <FormSelect label="Suffix" placeholder="— None —" options={suffixes} value={suffix} onChange={setSuffix} className="sm:w-52" error={false} />
+                              <FormInput label="Graduation Year" placeholder="YYYY" value={gradYear} onChange={setGradYear} className="sm:w-36" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     ) : (
                       <div className="flex flex-col gap-5">
@@ -285,22 +392,24 @@ export default function MembershipCheckout() {
                   </div>
                 </div>
 
-                {/* Card: Delivery Address (print plans only) */}
-                {isPrint && (
+                {/* Card: Delivery Address — shown whenever something is mailed */}
+                {needsDelivery && (
                   <div className="border border-[#c4c9d4]">
                     <div className="p-6 flex flex-col gap-6">
                       <div className="flex flex-col gap-1">
                         <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Delivery Address</h2>
                         <p className="font-body text-[15px] text-[#4e576a] leading-[1.5]">
-                          Required for your print edition of Proceedings. Address auto-populates shipping cost.
+                          Required for your print {printTitles.length > 1 ? 'editions' : 'edition'} of{' '}
+                          {printTitleList}. Address auto-populates shipping cost.
                         </p>
                       </div>
-                      <FormInput label="Street Address" placeholder="123 Main Street" value={street} onChange={setStreet} required error={fieldError(street)} />
-                      <div className="flex gap-4">
-                        <FormInput label="City" placeholder="Enter city" value={city} onChange={setCity} className="flex-1" required error={fieldError(city)} />
-                        <FormSelect label="State" placeholder="Select State" options={US_STATES} value={state} onChange={setState} className="w-44" required error={showErrors && !state} />
-                        <FormInput label="ZIP" placeholder="Enter zip code" value={zip} onChange={setZip} className="w-36" required error={fieldError(zip)} />
-                      </div>
+                      <AddressFields
+                        street={street} setStreet={setStreet}
+                        city={city} setCity={setCity}
+                        state={state} setState={setState}
+                        zip={zip} setZip={setZip}
+                        fieldError={fieldError} showErrors={showErrors}
+                      />
                     </div>
                   </div>
                 )}
@@ -366,18 +475,35 @@ export default function MembershipCheckout() {
                   </div>
                 )}
 
+                {/* Card: Billing Address — required to authorize the card */}
+                {needsBilling && (
+                  <div className="border border-[#c4c9d4]">
+                    <div className="p-6 flex flex-col gap-6">
+                      <div className="flex flex-col gap-1">
+                        <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Billing Address</h2>
+                        <p className="font-body text-[15px] text-[#4e576a] leading-[1.5]">
+                          {needsDelivery
+                            ? 'The address on file with your card issuer.'
+                            : 'The address on file with your card issuer. Required to verify your payment — nothing is mailed to it.'}
+                        </p>
+                      </div>
+                      <AddressFields
+                        street={billStreet} setStreet={setBillStreet}
+                        city={billCity} setCity={setBillCity}
+                        state={billState} setState={setBillState}
+                        zip={billZip} setZip={setBillZip}
+                        fieldError={fieldError} showErrors={showErrors}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Card: Payment Details */}
                 <div className={`border ${showErrors && !savedCardLast4 ? 'border-red-600' : 'border-[#c4c9d4]'}`}>
                   <div className="p-6 flex flex-col gap-6">
                     <div className="flex items-center justify-between">
                       <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Payment Details</h2>
-                      <div className="flex gap-1.5">
-                        {['VISA', 'MC', 'AMEX', 'DISC'].map(brand => (
-                          <span key={brand} className="border border-[#c4c9d4] px-2 py-1 font-body font-bold text-[11px] text-[#4e576a] tracking-wide leading-none">
-                            {brand}
-                          </span>
-                        ))}
-                      </div>
+                      <AcceptedCards />
                     </div>
 
                     {savedCardLast4 && (
@@ -391,15 +517,17 @@ export default function MembershipCheckout() {
                         {savedCardLast4 ? 'Change Your Credit Card Details' : 'Pay with Credit Card'}
                       </Button>
 
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={billingSameAsShipping}
-                          onChange={e => setBillingSameAsShipping(e.target.checked)}
-                          className="w-4 h-4 border border-[#4e576a] accent-[#023e7d] cursor-pointer"
-                        />
-                        <span className="font-body text-[15px] text-[#1d2535]">My billing information is the same as my shipping information.</span>
-                      </label>
+                      {needsDelivery && (
+                        <label className="flex items-center gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={billingSameAsShipping}
+                            onChange={e => setBillingSameAsShipping(e.target.checked)}
+                            className="w-4 h-4 border border-[#4e576a] accent-[#023e7d] cursor-pointer"
+                          />
+                          <span className="font-body text-[15px] text-[#1d2535]">My billing information is the same as my shipping information.</span>
+                        </label>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -438,6 +566,10 @@ export default function MembershipCheckout() {
                           <div className="flex justify-between items-baseline gap-4 py-3 border-b border-[#e8eaed]">
                             <span className="font-body font-bold text-[15px] text-[#1d2535]">Naval History Magazine</span>
                             <span className="font-body text-[15px] text-[#4e576a] text-right">${magPriceNum}</span>
+                          </div>
+                          <div className="flex justify-between items-baseline gap-4 py-3 border-b border-[#e8eaed]">
+                            <span className="font-body font-bold text-[15px] text-[#1d2535]">NH Format</span>
+                            <span className="font-body text-[15px] text-[#4e576a] text-right">{magFormatLabel}</span>
                           </div>
                           <div className="flex justify-between items-baseline gap-4 py-3 border-b border-[#e8eaed]">
                             <span className="font-body font-bold text-[15px] text-[#1d2535]">NH Term</span>

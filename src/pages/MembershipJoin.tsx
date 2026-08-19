@@ -14,11 +14,14 @@ export default function MembershipJoin() {
       <main className="flex-1">
         <JoinHero />
         <MembershipCustomizer />
+        <MembershipComparisonTable />
         <section className="container-site py-section flex flex-col gap-8">
-          <NavalHistoryBillboard />
+          {/* Naval History subscribe callout — parked for future use, not removed.
+              The component still lives in `sections/MembershipBillboard.tsx` and
+              its import above is intact, so re-enabling is a one-line uncomment. */}
+          {/* <NavalHistoryBillboard /> */}
           <OrgMembershipBillboard />
         </section>
-        <MembershipComparisonTable />
         <MembershipFAQ />
         <MembershipServicesCTA />
       </main>

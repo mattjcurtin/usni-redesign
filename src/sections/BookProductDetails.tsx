@@ -72,7 +72,7 @@ export default function BookProductDetails({ book }: Props) {
                       {row.isLink && row.href ? (
                         <a
                           href={row.href}
-                          className="font-body text-sm text-[#023E7D] underline hover:no-underline"
+                          className="font-body text-sm text-link"
                         >
                           {row.value}
                         </a>

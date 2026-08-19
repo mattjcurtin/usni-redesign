@@ -62,7 +62,7 @@ export default function FilterPanel({ activeCount, onClearAll, children }: Filte
         {activeCount > 0 && (
           <button
             onClick={onClearAll}
-            className="font-body text-sm text-[#023E7D] underline hover:no-underline flex-shrink-0"
+            className="font-body text-sm flex-shrink-0 text-link"
           >
             Clear all
           </button>
@@ -75,7 +75,7 @@ export default function FilterPanel({ activeCount, onClearAll, children }: Filte
         {activeCount > 0 && (
           <button
             onClick={onClearAll}
-            className="lg:hidden self-start font-body text-sm text-[#023E7D] underline hover:no-underline"
+            className="lg:hidden self-start font-body text-sm text-link"
           >
             Clear all
           </button>

@@ -274,22 +274,19 @@ function DropdownSelect({
   onChange: (v: string) => void
   options: { value: string; label: string }[]
 }) {
+  // The chevron comes from `select.select-field` in index.css. This markup used
+  // to stack an absolutely-positioned SVG on top of it, which drew a second arrow.
   return (
-    <div className="relative inline-block">
+    <div className="inline-block">
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="select-field bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 pr-10 py-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
+        className="select-field bg-white border border-navy-subtle text-navy-bolder font-headline text-[28px] lg:text-[36px] leading-[1.2] pl-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#0466c8]"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>{o.label}</option>
         ))}
       </select>
-      <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-        <svg className="w-5 h-5 text-navy-subtle" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M5 8l5 5 5-5" />
-        </svg>
-      </div>
     </div>
   )
 }

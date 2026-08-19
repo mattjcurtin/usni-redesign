@@ -37,7 +37,7 @@ export default function ArticleMeterBanner({
         <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8 pr-8">
           <div className="flex-1 min-w-0 space-y-1.5">
             <p className="font-headline text-[20px] lg:text-[24px] text-white leading-[1.25]">
-              You've read {articlesRead} out of {articlesLimit} free articles of {magazine} this month.
+              You’ve read {articlesRead} out of {articlesLimit} free {magazine} articles this month.
             </p>
             <p className="font-body text-[14px] lg:text-[15px] text-white/85 leading-[1.5]">
               Non-members can read {articlesLimit} free {magazine} articles per month.{' '}
@@ -59,7 +59,7 @@ export default function ArticleMeterBanner({
               to="/membership/join"
               className="font-body font-bold text-base bg-gold text-navy-bolder px-6 py-2.5 hover:bg-gold-dark transition-colors whitespace-nowrap"
             >
-              Join to subscribe
+              Become a member
             </Link>
           </div>
         </div>

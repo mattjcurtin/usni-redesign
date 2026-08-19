@@ -18,7 +18,7 @@ const variants: Record<ButtonVariant, string> = {
   primary: 'bg-gold text-navy-bolder hover:bg-gold-dark border border-gold',
   outline: 'bg-transparent text-white border border-white hover:bg-white hover:text-navy-bright',
   'outline-dark': 'bg-transparent text-navy-bolder border border-navy-bolder hover:bg-navy-bolder hover:text-white',
-  link: 'bg-transparent text-navy-subtle underline-offset-2 hover:underline p-0',
+  link: 'bg-transparent p-0 text-link',
 }
 
 const sizes: Record<ButtonSize, string> = {

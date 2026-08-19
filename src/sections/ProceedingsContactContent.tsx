@@ -45,7 +45,7 @@ export default function ProceedingsContactContent() {
                   </p>
                   <a
                     href={`mailto:${person.email}`}
-                    className="font-body font-bold text-sm text-navy-subtle underline underline-offset-2 hover:text-navy-bolder transition-colors"
+                    className="font-body font-bold text-sm transition-colors text-link"
                   >
                     {person.email}
                   </a>
@@ -74,13 +74,13 @@ export default function ProceedingsContactContent() {
               <div className="font-body text-base text-[#1d2535] leading-relaxed flex flex-col gap-2">
                 <p>
                   Phone Number:{' '}
-                  <a href="tel:4102686110" className="font-bold text-navy-subtle underline underline-offset-2 hover:text-navy-bolder transition-colors">
+                  <a href="tel:4102686110" className="font-bold transition-colors text-link">
                     (410) 268-6110
                   </a>
                 </p>
                 <p>
                   Fax Number:{' '}
-                  <a href="tel:4102951049" className="font-bold text-navy-subtle underline underline-offset-2 hover:text-navy-bolder transition-colors">
+                  <a href="tel:4102951049" className="font-bold transition-colors text-link">
                     (410) 295-1049
                   </a>
                 </p>

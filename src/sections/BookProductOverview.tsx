@@ -80,7 +80,7 @@ export default function BookProductOverview({ overview, book }: Props) {
                     </td>
                     <td className="py-3 px-3">
                       {row.isLink && row.href ? (
-                        <a href={row.href} className="font-body text-sm text-[#023E7D] underline hover:no-underline">
+                        <a href={row.href} className="font-body text-sm text-link">
                           {row.value}
                         </a>
                       ) : (

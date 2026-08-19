@@ -33,7 +33,7 @@ export default function Login() {
                   If this is your first time logging into our site, please use the{' '}
                   <a
                     href="/create-password"
-                    className="text-navy-subtle underline underline-offset-2 hover:text-navy-bolder transition-colors"
+                    className="transition-colors text-link"
                   >
                     Create/Change Password
                   </a>{' '}
@@ -49,7 +49,7 @@ export default function Login() {
                     If you are unsure what email address is associated with your account profile, please contact Member Services at{' '}
                     <a
                       href="mailto:member@usni.org"
-                      className="text-navy-subtle underline underline-offset-2 hover:text-navy-bolder transition-colors"
+                      className="transition-colors text-link"
                     >
                       member@usni.org
                     </a>{' '}
@@ -62,7 +62,7 @@ export default function Login() {
               <div className="w-full lg:w-[440px] flex-none">
                 <div className="bg-white border border-[#023e7d] p-8 lg:p-10">
                   <h2 className="font-headline text-[32px] text-navy-bolder leading-[1.1] mb-7">
-                    Member Sign in
+                    Sign in
                   </h2>
 
                   <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
@@ -97,7 +97,7 @@ export default function Login() {
                         </label>
                         <a
                           href="/forgot-password"
-                          className="font-body text-sm text-navy-subtle underline underline-offset-2 hover:text-navy-bolder transition-colors"
+                          className="font-body text-sm transition-colors text-link"
                         >
                           Forgot password?
                         </a>

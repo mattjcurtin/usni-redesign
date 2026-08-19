@@ -92,7 +92,7 @@ export default function BookProductHero({ book }: Props) {
                 <span key={a.name}>
                   <a
                     href="#author-bios"
-                    className="text-[#023E7D] underline hover:underline font-semibold"
+                    className="font-semibold text-link"
                   >
                     {a.name}
                   </a>
@@ -143,9 +143,9 @@ export default function BookProductHero({ book }: Props) {
             {/* Member savings note */}
             <p className="font-body text-sm text-neutral-subtle border-l-2 border-gold pl-3">
               USNI membership savings available —{' '}
-              <a href="/login" className="text-[#023E7D] underline hover:underline">Login</a>
+              <a href="/login" className="text-link">Login</a>
               {' '}or{' '}
-              <a href="/membership/join" className="text-[#023E7D] underline hover:underline">join today</a>
+              <a href="/membership/join" className="text-link">join today</a>
             </p>
 
             {/* CTA row */}
