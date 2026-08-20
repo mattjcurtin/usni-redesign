@@ -88,7 +88,7 @@ export interface PaymentMethodRecord {
 }
 
 export const member = {
-  salutation: 'Ms.',
+  salutation: 'Mr.',
   firstName: 'Matt',
   lastName: 'Curtin',
   email: 'member@example.com',
