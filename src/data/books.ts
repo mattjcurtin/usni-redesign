@@ -27,7 +27,7 @@ export interface Book {
   id: string
   title: string
   author: string
-  format: 'Hardcover' | 'Paperback' | 'eBook'
+  format: 'Hardcover' | 'Paperback'
   price: number
   originalPrice: number
   image: string
@@ -147,7 +147,7 @@ export const allBooks: Book[] = [
     id: 'nr6',
     title: 'Sea Power and the American Interest',
     author: 'John Fass Morton',
-    format: 'eBook',
+    format: 'Paperback',
     price: 15.99,
     originalPrice: 22.95,
     image: imgSeaPower,
@@ -182,7 +182,7 @@ export const allBooks: Book[] = [
     id: 'nr10',
     title: 'Cyber Warfare and Navies',
     author: 'Multiple Authors',
-    format: 'eBook',
+    format: 'Paperback',
     price: 18.99,
     originalPrice: 26.95,
     image: imgCyber,
@@ -276,7 +276,7 @@ export const allBooks: Book[] = [
     id: 'bs8',
     title: 'Career Compass',
     author: 'Douglas H. Raugh Jr.',
-    format: 'eBook',
+    format: 'Paperback',
     price: 12.99,
     originalPrice: 17.95,
     image: imgCareer,

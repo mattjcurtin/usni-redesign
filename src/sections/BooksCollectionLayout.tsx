@@ -4,7 +4,8 @@ import type { Book } from '@/data/books'
 
 /* ── Constants ─────────────────────────────────────────────────────────────── */
 
-const BINDING_OPTIONS: Book['format'][] = ['Hardcover', 'Paperback', 'eBook']
+// The Press does not currently sell eBooks, so binding offers only the two it does.
+const BINDING_OPTIONS: Book['format'][] = ['Hardcover', 'Paperback']
 
 const PRICE_RANGES = [
   { label: 'Under $20', min: 0, max: 19.99 },

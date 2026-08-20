@@ -3,6 +3,8 @@ import SharePopover from '@/components/ui/SharePopover'
 import ArticleComments from '@/sections/ArticleComments'
 import ArticleAuthorBio from '@/sections/ArticleAuthorBio'
 import ArticleAudioPlayer from '@/sections/ArticleAudioPlayer'
+import ArticleInBrief from '@/sections/ArticleInBrief'
+import ArticlePullQuote from '@/sections/ArticlePullQuote'
 
 const articleAuthors = [
   {
@@ -45,17 +47,6 @@ function ArticleSidebar() {
   )
 }
 
-function PullQuote({ quote, attribution }: { quote: string; attribution?: string }) {
-  return (
-    <blockquote className="border-l-4 border-[#023e7d] pl-6 py-2 my-6">
-      <p className="font-headline text-[24px] text-[#023e7d] leading-[1.3] italic">{quote}</p>
-      {attribution && (
-        <footer className="mt-3 font-body text-[14px] text-[#4e576a] font-semibold not-italic">{attribution}</footer>
-      )}
-    </blockquote>
-  )
-}
-
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
     <h2 className="font-headline text-[28px] text-[#001845] leading-[1.2] mt-10 mb-4 pt-8 border-t border-[#e8eaed]">
@@ -94,6 +85,18 @@ export default function MitscherArticleBody() {
 
             {/* ── Main article content ── */}
             <div className="flex-1 min-w-0">
+              <div className="bg-[#EBF4FF] p-6 lg:p-8 mb-6">
+                <ArticleInBrief
+                  readTime="14 min read"
+                  items={[
+                    <>Sixty years of scholarship has produced no consensus on whether Mitscher&rsquo;s decisions aboard <em>Hornet</em> secured or nearly cost the victory at Midway.</>,
+                    <><em>Hornet</em>&rsquo;s air group flew southwest rather than toward the Kido Butai &mdash; the &ldquo;flight to nowhere&rdquo; &mdash; and contributed nothing to the strikes that sank four Japanese carriers.</>,
+                    <>The ship&rsquo;s after-action report contradicts the surviving flight logs, which is why the episode turns on the reliability of sources rather than a shortage of them.</>,
+                    <>Modern reassessments read Midway as far more contingent than the clean narrative of American intelligence superiority allows.</>,
+                  ]}
+                />
+              </div>
+
               <div className="mb-8">
                 <ArticleAudioPlayer />
               </div>
@@ -118,10 +121,10 @@ export default function MitscherArticleBody() {
                   Yet for all his credentials, the events of June 4 — specifically the flight vectors he assigned to his air group and the fate of Torpedo Squadron 8 (VT-8) under Lieutenant Commander John C. Waldron — would cast a long shadow over his legacy. The question historians have wrestled with ever since: did Mitscher's navigational decisions contribute to one of the most devastating losses in American aviation history?
                 </p>
 
-                <PullQuote
-                  quote="My greatest hope is that we encounter the enemy and that my group can be the first to make contact."
-                  attribution="— Lt. Cdr. John C. Waldron, to his pilots before launch, June 4, 1942"
-                />
+                <ArticlePullQuote attribution="— Lt. Cdr. John C. Waldron, to his pilots before launch, June 4, 1942">
+                  My greatest hope is that we encounter the enemy and that my group can be the first to
+                  make contact.
+                </ArticlePullQuote>
 
                 <SectionHeading>The Flight to Nowhere</SectionHeading>
 
@@ -174,10 +177,11 @@ export default function MitscherArticleBody() {
                   Admiral Chester Nimitz was reportedly dissatisfied with Mitscher's report and ordered corrections. The precise nature of those corrections — and what they changed — has been a subject of debate ever since. Researchers who have combed the National Archives in search of the original draft have found the documentary trail frustratingly incomplete.
                 </p>
 
-                <PullQuote
-                  quote="The Hornet's performance at Midway remains the most vexed question in the historiography of that battle — not because we lack sources, but because the sources we have cannot be fully trusted."
-                  attribution="— Jonathan Parshall and Anthony Tully, Shattered Sword (2005)"
-                />
+                <ArticlePullQuote attribution="— Jonathan Parshall and Anthony Tully, Shattered Sword (2005)">
+                  The <em>Hornet</em>&rsquo;s performance at Midway remains the most vexed question in the
+                  historiography of that battle &mdash; not because we lack sources, but because the sources
+                  we have cannot be fully trusted.
+                </ArticlePullQuote>
 
                 <SectionHeading>Modern Reassessments</SectionHeading>
 

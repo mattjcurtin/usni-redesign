@@ -54,7 +54,11 @@ export default function NavalHistoryArticle() {
         <AdUnit size="rectangle" />
       </main>
       <Footer />
-      <ArticleMeterBanner magazine="Naval History" />
+      <ArticleMeterBanner
+          magazine="Naval History"
+          ctaLabel="Subscribe today"
+          ctaHref="/naval-history/subscribe"
+        />
     </div>
   )
 }

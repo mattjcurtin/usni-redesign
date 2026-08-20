@@ -96,7 +96,7 @@ function GiftSummary({ recipient, onEdit }: { recipient: GiftRecipient; onEdit: 
           <button
             type="button"
             onClick={onEdit}
-            className="flex items-center gap-1.5 font-body font-bold text-[16px] transition-colors text-link"
+            className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#002b5c] hover:text-white transition-colors"
           >
             <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -299,6 +299,9 @@ export default function CartItems() {
           </div>
           <div className="flex items-center gap-2 flex-shrink-0 pt-1">
             <button
+              type="button"
+              onClick={() => navigate('/membership/join')}
+              className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#002b5c] hover:text-white transition-colors"
             >
               <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>

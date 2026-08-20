@@ -19,8 +19,8 @@ const listenLinks = [
 
 export default function ProceedingsPodcastHero() {
   return (
-    <section style={{ background: 'linear-gradient(to bottom, #1d2535, #0e121a)' }}>
-      <div className="container-site py-10 lg:py-16">
+    <section className="bg-[#ebf4ff] pt-10 lg:pt-12 pb-12 lg:pb-16">
+      <div className="container-site">
         <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-10 xl:gap-16">
 
           {/* Content column */}
@@ -28,31 +28,31 @@ export default function ProceedingsPodcastHero() {
 
             {/* Breadcrumb */}
             <div className="pb-4 border-b border-[#C2DDFF]">
-              <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body font-bold text-sm lg:text-base text-white">
-                <a href="/" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
+              <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body font-bold text-sm lg:text-base">
+                <a href="/" className="flex items-center gap-1.5 text-navy-subtle hover:text-navy-bolder transition-colors">
                   <i className="fa-solid fa-house text-[10px]" aria-hidden="true" />
                   Home
                 </a>
-                <span className="text-white/40">/</span>
-                <a href="/proceedings" className="hover:text-white/80 transition-colors">Proceedings</a>
-                <span className="text-white/40">/</span>
-                <span className="font-normal italic text-[#f4f4f6]">The Proceedings Podcast</span>
+                <span className="text-neutral-subtle">/</span>
+                <a href="/proceedings" className="text-navy-subtle hover:text-navy-bolder transition-colors">Proceedings</a>
+                <span className="text-neutral-subtle">/</span>
+                <span className="font-normal italic text-neutral-subtle">The Proceedings Podcast</span>
               </nav>
             </div>
 
             {/* Title */}
-            <h1 className="font-headline text-[32px] lg:text-[56px] xl:text-[64px] text-white leading-[1.1]">
+            <h1 className="font-headline text-[32px] lg:text-[64px] text-navy-bolder leading-[1.1]">
               The Proceedings Podcast
             </h1>
 
             {/* Tagline */}
-            <p className="font-body font-bold text-[18px] lg:text-[24px] text-gold leading-[1.4]">
+            <p className="font-body font-bold text-[18px] lg:text-[24px] text-navy-subtle leading-[1.4]">
               Victory Begins at the U.S. Naval Institute
             </p>
 
             {/* Ways to listen */}
             <div className="pt-2 flex flex-col gap-3">
-              <p className="font-body font-semibold text-sm uppercase tracking-[0.08em] text-[#C2DDFF]">
+              <p className="font-body font-semibold text-sm uppercase tracking-[0.08em] text-[#023e7d]">
                 Ways to Listen
               </p>
               {/* Scaled to one height; each badge keeps its own aspect ratio.
@@ -83,7 +83,7 @@ export default function ProceedingsPodcastHero() {
             <img
               src={podcastArt}
               alt="The Proceedings Podcast cover art"
-              className="w-full shadow-2xl"
+              className="w-full shadow-lg border border-[#c2ddff]"
             />
           </div>
 

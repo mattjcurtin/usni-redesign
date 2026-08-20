@@ -64,7 +64,6 @@ export const aiWarfightingBook: BookProductData = {
   formats: [
     { label: 'Hardcover', price: 38.95, originalPrice: 48.95, isbn: '9781682477892', inStock: true },
     { label: 'Paperback', price: 24.95, originalPrice: 32.95, isbn: '9781682477908', inStock: true },
-    { label: 'eBook', price: 14.99, originalPrice: 19.99, isbn: '9781682477915', inStock: true },
   ],
   coverImage: imgAI,
   publishDate: 'March 15, 2025',

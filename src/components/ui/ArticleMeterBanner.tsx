@@ -6,6 +6,12 @@ interface ArticleMeterBannerProps {
   magazine?: string
   articlesRead?: number
   articlesLimit?: number
+  /**
+   * CTA label and target. Proceedings sells membership; Naval History sells a
+   * subscription, so the two cannot share one call to action.
+   */
+  ctaLabel?: string
+  ctaHref?: string
 }
 
 /**
@@ -17,6 +23,8 @@ export default function ArticleMeterBanner({
   magazine = 'Proceedings',
   articlesRead = 2,
   articlesLimit = 3,
+  ctaLabel = 'Become a member',
+  ctaHref = '/membership/join',
 }: ArticleMeterBannerProps) {
   const [dismissed, setDismissed] = useState(false)
 
@@ -56,10 +64,10 @@ export default function ArticleMeterBanner({
               Sign in
             </Link>
             <Link
-              to="/membership/join"
+              to={ctaHref}
               className="font-body font-bold text-base bg-gold text-navy-bolder px-6 py-2.5 hover:bg-gold-dark transition-colors whitespace-nowrap"
             >
-              Become a member
+              {ctaLabel}
             </Link>
           </div>
         </div>
