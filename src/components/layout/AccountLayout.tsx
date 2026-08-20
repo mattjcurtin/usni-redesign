@@ -116,7 +116,9 @@ function SidebarNav() {
       <div className="border-t border-[#c4c9d4] pt-4">
         <Link
           to="/login"
-          className="flex items-center gap-2 px-3 font-body font-semibold text-[15px] text-[#023e7d] hover:underline"
+          className="flex w-full items-center justify-center gap-2 bg-navy-bolder text-white
+                     font-body font-bold text-[15px] px-4 py-3 border border-navy-bolder
+                     hover:bg-navy-bright hover:border-navy-bright transition-colors"
         >
           <i className="fa-solid fa-arrow-right-from-bracket text-[12px]" aria-hidden="true" />
           Log out

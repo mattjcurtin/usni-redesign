@@ -129,10 +129,9 @@ export default function App() {
         <Route path="/books/ai-warfighting" element={<BookProduct />} />
         <Route path="/archives" element={<Archives />} />
         <Route path="/naval-history/mitscher-at-midway" element={<NavalHistoryArticle />} />
-        {/* Newsletter signup is hidden from the prototype — the footer CTA now
-            goes to the Mailchimp hosted form instead. The page and its import are
-            intact, so re-enabling is a one-line uncomment. */}
-        {/* <Route path="/newsletter" element={<NewsletterJoin />} /> */}
+        {/* Reachable by direct URL only. The footer CTA deliberately points at
+            the Mailchimp hosted form instead, so nothing on the site links here. */}
+        <Route path="/newsletter" element={<NewsletterJoin />} />
         <Route path="/essay-contests" element={<EssayContests />} />
         <Route path="/essay-contests/archive" element={<EssayContestsArchivePage />} />
         {/* One submission page for every contest — see ?contest=<slug> */}

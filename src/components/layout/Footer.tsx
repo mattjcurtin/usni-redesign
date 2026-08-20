@@ -1,4 +1,5 @@
 import facebookIcon from '@/assets/images/facebook.svg'
+import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
 import instagramIcon from '@/assets/images/instagram.svg'
 import youtubeIcon from '@/assets/images/youtube.svg'
 import linkedinIcon from '@/assets/images/linkedin.svg'
@@ -20,10 +21,16 @@ const contentLinks = [
   { label: 'Books & Press', href: '/books' },
   { label: 'Naval Institute Archives', href: '/archives' },
   { label: 'Oral Histories', href: '/archive/oral-histories' },
-  { label: 'Photos & Historical Prints', href: '/archive/photos' },
+  { label: 'Photos & Historical Prints', href: 'https://photos.usni.org', external: true },
 ]
 
-function FooterNavColumn({ title, links }: { title: string; links: typeof aboutLinks }) {
+function FooterNavColumn({
+  title,
+  links,
+}: {
+  title: string
+  links: { label: string; href: string; external?: boolean }[]
+}) {
   return (
     <div className="flex flex-col flex-1 min-w-0">
       {/* Category heading */}
@@ -36,10 +43,17 @@ function FooterNavColumn({ title, links }: { title: string; links: typeof aboutL
         <a
           key={link.href}
           href={link.href}
-          className="flex items-center min-h-[44px] font-body font-normal text-base text-white/90
+          {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          className="flex items-center gap-1.5 min-h-[44px] font-body font-normal text-base text-white/90
                      hover:text-white hover:underline underline-offset-2 transition-colors"
         >
           {link.label}
+          {link.external && (
+            <>
+              <ExternalLinkIcon />
+              <span className="sr-only">(opens in a new tab)</span>
+            </>
+          )}
         </a>
       ))}
     </div>

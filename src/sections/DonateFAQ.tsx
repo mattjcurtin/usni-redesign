@@ -36,12 +36,12 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   return (
     <div className={`border-b border-border-light last:border-b-0 transition-colors ${open ? 'bg-white' : ''}`}>
       <button
-        className={`flex items-center justify-between w-full py-4 px-4 text-left gap-4 transition-colors ${open ? '' : 'hover:bg-white'}`}
+        className="accordion-row flex items-center justify-between w-full py-4 px-4 text-left gap-4"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
       >
         <span className="font-body font-semibold text-base text-navy-bolder">{q}</span>
-        <span className={`flex-shrink-0 w-8 h-8 bg-navy-bolder text-white flex items-center justify-center transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
+        <span className={`accordion-chevron flex-shrink-0 w-8 h-8 bg-navy-bolder text-white flex items-center justify-center transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
           <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
             <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>

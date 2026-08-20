@@ -31,7 +31,7 @@ export const archivesDropdown: NavItem[] = [
   { label: 'About the Archives', href: '/archives' },
   { label: 'Oral Histories', href: '/archive/oral-histories' },
   { label: 'Memoirs', href: '/archive/memoirs' },
-  { label: 'Photos', href: '/archive/photos' },
+  { label: 'Photos', href: 'https://photos.usni.org', external: true },
   { label: 'Contact the Archives', href: '/archive/contact' },
 ]
 

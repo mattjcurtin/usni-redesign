@@ -44,7 +44,7 @@ function TeaserCard({ entry }: { entry: EssayArchiveEntry }) {
   const src = archiveImage(entry.image)
 
   return (
-    <article className="flex flex-col bg-white border border-border-light h-full">
+    <article className="group flex flex-col bg-white border border-navy-subtle h-full">
       <div className="relative aspect-[16/10] overflow-hidden bg-navy-bolder">
         {src ? (
           <img src={src} alt={entry.imageAlt ?? ''} className="w-full h-full object-cover" />
@@ -59,7 +59,9 @@ function TeaserCard({ entry }: { entry: EssayArchiveEntry }) {
 
       <div className="flex flex-col gap-2 p-5 flex-1">
         <h3 className="font-headline text-lg lg:text-xl text-navy-bolder leading-[1.25]">
-          {entry.title}
+          <a href={entry.sourceHref} className="article-link article-link--card">
+            {entry.title}
+          </a>
         </h3>
 
         {entry.author && (
@@ -87,7 +89,7 @@ function TeaserCard({ entry }: { entry: EssayArchiveEntry }) {
 function AccordionChevron({ open }: { open: boolean }) {
   return (
     <span
-      className="flex-shrink-0 flex items-center justify-center bg-navy-subtle p-1.5"
+      className="accordion-chevron flex-shrink-0 flex items-center justify-center bg-navy-subtle p-1.5"
       aria-hidden="true"
     >
       <svg
@@ -213,7 +215,7 @@ export default function EssayContestsArchive() {
               onClick={() => setCategoriesOpen((o) => !o)}
               aria-expanded={categoriesOpen}
               aria-controls="archive-categories"
-              className="flex items-center justify-between w-full gap-3 py-3 font-body font-bold text-sm text-navy-bolder text-left"
+              className="accordion-row flex items-center justify-between w-full gap-3 px-3 py-3 font-body font-bold text-sm text-navy-bolder text-left"
             >
               <span className="flex items-center gap-2">
                 Categories

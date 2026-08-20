@@ -189,6 +189,38 @@
     animation: link-underline-sweep 0.32s ease-out;
   }
 
+  /* ── Accordion rows ──────────────────────────────────────────────────────
+     One hover treatment for every accordion header: a solid #0466C8 band with
+     white type. Written in CSS rather than per-component Tailwind because the
+     row's label and chevron set their own colours — the descendant selectors
+     below are two classes deep, so they outrank single-class text utilities
+     that would otherwise keep the label navy on a blue band. */
+  .accordion-row {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .accordion-row:hover {
+    background-color: #0466c8;
+  }
+
+  .accordion-row:hover,
+  .accordion-row:hover span,
+  .accordion-row:hover h2,
+  .accordion-row:hover h3,
+  .accordion-row:hover p {
+    color: #ffffff;
+  }
+
+  /* The filled chevron badge inverts, so it stays legible on the blue band. */
+  .accordion-row:hover .accordion-chevron {
+    background-color: #ffffff;
+    color: #0466c8;
+  }
+
+  .accordion-row:hover .accordion-chevron svg {
+    color: #0466c8;
+  }
+
   /* ── Select fields ──────────────────────────────────────────────────────
      One chevron treatment for every <select> on the site. Replaces three
      competing approaches (the native browser arrow, an absolutely-positioned

@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
 
+/** Photos lives on photos.usni.org, not on this site. */
 const navItems = [
   { label: 'About the Archives', href: '/archives' },
   { label: 'Oral Histories', href: '/archives/oral-histories' },
   { label: 'Memoirs', href: '/archives/memoirs' },
-  { label: 'Photos', href: '/archives/photos' },
+  { label: 'Photos', href: 'https://photos.usni.org', external: true },
   { label: 'Contact the Archives', href: '/archives/contact' },
 ]
 
@@ -47,13 +49,20 @@ export default function ArchivesSubNav() {
                   key={item.label}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`block px-6 py-3.5 font-body font-semibold text-sm border-b border-[#C8C4A8] last:border-0 transition-colors
+                  {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className={`flex items-center gap-1.5 px-6 py-3.5 font-body font-semibold text-sm border-b border-[#C8C4A8] last:border-0 transition-colors
                     ${isActive
                       ? 'text-navy-boldest bg-[#D4D0BA]'
                       : 'text-navy-bolder hover:text-navy-subtle hover:bg-[#D4D0BA]'
                     }`}
                 >
                   {item.label}
+                  {item.external && (
+                    <>
+                      <ExternalLinkIcon />
+                      <span className="sr-only">(opens in a new tab)</span>
+                    </>
+                  )}
                 </a>
               )
             })}
@@ -72,6 +81,7 @@ export default function ArchivesSubNav() {
             <a
               key={item.label}
               href={item.href}
+              {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               className={`font-body font-semibold text-sm whitespace-nowrap transition-colors
                 ${isActive
                   ? 'text-navy-boldest link-underline-always'
@@ -79,6 +89,13 @@ export default function ArchivesSubNav() {
                 }`}
             >
               {item.label}
+              {item.external && (
+                <>
+                  {' '}
+                  <ExternalLinkIcon className="relative -top-px" />
+                  <span className="sr-only">(opens in a new tab)</span>
+                </>
+              )}
             </a>
           )
         })}

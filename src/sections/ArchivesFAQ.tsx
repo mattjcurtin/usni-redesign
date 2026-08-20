@@ -43,13 +43,13 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   return (
     <div className="border-b border-border-light last:border-b-0">
       <button
-        className="flex items-center justify-between w-full py-4 px-0 text-left"
+        className="accordion-row flex items-center justify-between w-full py-4 px-4 text-left"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
       >
         <span className="font-body font-semibold text-base lg:text-lg text-navy-bolder pr-4">{question}</span>
         <span
-          className={`flex-shrink-0 w-8 h-8 bg-navy-bolder text-white flex items-center justify-center transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`accordion-chevron flex-shrink-0 w-8 h-8 bg-navy-bolder text-white flex items-center justify-center transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         >
           <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none">
             <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -57,7 +57,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         </span>
       </button>
       {open && (
-        <div className="pb-5 pr-10">
+        <div className="px-4 pt-3 pb-5 pr-10">
           <p className="font-body text-base text-neutral-subtle leading-relaxed">{answer}</p>
         </div>
       )}

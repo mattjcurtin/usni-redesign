@@ -14,9 +14,9 @@ export default function Archives() {
       <main className="flex-1">
         <ArchivesSubNav />
         <ArchivesHero />
+        <AdUnit />
         <ArchivesAbout />
         <ArchivesCollections />
-        <AdUnit />
         <ArchivesFAQ />
       </main>
       <Footer />

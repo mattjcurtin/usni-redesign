@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
 import { useLocation } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
 import { navItems, archivesDropdown } from '@/data/homepage'
@@ -332,11 +333,18 @@ function SimpleDropdown({ items }: { items: NavItem[] }) {
         <a
           key={item.href}
           href={item.href}
-          className="block px-5 py-3.5 font-body font-bold text-base text-navy-bolder
+          {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          className="flex items-center gap-1.5 px-5 py-3.5 font-body font-bold text-base text-navy-bolder
                      hover:bg-surface-subtle hover:text-navy-subtle transition-colors
                      border-b border-border-light last:border-0"
         >
           {item.label}
+          {item.external && (
+            <>
+              <ExternalLinkIcon />
+              <span className="sr-only">(opens in a new tab)</span>
+            </>
+          )}
         </a>
       ))}
     </div>

@@ -36,7 +36,7 @@ const kinds = Object.keys(kindCounts).sort((a, b) => a.localeCompare(b))
 function AccordionChevron({ open }: { open: boolean }) {
   return (
     <span
-      className="flex-shrink-0 flex items-center justify-center bg-navy-subtle p-1.5"
+      className="accordion-chevron flex-shrink-0 flex items-center justify-center bg-navy-subtle p-1.5"
       aria-hidden="true"
     >
       <svg
@@ -56,7 +56,7 @@ function AccordionChevron({ open }: { open: boolean }) {
 
 function EventCard({ event }: { event: PastEvent }) {
   return (
-    <article className="group relative flex flex-col bg-white border border-border-light h-full hover:shadow-md transition-shadow">
+    <article className="group relative flex flex-col bg-white border border-navy-subtle h-full hover:shadow-md transition-shadow">
       <div className="relative aspect-[16/10] overflow-hidden bg-navy-bolder">
         <img
           src={event.image}
@@ -188,7 +188,7 @@ export default function PastEventsArchive() {
               onClick={() => setKindsOpen((o) => !o)}
               aria-expanded={kindsOpen}
               aria-controls="past-events-kinds"
-              className="flex items-center justify-between w-full gap-3 py-3 font-body font-bold text-sm text-navy-bolder text-left"
+              className="accordion-row flex items-center justify-between w-full gap-3 px-3 py-3 font-body font-bold text-sm text-navy-bolder text-left"
             >
               <span className="flex items-center gap-2">
                 Event Type

@@ -1,5 +1,6 @@
-import imgArchive from '@/assets/images/archive-feature-US-MdAnUSNI-108046019+4.webp'
-import imgOralHistory from '@/assets/images/oral-history-50-feature.png'
+import imgReadingRoom from '@/assets/images/US-MdAnUSNI-219018012.webp'
+import imgCollection from '@/assets/images/US-MdAnUSNI-219005024.webp'
+import imgPortrait from '@/assets/images/May+Photo+7.webp'
 
 export default function ArchivesAbout() {
   return (
@@ -48,22 +49,24 @@ export default function ArchivesAbout() {
           <div className="hidden lg:grid grid-cols-2 gap-3 h-[560px]">
             <div className="overflow-hidden row-span-2">
               <img
-                src={imgArchive}
-                alt="Naval Institute Archives collection"
+                src={imgReadingRoom}
+                alt="The Naval Institute Archives reading room in Annapolis"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="overflow-hidden">
               <img
-                src={imgOralHistory}
-                alt="Oral history interview"
+                src={imgCollection}
+                alt="Boxed manuscript and photographic collections on the archive shelves"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="overflow-hidden bg-navy-boldest flex items-center justify-center p-8">
-              <p className="font-headline text-white text-[28px] leading-[1.2] text-center">
-                Over 800 oral history interviews
-              </p>
+            <div className="overflow-hidden">
+              <img
+                src={imgPortrait}
+                alt="A portrait from the Naval Institute photographic collection"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
 

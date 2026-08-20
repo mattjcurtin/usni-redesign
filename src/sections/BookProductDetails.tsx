@@ -36,13 +36,13 @@ export default function BookProductDetails({ book }: Props) {
         {/* Accordion header */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between pb-5 border-b border-[#e4e7ec] group"
+          className="accordion-row w-full flex items-center justify-between px-4 py-4 border-b border-[#e4e7ec]"
           aria-expanded={isOpen}
         >
           <h2 className="font-headline text-2xl lg:text-3xl text-navy-bolder">
             Product Details
           </h2>
-          <span className="text-neutral-subtle group-hover:text-navy-bolder transition-colors text-xl font-light leading-none">
+          <span className="text-neutral-subtle transition-colors text-xl font-light leading-none">
             {isOpen ? '−' : '+'}
           </span>
         </button>

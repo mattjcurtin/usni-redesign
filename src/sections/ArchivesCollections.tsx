@@ -1,6 +1,7 @@
 import imgOralHistory from '@/assets/images/oral-history-50-feature.png'
 import imgPhotos from '@/assets/images/8518400.jpg'
 import imgMemoirs from '@/assets/images/jackctaylorcenter-extended.jpg'
+import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
 
 const collections = [
   {
@@ -30,7 +31,8 @@ const collections = [
       'Hundreds of thousands of photographs documenting ships, personnel, battles, and ceremonies of the U.S. Navy, Marine Corps, and Coast Guard from the 19th century to the present.',
     image: imgPhotos,
     imageAlt: 'Historical naval photograph',
-    href: '/archives/photos',
+    href: 'https://photos.usni.org',
+    external: true,
     cta: 'Browse Photos',
   },
 ]
@@ -52,6 +54,7 @@ export default function ArchivesCollections() {
             <a
               key={col.id}
               href={col.href}
+              {...('external' in col && col.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               className="group flex flex-col bg-white border border-[#c4c9d4] overflow-hidden hover:border-[#023e7d] transition-colors"
             >
               {/* Image */}
@@ -75,7 +78,14 @@ export default function ArchivesCollections() {
                   <span className="font-body font-extrabold text-[15px] text-[#0466c8] group-hover:text-[#023e7d] transition-colors">
                     {col.cta}
                   </span>
-                  <i className="fa-regular fa-circle-plus text-[#0466c8] group-hover:text-[#023e7d] transition-colors text-lg" aria-hidden="true" />
+                  {col.external ? (
+                    <>
+                      <ExternalLinkIcon className="text-[#0466c8] group-hover:text-[#023e7d] transition-colors" />
+                      <span className="sr-only">(opens in a new tab)</span>
+                    </>
+                  ) : (
+                    <i className="fa-regular fa-circle-plus text-[#0466c8] group-hover:text-[#023e7d] transition-colors text-lg" aria-hidden="true" />
+                  )}
                 </div>
               </div>
             </a>

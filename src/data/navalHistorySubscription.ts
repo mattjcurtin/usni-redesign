@@ -29,18 +29,18 @@ export const OFFERS: Record<Format, Record<Region, Record<Term, Offer>>> = {
       '3': { price: 124, memberPrice: 90, originalPrice: 129 },
     },
     international: {
-      '1': { price: 62, memberPrice: 52, originalPrice: null },
-      '3': { price: 164, memberPrice: 150, originalPrice: 186 },
+      '1': { price: 63, memberPrice: 52, originalPrice: null },
+      '3': { price: 184, memberPrice: 150, originalPrice: 189 },
     },
   },
   digital: {
     us: {
-      '1': { price: 32, memberPrice: 24, originalPrice: null },
-      '3': { price: 84, memberPrice: 68, originalPrice: 96 },
+      '1': { price: 32, memberPrice: 22, originalPrice: null },
+      '3': { price: 84, memberPrice: 52, originalPrice: 96 },
     },
     international: {
-      '1': { price: 32, memberPrice: 24, originalPrice: null },
-      '3': { price: 84, memberPrice: 68, originalPrice: 96 },
+      '1': { price: 32, memberPrice: 22, originalPrice: null },
+      '3': { price: 84, memberPrice: 52, originalPrice: 96 },
     },
   },
 }

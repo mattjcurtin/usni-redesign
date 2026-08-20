@@ -71,19 +71,19 @@ const pricingData: Record<Region, Record<AnnualTerm, TierDef[]>> = {
       { plan: 'student', name: 'Student', price: 20, description: 'For full-time students and active-duty personnel in professional military education.', features: studentFeatures },
     ],
     '3': [
-      { plan: 'digital', name: 'Digital', price: 120, originalPrice: 135, description: 'Full online access to USNI.org and the digital edition of Proceedings.', features: digitalFeatures },
-      { plan: 'full', name: 'Full', price: 195, originalPrice: 225, description: 'Everything in Digital plus the print edition of Proceedings mailed monthly.', features: fullFeatures, isMostPopular: true },
+      { plan: 'digital', name: 'Digital', price: 112, originalPrice: 135, description: 'Full online access to USNI.org and the digital edition of Proceedings.', features: digitalFeatures },
+      { plan: 'full', name: 'Full', price: 187, originalPrice: 225, description: 'Everything in Digital plus the print edition of Proceedings mailed monthly.', features: fullFeatures, isMostPopular: true },
     ],
   },
   international: {
     '1': [
-      { plan: 'digital', name: 'Digital', price: 60, description: 'Full online access to USNI.org and the digital edition of Proceedings.', features: digitalFeatures },
-      { plan: 'full', name: 'Full', price: 95, description: 'Everything in Digital plus the print edition of Proceedings mailed monthly.', features: fullFeatures, isMostPopular: true },
-      { plan: 'student', name: 'Student', price: 30, description: 'For full-time students and active-duty personnel in professional military education.', features: studentFeatures },
+      { plan: 'digital', name: 'Digital', price: 45, description: 'Full online access to USNI.org and the digital edition of Proceedings.', features: digitalFeatures },
+      { plan: 'full', name: 'Full', price: 155, description: 'Everything in Digital plus the print edition of Proceedings mailed monthly.', features: fullFeatures, isMostPopular: true },
+      { plan: 'student', name: 'Student', price: 44, description: 'For full-time students and active-duty personnel in professional military education.', features: studentFeatures },
     ],
     '3': [
-      { plan: 'digital', name: 'Digital', price: 165, originalPrice: 180, description: 'Full online access to USNI.org and the digital edition of Proceedings.', features: digitalFeatures },
-      { plan: 'full', name: 'Full', price: 255, originalPrice: 285, description: 'Everything in Digital plus the print edition of Proceedings mailed monthly.', features: fullFeatures, isMostPopular: true },
+      { plan: 'digital', name: 'Digital', price: 112, originalPrice: 135, description: 'Full online access to USNI.org and the digital edition of Proceedings.', features: digitalFeatures },
+      { plan: 'full', name: 'Full', price: 372, originalPrice: 465, description: 'Everything in Digital plus the print edition of Proceedings mailed monthly.', features: fullFeatures, isMostPopular: true },
     ],
   },
 }

@@ -24,6 +24,8 @@ export interface MegaMenuCTA {
 export interface NavItem {
   label: string
   href: string
+  /** Leaves the site — renders an external-link marker and opens in a new tab. */
+  external?: boolean
   children?: NavItem[]
   megaCta?: MegaMenuCTA
   alignRight?: boolean

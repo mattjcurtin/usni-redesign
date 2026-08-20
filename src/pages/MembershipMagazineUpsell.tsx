@@ -29,12 +29,12 @@ const PRICING: Record<Format, Record<Region, Record<Term, Price>>> = {
   },
   digital: {
     us: {
-      '1': { price: 24, originalPrice: null, unit: '/ yr' },
-      '3': { price: 68, originalPrice: 72, unit: '/ 3 yrs' },
+      '1': { price: 22, originalPrice: null, unit: '/ yr' },
+      '3': { price: 52, originalPrice: 66, unit: '/ 3 yrs' },
     },
     international: {
-      '1': { price: 24, originalPrice: null, unit: '/ yr' },
-      '3': { price: 68, originalPrice: 72, unit: '/ 3 yrs' },
+      '1': { price: 22, originalPrice: null, unit: '/ yr' },
+      '3': { price: 52, originalPrice: 66, unit: '/ 3 yrs' },
     },
   },
 }

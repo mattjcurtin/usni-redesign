@@ -46,13 +46,13 @@ function AccordionItem({ question, answer }: { question: string; answer: string 
   return (
     <div className={`border-b border-border-light transition-colors ${open ? 'bg-white' : ''}`}>
       <button
-        className={`flex items-center justify-between w-full gap-4 px-5 py-5 text-left transition-colors ${open ? 'bg-white' : 'hover:bg-white'}`}
+        className={`accordion-row flex items-center justify-between w-full gap-4 px-5 py-5 text-left ${open ? 'bg-white' : ''}`}
         onClick={() => setOpen(!open)}
         aria-expanded={open}
       >
         <span className="font-body font-bold text-base text-navy-bolder leading-[1.4] flex-1">{question}</span>
         <span
-          className="flex-shrink-0 flex items-center justify-center bg-navy-subtle p-2"
+          className="accordion-chevron flex-shrink-0 flex items-center justify-center bg-navy-subtle p-2"
           aria-hidden="true"
         >
           <svg
