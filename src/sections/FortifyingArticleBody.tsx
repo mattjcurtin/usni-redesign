@@ -3,6 +3,8 @@ import ArticleComments from '@/sections/ArticleComments'
 import ArticleInBrief from '@/sections/ArticleInBrief'
 import ArticleAudioPlayer from '@/sections/ArticleAudioPlayer'
 import ArticleImageGallery, { type GalleryImage } from '@/components/ui/ArticleImageGallery'
+import ArticleVideo from '@/components/ui/ArticleVideo'
+import videoPoster from '@/assets/images/sample-video-preview.png'
 import galleryReserve from '@/assets/images/8518400.jpg'
 import galleryBriefing from '@/assets/images/6995965.jpg'
 import galleryArchive from '@/assets/images/8587-09-158.jpg'
@@ -199,6 +201,14 @@ export default function FortifyingArticleBody() {
                 culminate with a program for cyber personnel similar to TOPGUN. The benefits would permeate beyond
                 cyber to every high-cognition community in the service.
               </p>
+
+              <ArticleVideo
+                youtubeId="lJXXiDVQLt4"
+                poster={videoPoster}
+                posterAlt="Sailors at work in a shipboard operations space"
+                title="Standing the digital watch"
+                caption="Sample video — placeholder poster frame and caption."
+              />
 
               <h2 className="font-headline text-[32px] text-[#060a0a] leading-[1.2] pt-2">
                 The Navy's Cyber Talent Crisis
