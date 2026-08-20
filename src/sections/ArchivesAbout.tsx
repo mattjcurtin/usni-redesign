@@ -34,8 +34,8 @@ export default function ArchivesAbout() {
             </p>
             <div className="pt-2">
               <a
-                href="/archives/contact"
-                className="inline-flex items-center gap-2 font-body font-bold text-base text-[#0466c8] hover:text-navy-bolder transition-colors"
+                href="/contact#archives"
+                className="inline-flex items-center gap-2 font-body font-bold text-base text-link"
               >
                 Contact the Archives for access
                 <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

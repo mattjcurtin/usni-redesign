@@ -1,6 +1,6 @@
-import imgOralHistory from '@/assets/images/oral-history-50-feature.png'
-import imgPhotos from '@/assets/images/8518400.jpg'
-import imgMemoirs from '@/assets/images/jackctaylorcenter-extended.jpg'
+import imgOralHistory from '@/assets/images/JFKWHP-ST-A26-25-62_0.jpg'
+import imgPhotos from '@/assets/images/250908-M-IU565-1134K.jpg'
+import imgMemoirs from '@/assets/images/3d-rendering-pen-ai-generated.jpg'
 import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
 
 const collections = [
@@ -10,7 +10,7 @@ const collections = [
     description:
       'More than 800 recorded interviews with admirals, flag officers, enlisted sailors, Marines, and civilians who shaped American sea power — spanning World War II through the present day.',
     image: imgOralHistory,
-    imageAlt: 'Oral history interview session',
+    imageAlt: 'An oral history interview being recorded',
     href: '/archives/oral-histories',
     cta: 'Browse Oral Histories',
   },
@@ -20,7 +20,7 @@ const collections = [
     description:
       'Unpublished autobiographical manuscripts and personal papers donated by naval officers and their families. These first-person accounts offer a unique window into naval service across generations.',
     image: imgMemoirs,
-    imageAlt: 'Naval Institute library and reading room',
+    imageAlt: 'A pen resting on a handwritten manuscript page',
     href: '/archives/memoirs',
     cta: 'Browse Memoirs',
   },
@@ -30,7 +30,7 @@ const collections = [
     description:
       'Hundreds of thousands of photographs documenting ships, personnel, battles, and ceremonies of the U.S. Navy, Marine Corps, and Coast Guard from the 19th century to the present.',
     image: imgPhotos,
-    imageAlt: 'Historical naval photograph',
+    imageAlt: 'Marines photographed during a field exercise',
     href: 'https://photos.usni.org',
     external: true,
     cta: 'Browse Photos',
@@ -74,19 +74,24 @@ export default function ArchivesCollections() {
                 <p className="font-body text-base text-neutral-subtle leading-relaxed flex-1">
                   {col.description}
                 </p>
-                <div className="flex items-center gap-1.5 mt-2">
-                  <span className="font-body font-extrabold text-[15px] text-[#0466c8] group-hover:text-[#023e7d] transition-colors">
-                    {col.cta}
-                  </span>
+                {/* Solid button, matching the About quick-link cards. The card
+                    itself is the anchor, so this is a span styled as a button
+                    rather than a nested link. */}
+                <span
+                  className="mt-2 inline-flex items-center justify-center gap-2 w-full bg-navy-bolder text-white
+                             font-body font-bold text-sm tracking-[-0.3px] px-5 py-3.5 border border-navy-bolder
+                             group-hover:bg-navy-bright group-hover:border-navy-bright transition-colors duration-150"
+                >
+                  {col.cta}
                   {col.external ? (
                     <>
-                      <ExternalLinkIcon className="text-[#0466c8] group-hover:text-[#023e7d] transition-colors" />
+                      <ExternalLinkIcon />
                       <span className="sr-only">(opens in a new tab)</span>
                     </>
                   ) : (
-                    <i className="fa-regular fa-circle-plus text-[#0466c8] group-hover:text-[#023e7d] transition-colors text-lg" aria-hidden="true" />
+                    <span aria-hidden="true">&rarr;</span>
                   )}
-                </div>
+                </span>
               </div>
             </a>
           ))}

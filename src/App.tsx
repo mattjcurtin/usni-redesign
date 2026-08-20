@@ -2,10 +2,23 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   // 'instant' overrides the global scroll-behavior: smooth so route changes
   // land at the top immediately instead of animating up the old page.
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
+  //
+  // A hash takes precedence: cross-page anchors like /contact#archives were
+  // being scrolled back to the top by this effect, which fires on arrival and
+  // undid the browser's own jump to the target.
+  useEffect(() => {
+    if (hash) {
+      const target = document.getElementById(hash.slice(1))
+      if (target) {
+        target.scrollIntoView({ behavior: 'instant', block: 'start' })
+        return
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [pathname, hash])
   return null
 }
 import { CartProvider } from '@/context/CartContext'
@@ -73,6 +86,7 @@ import AccountSaved from '@/pages/account/AccountSaved'
 import AccountPreferences from '@/pages/account/AccountPreferences'
 import AccountBenefits from '@/pages/account/AccountBenefits'
 import AccountApiKeys from '@/pages/account/AccountApiKeys'
+import Contact from '@/pages/Contact'
 import NotFound from '@/pages/NotFound'
 
 export default function App() {
@@ -110,6 +124,7 @@ export default function App() {
         <Route path="/naval-history/subscribe/checkout" element={<NavalHistorySubscribeCheckout />} />
         <Route path="/naval-history/subscribe/confirmation" element={<NavalHistorySubscribeConfirmation />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/contact" element={<Contact />} />
 
         {/* Account section — no auth gate; the prototype has no sessions */}
         <Route path="/account" element={<AccountDashboard />} />

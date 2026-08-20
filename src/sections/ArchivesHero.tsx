@@ -45,7 +45,7 @@ export default function ArchivesHero() {
           <NavyButtonLink href="/archives/oral-histories">
             Browse Collections
           </NavyButtonLink>
-          <ButtonLink href="/archives/contact" variant="outline-dark" size="md">
+          <ButtonLink href="/contact#archives" variant="outline-dark" size="md">
             Contact the Archives
           </ButtonLink>
         </div>

@@ -73,8 +73,7 @@ export default function ArchivesFAQ() {
 
           {/* Left */}
           <div>
-            <div className="flex flex-col gap-4 mb-6">
-              <p className="eyebrow text-navy-subtle">FAQ</p>
+            <div className="mb-6">
               <h2 className="font-headline text-3xl lg:text-4xl text-navy-bolder leading-[1.1]">
                 Frequently Asked Questions
               </h2>
@@ -83,7 +82,7 @@ export default function ArchivesFAQ() {
               Have a question not answered here? Reach out to our archivists directly.
             </p>
             <a
-              href="/archives/contact"
+              href="/contact#archives"
               className="inline-flex items-center justify-center bg-navy-bolder text-white
                          font-body font-bold text-base tracking-[-0.5px] px-6 py-4
                          hover:bg-navy-bright transition-colors"

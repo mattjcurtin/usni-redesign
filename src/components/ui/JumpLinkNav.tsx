@@ -75,7 +75,9 @@ export default function JumpLinkNav({ links, mobileLabel }: JumpLinkNavProps) {
                 onClick={() => setOpen(false)}
                 aria-current={link.href === activeHref ? 'true' : undefined}
                 className={`block px-6 py-3.5 font-body font-semibold text-sm border-b border-border-light last:border-0 transition-colors
-                  ${link.href === activeHref ? 'text-navy-boldest bg-surface-subtle' : 'text-navy-bolder hover:text-navy'}`}
+                  ${link.href === activeHref
+                    ? 'text-navy-boldest bg-surface-subtle'
+                    : 'text-navy-bolder hover:text-[#0466c8]'}`}
               >
                 {link.label}
               </a>
@@ -92,8 +94,8 @@ export default function JumpLinkNav({ links, mobileLabel }: JumpLinkNavProps) {
               <a
                 href={link.href}
                 aria-current={link.href === activeHref ? 'true' : undefined}
-                className={`relative flex items-center font-body font-bold text-[17px] text-navy-bolder px-8 py-5 whitespace-nowrap
-                           hover:text-navy transition-colors
+                className={`link-underline-hover relative flex items-center font-body font-bold text-[17px] text-navy-bolder px-8 py-5 whitespace-nowrap
+                           hover:text-[#0466c8] transition-colors
                            ${link.href === activeHref ? 'after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[3px] after:bg-gold' : ''}`}
               >
                 {link.label}
