@@ -156,10 +156,14 @@ export function Toggle({
       onClick={onChange}
       className="flex-shrink-0 w-11 h-6"
     >
+      {/* The knob is placed with an explicit `left` rather than a transform. With
+          `absolute` and no offset it fell back to its static position — which,
+          following a block-level sibling, put it outside the track and over the
+          adjacent label. */}
       <span className="relative block w-11 h-6">
-        <span className={`block w-11 h-6 rounded-full transition-colors ${on ? 'bg-[#023e7d]' : 'bg-[#c4c9d4]'}`} />
+        <span className={`absolute inset-0 rounded-full transition-colors ${on ? 'bg-[#023e7d]' : 'bg-[#c4c9d4]'}`} />
         <span
-          className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${on ? 'translate-x-6' : 'translate-x-1'}`}
+          className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${on ? 'left-6' : 'left-1'}`}
         />
       </span>
     </button>

@@ -173,6 +173,16 @@
     background-position: 0% 100%;
     background-repeat: no-repeat;
     background-size: 100% 1px;
+    /* The underline is a gradient sized to 100% of the element box, so a link
+       that gets stretched — any flex or grid child, which the layout engine
+       blockifies regardless of `display: inline` — would rule the whole box
+       instead of the words. Shrinking the box to its content keeps the two the
+       same width. Tailwind's width utilities sit in a later layer, so an
+       explicit `w-full` still wins where a full-width link is wanted. */
+    width: fit-content;
+    /* Each line of a wrapped link gets its own rule rather than one under the last. */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .text-link:hover {

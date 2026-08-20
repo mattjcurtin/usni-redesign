@@ -1,15 +1,29 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import membershipHero from '@/assets/images/membership-hero.png'
+import { isTestLogin } from '@/data/testAccount'
 
 export default function Login() {
+  const navigate = useNavigate()
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError]       = useState(false)
 
+  /**
+   * Same demo credentials the checkouts accept, so one sign-in works everywhere.
+   * There is no session to establish — the account pages are directly reachable —
+   * so a successful sign-in lands on the dashboard.
+   */
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    // auth wired up at integration time
+    if (!isTestLogin(email, password)) {
+      setError(true)
+      return
+    }
+    setError(false)
+    navigate('/account')
   }
 
   return (
@@ -111,6 +125,13 @@ export default function Login() {
                         className="w-full border border-[#c4c9d4] px-3.5 py-3 font-body text-sm text-navy-bolder focus:outline-none focus:ring-2 focus:ring-[#0466c8] focus:border-transparent"
                       />
                     </div>
+
+                    {error && (
+                      <p role="alert" className="flex items-start gap-2 font-body text-sm text-[#c1121f]">
+                        <i className="fa-solid fa-circle-exclamation mt-0.5 flex-shrink-0" aria-hidden="true" />
+                        That email and password don&rsquo;t match an account.
+                      </p>
+                    )}
 
                     {/* Submit */}
                     <button

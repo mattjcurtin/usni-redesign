@@ -8,6 +8,8 @@ import CreditCardModal from '@/components/ui/CreditCardModal'
 import { AcceptedCards } from '@/components/ui/CardBrandIcons'
 import { PRIORITY_LABELS, makeOrderNumber } from '@/data/transactions'
 import { countries, militaryStatuses, services, suffixes, usStates } from '@/data/essaySubmission'
+import { ACCOUNT_ADDRESS, ACCOUNT_CARD, isTestLogin } from '@/data/testAccount'
+import { ChoiceOption, SignedInAs, addressLines } from '@/components/ui/SavedOnFile'
 
 // ─── Field components ──────────────────────────────────────────────────────────
 
@@ -178,26 +180,59 @@ export default function DonateCheckout() {
   const [billZip, setBillZip]         = useState('')
   const [billCountry, setBillCountry] = useState('United States')
 
+  /**
+   * Signing in applies what the account already knows: the address on file
+   * prefills billing, and the card on file is selected. Either can still be
+   * replaced — `editingBilling` and the card modal are the escape hatches.
+   */
+  const [signedInAs, setSignedInAs] = useState<string | null>(null)
+  const [signInError, setSignInError] = useState(false)
+  const [billingChoice, setBillingChoice] = useState<'file' | 'new'>('file')
+  const [paymentChoice, setPaymentChoice] = useState<'file' | 'new'>('file')
+
+  const applySignIn = () => {
+    if (!isTestLogin(email, password)) { setSignInError(true); return }
+    setSignInError(false)
+    setSignedInAs(ACCOUNT_ADDRESS.name)
+    setBillStreet(ACCOUNT_ADDRESS.lines[0])
+    setBillCity(ACCOUNT_ADDRESS.city)
+    setBillState(ACCOUNT_ADDRESS.state)
+    setBillZip(ACCOUNT_ADDRESS.zip)
+    setBillCountry(ACCOUNT_ADDRESS.country)
+    setSavedCardLast4(ACCOUNT_CARD.last4)
+    setBillingChoice('file'); setPaymentChoice('file')
+  }
+
+  const signOut = () => {
+    setSignedInAs(null)
+    setBillStreet(''); setBillCity(''); setBillState(''); setBillZip('')
+    setBillCountry('United States')
+    setSavedCardLast4(null)
+    setBillingChoice('file'); setPaymentChoice('file')
+  }
+
   // ── Required-field validation
   const [showErrors, setShowErrors] = useState(false)
   const errorAlertRef = useRef<HTMLDivElement>(null)
 
   const missingFields: string[] = []
-  if (activeTab === 'guest' || activeTab === 'create') {
+  const signedIn = signedInAs !== null
+  if (!signedIn && (activeTab === 'guest' || activeTab === 'create')) {
     if (!firstName.trim())    missingFields.push('First Name')
     if (!lastName.trim())     missingFields.push('Last Name')
     if (!email.trim())        missingFields.push('Email Address')
     if (!confirmEmail.trim()) missingFields.push('Confirm Email Address')
   }
-  if (activeTab === 'create') {
+  if (!signedIn && activeTab === 'create') {
     if (!password.trim())   missingFields.push('Password')
     if (!service)           missingFields.push('Service')
     if (!militaryStatus)    missingFields.push('Military Status')
     if (!rank.trim())       missingFields.push('Rank / Title')
   }
-  if (activeTab === 'signin') {
+  if (activeTab === 'signin' && !signedIn) {
     if (!email.trim())    missingFields.push('Email Address')
     if (!password.trim()) missingFields.push('Password')
+    missingFields.push('Sign in')
   }
   // Nothing ever ships on a donation, so there is no delivery address to reuse:
   // the billing address is the only address on the order, and the card cannot be
@@ -333,13 +368,31 @@ export default function DonateCheckout() {
                       </div>
                     )}
                     {activeTab === 'signin' && (
-                      <div className="flex flex-col gap-5">
-                        <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
-                        <FormInput label="Password" placeholder="Your password" value={password} onChange={setPassword} type="password" required error={fieldError(password)} />
-                        <a href="/login/forgot" className="font-body text-[15px] w-fit text-link">
-                          Forgot your password?
-                        </a>
-                      </div>
+                      signedIn ? (
+                        <SignedInAs email={email.trim()} onSignOut={signOut} />
+                      ) : (
+                        <div className="flex flex-col gap-5">
+                          <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
+                          <FormInput label="Password" placeholder="Your password" value={password} onChange={setPassword} type="password" required error={fieldError(password)} />
+                          {signInError && (
+                            <p role="alert" className="font-body text-[14px] text-[#c1121f]">
+                              That email and password don&rsquo;t match an account.
+                            </p>
+                          )}
+                          <div className="flex flex-wrap items-center gap-4">
+                            <button
+                              type="button"
+                              onClick={applySignIn}
+                              className="bg-[#002b5c] text-white font-body font-bold text-[16px] px-6 py-3 border border-[#002b5c] hover:bg-navy-bright hover:border-navy-bright transition-colors"
+                            >
+                              Sign in
+                            </button>
+                            <a href="/login/forgot" className="font-body text-[15px] w-fit text-link">
+                              Forgot your password?
+                            </a>
+                          </div>
+                        </div>
+                      )
                     )}
                   </div>
                 </div>
@@ -354,14 +407,41 @@ export default function DonateCheckout() {
                         issue your tax receipt — nothing is mailed to it.
                       </p>
                     </div>
-                    <AddressFields
-                      street={billStreet} setStreet={setBillStreet}
-                      city={billCity} setCity={setBillCity}
-                      state={billState} setState={setBillState}
-                      zip={billZip} setZip={setBillZip}
-                      country={billCountry} setCountry={setBillCountry}
-                      fieldError={fieldError} showErrors={showErrors}
-                    />
+                    {signedIn ? (
+                      <div className="flex flex-col gap-3">
+                        <ChoiceOption
+                          name="dc-billing" value="file"
+                          checked={billingChoice === 'file'}
+                          onSelect={() => setBillingChoice('file')}
+                          title="Use the address on file"
+                          detail={addressLines(ACCOUNT_ADDRESS)}
+                        />
+                        <ChoiceOption
+                          name="dc-billing" value="new"
+                          checked={billingChoice === 'new'}
+                          onSelect={() => setBillingChoice('new')}
+                          title="Use a different address"
+                        >
+                          <AddressFields
+                            street={billStreet} setStreet={setBillStreet}
+                            city={billCity} setCity={setBillCity}
+                            state={billState} setState={setBillState}
+                            zip={billZip} setZip={setBillZip}
+                            country={billCountry} setCountry={setBillCountry}
+                            fieldError={fieldError} showErrors={showErrors}
+                          />
+                        </ChoiceOption>
+                      </div>
+                    ) : (
+                          <AddressFields
+                            street={billStreet} setStreet={setBillStreet}
+                            city={billCity} setCity={setBillCity}
+                            state={billState} setState={setBillState}
+                            zip={billZip} setZip={setBillZip}
+                            country={billCountry} setCountry={setBillCountry}
+                            fieldError={fieldError} showErrors={showErrors}
+                          />
+                    )}
                   </div>
                 </div>
 
@@ -373,16 +453,43 @@ export default function DonateCheckout() {
                       <AcceptedCards />
                     </div>
 
-                    {savedCardLast4 && (
+                    {signedIn ? (
+                      <div className="flex flex-col gap-3">
+                        <ChoiceOption
+                          name="dc-payment" value="file"
+                          checked={paymentChoice === 'file'}
+                          onSelect={() => { setPaymentChoice('file'); setSavedCardLast4(ACCOUNT_CARD.last4) }}
+                          title={`${ACCOUNT_CARD.brand} ····\u00a0${ACCOUNT_CARD.last4}`}
+                          detail={`Card on file · expires ${ACCOUNT_CARD.expires}`}
+                        />
+                        <ChoiceOption
+                          name="dc-payment" value="new"
+                          checked={paymentChoice === 'new'}
+                          onSelect={() => { setPaymentChoice('new'); setSavedCardLast4(null) }}
+                          title="Use a new card"
+                          detail={
+                            paymentChoice === 'new' && savedCardLast4
+                              ? `Card ending in ${savedCardLast4} added`
+                              : undefined
+                          }
+                        >
+                          <Button type="button" variant="primary" size="lg" className="self-start" onClick={() => setCardModalOpen(true)}>
+                            {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
+                          </Button>
+                        </ChoiceOption>
+                      </div>
+                    ) : savedCardLast4 ? (
                       <p className="font-body text-[15px] text-[#1d2535]">
                         The credit card ending in <span className="font-bold">{savedCardLast4}</span> was successfully added.
                       </p>
-                    )}
+                    ) : null}
 
                     <div className="flex flex-col items-start gap-4">
-                      <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
-                        {savedCardLast4 ? 'Change Your Credit Card Details' : 'Pay with Credit Card'}
-                      </Button>
+                      {!signedIn && (
+                        <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
+                          {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
+                        </Button>
+                      )}
 
                       <p className="font-body text-[14px] text-[#4e576a]">
                         Your card is charged once this order is completed. The billing address above is
@@ -452,7 +559,7 @@ export default function DonateCheckout() {
                       onClick={handleCompleteDonation}
                       className="w-full bg-[#002b5c] text-white font-body font-extrabold text-[18px] py-4 px-6 hover:bg-navy-bright transition-colors"
                     >
-                      Complete Donation
+                      Checkout
                     </button>
                   </div>
                 </div>

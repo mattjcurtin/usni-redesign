@@ -36,6 +36,7 @@ import BooksNewReleases from '@/pages/BooksNewReleases'
 import BooksCart from '@/pages/BooksCart'
 import NavalHistory from '@/pages/NavalHistory'
 import NavalHistorySubscribe from '@/pages/NavalHistorySubscribe'
+import NavalHistorySubscribeCart from '@/pages/NavalHistorySubscribeCart'
 import NavalHistorySubscribeCheckout from '@/pages/NavalHistorySubscribeCheckout'
 import NavalHistorySubscribeConfirmation from '@/pages/NavalHistorySubscribeConfirmation'
 import Login from '@/pages/Login'
@@ -105,6 +106,7 @@ export default function App() {
         <Route path="/books/cart" element={<BooksCart />} />
         <Route path="/naval-history" element={<NavalHistory />} />
         <Route path="/naval-history/subscribe" element={<NavalHistorySubscribe />} />
+        <Route path="/naval-history/subscribe/cart" element={<NavalHistorySubscribeCart />} />
         <Route path="/naval-history/subscribe/checkout" element={<NavalHistorySubscribeCheckout />} />
         <Route path="/naval-history/subscribe/confirmation" element={<NavalHistorySubscribeConfirmation />} />
         <Route path="/login" element={<Login />} />

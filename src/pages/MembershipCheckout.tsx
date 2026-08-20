@@ -8,6 +8,8 @@ import CreditCardModal from '@/components/ui/CreditCardModal'
 import { AcceptedCards } from '@/components/ui/CardBrandIcons'
 import { PLAN_LABELS, TERM_LABELS, makeOrderNumber } from '@/data/transactions'
 import { militaryStatuses, services, suffixes } from '@/data/essaySubmission'
+import { ACCOUNT_ADDRESS, ACCOUNT_CARD, isTestLogin } from '@/data/testAccount'
+import { ChoiceOption, SignedInAs, addressLines } from '@/components/ui/SavedOnFile'
 
 const US_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
@@ -204,6 +206,37 @@ export default function MembershipCheckout() {
   const [billState, setBillState]   = useState('')
   const [billZip, setBillZip]       = useState('')
 
+  /**
+   * Signing in applies the account's address and card. Delivery is filled too:
+   * a signed-in member's mailing address is known, and leaving it blank beside a
+   * prefilled billing address would read as a bug.
+   */
+  const [signedInAs, setSignedInAs] = useState<string | null>(null)
+  const [signInError, setSignInError] = useState(false)
+  const [billingChoice, setBillingChoice] = useState<'file' | 'new'>('file')
+  const [deliveryChoice, setDeliveryChoice] = useState<'file' | 'new'>('file')
+  const [paymentChoice, setPaymentChoice] = useState<'file' | 'new'>('file')
+
+  const applySignIn = () => {
+    if (!isTestLogin(email, password)) { setSignInError(true); return }
+    setSignInError(false)
+    setSignedInAs(ACCOUNT_ADDRESS.name)
+    setStreet(ACCOUNT_ADDRESS.lines[0]); setCity(ACCOUNT_ADDRESS.city)
+    setState(ACCOUNT_ADDRESS.state);     setZip(ACCOUNT_ADDRESS.zip)
+    setBillStreet(ACCOUNT_ADDRESS.lines[0]); setBillCity(ACCOUNT_ADDRESS.city)
+    setBillState(ACCOUNT_ADDRESS.state);     setBillZip(ACCOUNT_ADDRESS.zip)
+    setSavedCardLast4(ACCOUNT_CARD.last4)
+    setBillingChoice('file'); setDeliveryChoice('file'); setPaymentChoice('file')
+  }
+
+  const signOut = () => {
+    setSignedInAs(null)
+    setStreet(''); setCity(''); setState(''); setZip('')
+    setBillStreet(''); setBillCity(''); setBillState(''); setBillZip('')
+    setSavedCardLast4(null)
+    setBillingChoice('file'); setDeliveryChoice('file'); setPaymentChoice('file')
+  }
+
   // ── Gift recipient
   const isGift = searchParams.get('gift') === 'true'
   const [editingGift, setEditingGift] = useState(false)
@@ -232,7 +265,8 @@ export default function MembershipCheckout() {
   const errorAlertRef = useRef<HTMLDivElement>(null)
 
   const missingFields: string[] = []
-  if (activeTab === 'create') {
+  const signedIn = signedInAs !== null
+  if (!signedIn && activeTab === 'create') {
     if (!firstName.trim())    missingFields.push('First Name')
     if (!lastName.trim())     missingFields.push('Last Name')
     if (!email.trim())        missingFields.push('Email Address')
@@ -241,9 +275,10 @@ export default function MembershipCheckout() {
     if (!service)             missingFields.push('Service')
     if (!militaryStatus)      missingFields.push('Military Status')
     if (!rank.trim())         missingFields.push('Rank / Title')
-  } else {
+  } else if (!signedIn) {
     if (!email.trim())    missingFields.push('Email Address')
     if (!password.trim()) missingFields.push('Password')
+    missingFields.push('Sign in')
   }
   if (needsDelivery) {
     if (!street.trim()) missingFields.push('Street Address')
@@ -357,7 +392,9 @@ export default function MembershipCheckout() {
                       ))}
                     </div>
 
-                    {activeTab === 'create' ? (
+                    {signedIn ? (
+                      <SignedInAs email={email.trim()} onSignOut={signOut} />
+                    ) : activeTab === 'create' ? (
                       <div className="flex flex-col gap-5">
                         <div className="flex gap-5">
                           <FormInput label="First Name" placeholder="First name" value={firstName} onChange={setFirstName} className="flex-1" required error={fieldError(firstName)} />
@@ -387,8 +424,26 @@ export default function MembershipCheckout() {
                       <div className="flex flex-col gap-5">
                         <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
                         <FormInput label="Password" placeholder="••••••••" value={password} onChange={setPassword} type="password" required error={fieldError(password)} />
+                        {signInError && (
+                          <p role="alert" className="font-body text-[14px] text-[#c1121f]">
+                            That email and password don&rsquo;t match an account.
+                          </p>
+                        )}
+                        <div className="flex flex-wrap items-center gap-4">
+                          <button
+                            type="button"
+                            onClick={applySignIn}
+                            className="bg-[#002b5c] text-white font-body font-bold text-[16px] px-6 py-3 border border-[#002b5c] hover:bg-navy-bright hover:border-navy-bright transition-colors"
+                          >
+                            Sign in
+                          </button>
+                          <a href="/login/forgot" className="font-body text-[15px] w-fit text-link">
+                            Forgot your password?
+                          </a>
+                        </div>
                       </div>
                     )}
+
                   </div>
                 </div>
 
@@ -403,13 +458,39 @@ export default function MembershipCheckout() {
                           {printTitleList}. Address auto-populates shipping cost.
                         </p>
                       </div>
-                      <AddressFields
-                        street={street} setStreet={setStreet}
-                        city={city} setCity={setCity}
-                        state={state} setState={setState}
-                        zip={zip} setZip={setZip}
-                        fieldError={fieldError} showErrors={showErrors}
-                      />
+                      {signedIn ? (
+                        <div className="flex flex-col gap-3">
+                          <ChoiceOption
+                            name="mc-delivery" value="file"
+                            checked={deliveryChoice === 'file'}
+                            onSelect={() => setDeliveryChoice('file')}
+                            title="Use the address on file"
+                            detail={addressLines(ACCOUNT_ADDRESS)}
+                          />
+                          <ChoiceOption
+                            name="mc-delivery" value="new"
+                            checked={deliveryChoice === 'new'}
+                            onSelect={() => setDeliveryChoice('new')}
+                            title="Use a different address"
+                          >
+                            <AddressFields
+                              street={street} setStreet={setStreet}
+                              city={city} setCity={setCity}
+                              state={state} setState={setState}
+                              zip={zip} setZip={setZip}
+                              fieldError={fieldError} showErrors={showErrors}
+                            />
+                          </ChoiceOption>
+                        </div>
+                      ) : (
+                            <AddressFields
+                              street={street} setStreet={setStreet}
+                              city={city} setCity={setCity}
+                              state={state} setState={setState}
+                              zip={zip} setZip={setZip}
+                              fieldError={fieldError} showErrors={showErrors}
+                            />
+                      )}
                     </div>
                   </div>
                 )}
@@ -487,13 +568,39 @@ export default function MembershipCheckout() {
                             : 'The address on file with your card issuer. Required to verify your payment — nothing is mailed to it.'}
                         </p>
                       </div>
-                      <AddressFields
-                        street={billStreet} setStreet={setBillStreet}
-                        city={billCity} setCity={setBillCity}
-                        state={billState} setState={setBillState}
-                        zip={billZip} setZip={setBillZip}
-                        fieldError={fieldError} showErrors={showErrors}
-                      />
+                      {signedIn ? (
+                        <div className="flex flex-col gap-3">
+                          <ChoiceOption
+                            name="mc-billing" value="file"
+                            checked={billingChoice === 'file'}
+                            onSelect={() => setBillingChoice('file')}
+                            title="Use the address on file"
+                            detail={addressLines(ACCOUNT_ADDRESS)}
+                          />
+                          <ChoiceOption
+                            name="mc-billing" value="new"
+                            checked={billingChoice === 'new'}
+                            onSelect={() => setBillingChoice('new')}
+                            title="Use a different address"
+                          >
+                            <AddressFields
+                              street={billStreet} setStreet={setBillStreet}
+                              city={billCity} setCity={setBillCity}
+                              state={billState} setState={setBillState}
+                              zip={billZip} setZip={setBillZip}
+                              fieldError={fieldError} showErrors={showErrors}
+                            />
+                          </ChoiceOption>
+                        </div>
+                      ) : (
+                            <AddressFields
+                              street={billStreet} setStreet={setBillStreet}
+                              city={billCity} setCity={setBillCity}
+                              state={billState} setState={setBillState}
+                              zip={billZip} setZip={setBillZip}
+                              fieldError={fieldError} showErrors={showErrors}
+                            />
+                      )}
                     </div>
                   </div>
                 )}
@@ -506,16 +613,43 @@ export default function MembershipCheckout() {
                       <AcceptedCards />
                     </div>
 
-                    {savedCardLast4 && (
+                    {signedIn ? (
+                      <div className="flex flex-col gap-3">
+                        <ChoiceOption
+                          name="mc-payment" value="file"
+                          checked={paymentChoice === 'file'}
+                          onSelect={() => { setPaymentChoice('file'); setSavedCardLast4(ACCOUNT_CARD.last4) }}
+                          title={`${ACCOUNT_CARD.brand} ····\u00a0${ACCOUNT_CARD.last4}`}
+                          detail={`Card on file · expires ${ACCOUNT_CARD.expires}`}
+                        />
+                        <ChoiceOption
+                          name="mc-payment" value="new"
+                          checked={paymentChoice === 'new'}
+                          onSelect={() => { setPaymentChoice('new'); setSavedCardLast4(null) }}
+                          title="Use a new card"
+                          detail={
+                            paymentChoice === 'new' && savedCardLast4
+                              ? `Card ending in ${savedCardLast4} added`
+                              : undefined
+                          }
+                        >
+                          <Button type="button" variant="primary" size="lg" className="self-start" onClick={() => setCardModalOpen(true)}>
+                            {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
+                          </Button>
+                        </ChoiceOption>
+                      </div>
+                    ) : savedCardLast4 ? (
                       <p className="font-body text-[15px] text-[#1d2535]">
                         The credit card ending in <span className="font-bold">{savedCardLast4}</span> was successfully added.
                       </p>
-                    )}
+                    ) : null}
 
                     <div className="flex flex-col items-start gap-4">
-                      <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
-                        {savedCardLast4 ? 'Change Your Credit Card Details' : 'Pay with Credit Card'}
-                      </Button>
+                      {!signedIn && (
+                        <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
+                          {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
+                        </Button>
+                      )}
 
                       {needsDelivery && (
                         <label className="flex items-center gap-3 cursor-pointer">
@@ -636,7 +770,7 @@ export default function MembershipCheckout() {
                       onClick={handleCompleteCheckout}
                       className="w-full bg-[#002b5c] text-white font-body font-extrabold text-[18px] py-4 px-6 hover:bg-navy-bright transition-colors"
                     >
-                      Complete Checkout
+                      Checkout
                     </button>
                   </div>
                 </div>

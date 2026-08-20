@@ -4,7 +4,6 @@ import { useCart } from '@/context/CartContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import {
-  ConfirmationActions,
   ConfirmationBanner,
   ConfirmationSupport,
   NextSteps,
@@ -157,14 +156,6 @@ export default function DonateConfirmation() {
               <ReceiptCard title="What happens next">
                 <NextSteps steps={steps} />
               </ReceiptCard>
-
-              <ConfirmationActions
-                links={[
-                  { label: 'See what your gift supports', href: '/giving' },
-                  { label: 'Become a member', href: '/membership/join' },
-                  { label: 'Back to home', href: '/' },
-                ]}
-              />
 
               <ConfirmationSupport>
                 Questions about this gift, or need to change a recurring schedule? Contact Amanda

@@ -47,7 +47,7 @@ export default function NavalHistorySubscribe() {
   const subscribe = (format: Format) => {
     const { price } = offerFor(format, region, term)
     navigate(
-      `/naval-history/subscribe/checkout?term=${term}&region=${region}&format=${format}&price=${price}`,
+      `/naval-history/subscribe/cart?term=${term}&region=${region}&format=${format}&price=${price}`,
     )
   }
 
@@ -171,7 +171,7 @@ export default function NavalHistorySubscribe() {
                         </button>
                         <a
                           href="/login"
-                          className="text-center font-body text-sm text-link"
+                          className="mx-auto font-body text-sm text-link"
                         >
                           Already a member? Sign in for member pricing
                         </a>

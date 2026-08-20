@@ -2,6 +2,13 @@ import ArticleAuthorBio from '@/sections/ArticleAuthorBio'
 import ArticleComments from '@/sections/ArticleComments'
 import ArticleInBrief from '@/sections/ArticleInBrief'
 import ArticleAudioPlayer from '@/sections/ArticleAudioPlayer'
+import ArticleImageGallery, { type GalleryImage } from '@/components/ui/ArticleImageGallery'
+import galleryReserve from '@/assets/images/8518400.jpg'
+import galleryBriefing from '@/assets/images/6995965.jpg'
+import galleryArchive from '@/assets/images/8587-09-158.jpg'
+import galleryHistory from '@/assets/images/naval-history-billboard.jpg'
+import galleryOrg from '@/assets/images/org-membership-billboard.jpg'
+import galleryEssay from '@/assets/images/essay-contests-hero-main.jpg'
 import AdUnit from '@/components/ui/AdUnit'
 
 import fitnessImg from '@/assets/images/proceedings-articles/fortifying/fitness-event.jpg'
@@ -61,6 +68,49 @@ function PhotoFigure({
 }
 
 // ── Topics ────────────────────────────────────────────────────────────────────
+
+/**
+ * Sample gallery content. Placeholder photography pulled from the shared assets
+ * directory — swap the imports and captions for the real set.
+ */
+const GALLERY_IMAGES: GalleryImage[] = [
+  {
+    src: galleryReserve,
+    alt: 'Sailors at consoles in a darkened operations space',
+    caption: 'Watchstanders track contacts from a darkened operations space during a fleet exercise.',
+    credit: 'U.S. Navy',
+  },
+  {
+    src: galleryBriefing,
+    alt: 'Officers gathered around a briefing table',
+    caption: 'A watch team walks through the night order book before turnover.',
+    credit: 'U.S. Naval Institute Photo Archive',
+  },
+  {
+    src: galleryArchive,
+    alt: 'Archival photograph of a ship at sea',
+    caption: 'Cryptologic work has been part of the watch since long before the term cyber existed.',
+    credit: 'Naval History and Heritage Command',
+  },
+  {
+    src: galleryHistory,
+    alt: 'Period illustration of ships under sail',
+    caption: 'The forum has argued the nature of the watch in these pages since 1874.',
+    credit: 'U.S. Naval Institute Archives',
+  },
+  {
+    src: galleryOrg,
+    alt: 'Sailors looking out over the horizon at sea',
+    caption: 'Retention turns on whether the work feels like a profession rather than a billet.',
+    credit: 'U.S. Navy',
+  },
+  {
+    src: galleryEssay,
+    alt: 'Naval officers in discussion',
+    caption: 'Junior officers debate the cyber force design problem at a Naval Institute forum.',
+    credit: 'U.S. Naval Institute',
+  },
+]
 
 const topics = ['Cybersecurity', 'Information Warfare', 'Training & Education', 'Retention', 'Navy Culture']
 
@@ -262,6 +312,12 @@ export default function FortifyingArticleBody() {
                 is an improvement, but the service still needs an upgrade to its command culture so the quietest
                 voice may raise a red flag when it counts.
               </p>
+
+              <ArticleImageGallery
+                heading="Standing the Digital Watch"
+                intro="Sample gallery — placeholder photography and captions."
+                images={GALLERY_IMAGES}
+              />
 
               {/* Centered ad at the mid-article break */}
               <AdUnit size="leaderboard" />

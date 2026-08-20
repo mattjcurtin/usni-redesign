@@ -9,6 +9,8 @@ import { Field, SelectInput, TextInput, CheckboxField } from '@/components/ui/Fo
 import { Toggle } from '@/components/ui/AccountCard'
 import { countries, militaryStatuses, services, suffixes, usStates } from '@/data/essaySubmission'
 import { makeOrderNumber } from '@/data/transactions'
+import { ACCOUNT_ADDRESS, ACCOUNT_CARD, isTestLogin } from '@/data/testAccount'
+import { ChoiceOption, SignedInAs, addressLines } from '@/components/ui/SavedOnFile'
 import {
   FORMAT_LABELS,
   TERM_LABELS,
@@ -142,11 +144,41 @@ export default function NavalHistorySubscribeCheckout() {
   const [showErrors, setShowErrors] = useState(false)
   const alertRef = useRef<HTMLDivElement>(null)
 
+  /** Signing in applies the account's address and card; both stay replaceable. */
+  const [signedInAs, setSignedInAs] = useState<string | null>(null)
+  const [signInError, setSignInError] = useState(false)
+  const [billingChoice, setBillingChoice] = useState<'file' | 'new'>('file')
+  const [deliveryChoice, setDeliveryChoice] = useState<'file' | 'new'>('file')
+  const [paymentChoice, setPaymentChoice] = useState<'file' | 'new'>('file')
+  const signedIn = signedInAs !== null
+
+  const applySignIn = () => {
+    if (!isTestLogin(email, password)) { setSignInError(true); return }
+    setSignInError(false)
+    setSignedInAs(ACCOUNT_ADDRESS.name)
+    setStreet(ACCOUNT_ADDRESS.lines[0]); setCity(ACCOUNT_ADDRESS.city)
+    setState(ACCOUNT_ADDRESS.state);     setZip(ACCOUNT_ADDRESS.zip)
+    setCountry(ACCOUNT_ADDRESS.country)
+    setBillStreet(ACCOUNT_ADDRESS.lines[0]); setBillCity(ACCOUNT_ADDRESS.city)
+    setBillState(ACCOUNT_ADDRESS.state);     setBillZip(ACCOUNT_ADDRESS.zip)
+    setBillCountry(ACCOUNT_ADDRESS.country)
+    setSavedCardLast4(ACCOUNT_CARD.last4)
+    setBillingChoice('file'); setDeliveryChoice('file'); setPaymentChoice('file')
+  }
+
+  const signOut = () => {
+    setSignedInAs(null)
+    setStreet(''); setCity(''); setState(''); setZip('')
+    setBillStreet(''); setBillCity(''); setBillState(''); setBillZip('')
+    setSavedCardLast4(null)
+    setBillingChoice('file'); setDeliveryChoice('file'); setPaymentChoice('file')
+  }
+
   // A card needs an address to verify against; digital collects one purely for that.
   const needsBilling = !isPrint || !billSame
 
   const missing: string[] = []
-  if (tab === 'create') {
+  if (!signedIn && tab === 'create') {
     if (!firstName.trim())    missing.push('First name')
     if (!lastName.trim())     missing.push('Last name')
     if (!email.trim())        missing.push('Email address')
@@ -155,9 +187,10 @@ export default function NavalHistorySubscribeCheckout() {
     if (!service)             missing.push('Service')
     if (!militaryStatus)      missing.push('Military status')
     if (!rank.trim())         missing.push('Rank / title')
-  } else {
+  } else if (!signedIn) {
     if (!email.trim())    missing.push('Email address')
     if (!password.trim()) missing.push('Password')
+    missing.push('Sign in')
   }
   if (isPrint) {
     if (!street.trim()) missing.push('Delivery street address')
@@ -200,12 +233,9 @@ export default function NavalHistorySubscribeCheckout() {
       <Header />
 
       <main className="flex-1">
-        <section className="bg-[#ebf4ff] py-14 lg:py-20">
-          <div className="container-site text-center">
-            <p className="font-body font-medium text-sm uppercase tracking-[0.08em] text-[#023e7d] mb-2">
-              Step 2 of 2
-            </p>
-            <h1 className="font-headline text-[44px] lg:text-[56px] text-[#1d2535] leading-[1.1]">
+        <section className="bg-[#ebf4ff] py-20">
+          <div className="container-site">
+            <h1 className="font-headline text-[64px] text-[#1d2535] leading-[1.1] text-center">
               Checkout
             </h1>
           </div>
@@ -303,6 +333,8 @@ export default function NavalHistorySubscribeCheckout() {
                         </div>
                       </div>
                     </div>
+                  ) : signedIn ? (
+                    <SignedInAs email={email.trim()} onSignOut={signOut} />
                   ) : (
                     <div className="flex flex-col gap-5">
                       <Field label="Email address" htmlFor="nhs-si-email" required error={err(email)}>
@@ -311,6 +343,23 @@ export default function NavalHistorySubscribeCheckout() {
                       <Field label="Password" htmlFor="nhs-si-pass" required error={err(password)}>
                         <TextInput id="nhs-si-pass" type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} hasError={!!err(password)} />
                       </Field>
+                      {signInError && (
+                        <p role="alert" className="font-body text-[14px] text-[#c1121f]">
+                          That email and password don&rsquo;t match an account.
+                        </p>
+                      )}
+                      <div className="flex flex-wrap items-center gap-4">
+                        <button
+                          type="button"
+                          onClick={applySignIn}
+                          className="bg-[#002b5c] text-white font-body font-bold text-[16px] px-6 py-3 border border-[#002b5c] hover:bg-navy-bright hover:border-navy-bright transition-colors"
+                        >
+                          Sign in
+                        </button>
+                        <a href="/login/forgot" className="font-body text-[15px] w-fit text-link">
+                          Forgot your password?
+                        </a>
+                      </div>
                       <p className="font-body text-[14px] text-neutral-subtle">
                         Members get the member rate on this subscription automatically once signed in.
                       </p>
@@ -325,14 +374,41 @@ export default function NavalHistorySubscribeCheckout() {
                       region === 'international' ? 'International rates include shipping.' : ''
                     }`.trim()}
                   >
-                    <AddressFields
-                      street={street} setStreet={setStreet}
-                      city={city} setCity={setCity}
-                      state={state} setState={setState}
-                      zip={zip} setZip={setZip}
-                      country={country} setCountry={setCountry}
-                      err={err}
-                    />
+                    {signedIn ? (
+                      <div className="flex flex-col gap-3">
+                        <ChoiceOption
+                          name="nhs-delivery" value="file"
+                          checked={deliveryChoice === 'file'}
+                          onSelect={() => setDeliveryChoice('file')}
+                          title="Use the address on file"
+                          detail={addressLines(ACCOUNT_ADDRESS)}
+                        />
+                        <ChoiceOption
+                          name="nhs-delivery" value="new"
+                          checked={deliveryChoice === 'new'}
+                          onSelect={() => setDeliveryChoice('new')}
+                          title="Use a different address"
+                        >
+                          <AddressFields
+                            street={street} setStreet={setStreet}
+                            city={city} setCity={setCity}
+                            state={state} setState={setState}
+                            zip={zip} setZip={setZip}
+                            country={country} setCountry={setCountry}
+                            err={err}
+                          />
+                        </ChoiceOption>
+                      </div>
+                    ) : (
+                      <AddressFields
+                        street={street} setStreet={setStreet}
+                        city={city} setCity={setCity}
+                        state={state} setState={setState}
+                        zip={zip} setZip={setZip}
+                        country={country} setCountry={setCountry}
+                        err={err}
+                      />
+                    )}
                   </Card>
                 )}
 
@@ -345,14 +421,41 @@ export default function NavalHistorySubscribeCheckout() {
                         : 'The address on file with your card issuer. Required to verify your payment — nothing is mailed to it.'
                     }
                   >
-                    <AddressFields
-                      street={billStreet} setStreet={setBillStreet}
-                      city={billCity} setCity={setBillCity}
-                      state={billState} setState={setBillState}
-                      zip={billZip} setZip={setBillZip}
-                      country={billCountry} setCountry={setBillCountry}
-                      err={err}
-                    />
+                    {signedIn ? (
+                      <div className="flex flex-col gap-3">
+                        <ChoiceOption
+                          name="nhs-billing" value="file"
+                          checked={billingChoice === 'file'}
+                          onSelect={() => setBillingChoice('file')}
+                          title="Use the address on file"
+                          detail={addressLines(ACCOUNT_ADDRESS)}
+                        />
+                        <ChoiceOption
+                          name="nhs-billing" value="new"
+                          checked={billingChoice === 'new'}
+                          onSelect={() => setBillingChoice('new')}
+                          title="Use a different address"
+                        >
+                          <AddressFields
+                            street={billStreet} setStreet={setBillStreet}
+                            city={billCity} setCity={setBillCity}
+                            state={billState} setState={setBillState}
+                            zip={billZip} setZip={setBillZip}
+                            country={billCountry} setCountry={setBillCountry}
+                            err={err}
+                          />
+                        </ChoiceOption>
+                      </div>
+                    ) : (
+                      <AddressFields
+                        street={billStreet} setStreet={setBillStreet}
+                        city={billCity} setCity={setBillCity}
+                        state={billState} setState={setBillState}
+                        zip={billZip} setZip={setBillZip}
+                        country={billCountry} setCountry={setBillCountry}
+                        err={err}
+                      />
+                    )}
                   </Card>
                 )}
 
@@ -363,16 +466,43 @@ export default function NavalHistorySubscribeCheckout() {
                       <AcceptedCards />
                     </div>
 
-                    {savedCardLast4 && (
+                    {signedIn ? (
+                      <div className="flex flex-col gap-3">
+                        <ChoiceOption
+                          name="nhs-payment" value="file"
+                          checked={paymentChoice === 'file'}
+                          onSelect={() => { setPaymentChoice('file'); setSavedCardLast4(ACCOUNT_CARD.last4) }}
+                          title={`${ACCOUNT_CARD.brand} ····\u00a0${ACCOUNT_CARD.last4}`}
+                          detail={`Card on file · expires ${ACCOUNT_CARD.expires}`}
+                        />
+                        <ChoiceOption
+                          name="nhs-payment" value="new"
+                          checked={paymentChoice === 'new'}
+                          onSelect={() => { setPaymentChoice('new'); setSavedCardLast4(null) }}
+                          title="Use a new card"
+                          detail={
+                            paymentChoice === 'new' && savedCardLast4
+                              ? `Card ending in ${savedCardLast4} added`
+                              : undefined
+                          }
+                        >
+                          <Button type="button" variant="primary" size="lg" className="self-start" onClick={() => setCardModalOpen(true)}>
+                            {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
+                          </Button>
+                        </ChoiceOption>
+                      </div>
+                    ) : savedCardLast4 ? (
                       <p className="font-body text-[15px] text-[#1d2535]">
                         The credit card ending in <span className="font-bold">{savedCardLast4}</span> was successfully added.
                       </p>
-                    )}
+                    ) : null}
 
                     <div className="flex flex-col items-start gap-4">
-                      <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
-                        {savedCardLast4 ? 'Change Your Credit Card Details' : 'Pay with Credit Card'}
-                      </Button>
+                      {!signedIn && (
+                        <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
+                          {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
+                        </Button>
+                      )}
 
                       {isPrint && (
                         <CheckboxField id="nhs-billsame" checked={billSame} onChange={setBillSame}>
@@ -441,7 +571,7 @@ export default function NavalHistorySubscribeCheckout() {
                       onClick={handleComplete}
                       className="w-full bg-[#002b5c] text-white font-body font-extrabold text-[18px] py-4 px-6 hover:bg-navy-bright transition-colors"
                     >
-                      Complete Subscription
+                      Checkout
                     </button>
                   </div>
                 </div>
