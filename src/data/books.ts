@@ -356,6 +356,23 @@ export const allBooks: Book[] = [
 ]
 
 export const newReleases: Book[] = [
+  // Leads the list deliberately: this is the one title with a built product
+  // page, so it is the clear path from /books into the product detail work.
+  // Author, format, and prices track data/bookProductData.ts so the card and
+  // the page it opens cannot disagree. No `series` — the product page's "AUSA
+  // Series" is not one of SERIES_FACETS, and an off-vocabulary value would sit
+  // outside the collection facets.
+  {
+    id: 'new-ai-warfighting',
+    title: 'AI Warfighting',
+    author: 'Capt. James T. Morrison, USN (Ret.), and Dr. Sarah K. Chen',
+    format: 'Hardcover',
+    price: 38.95,
+    originalPrice: 48.95,
+    image: imgAI,
+    href: '/books/ai-warfighting',
+    subjects: ['Cybersecurity & Technology', 'Strategy & Geopolitics'],
+  },
   {
     id: 'new1',
     title: 'Rush to Disaster',
