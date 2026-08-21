@@ -173,7 +173,10 @@ export default function AccountDashboard() {
           <ul className="flex flex-col">
             {savedArticles.map(a => (
               <li key={a.href} className="py-3 border-b border-[#e8eaed] last:border-b-0 last:pb-0 first:pt-0">
-                <Link to={a.href} className="font-body font-bold text-[15px] text-navy-bolder hover:text-navy-bright">
+                <Link
+                  to={a.href}
+                  className="link-underline-hover font-body font-bold text-[15px] text-navy-bolder hover:text-navy-bright transition-colors"
+                >
                   {a.title}
                 </Link>
                 <p className="font-body text-[13px] text-neutral-subtle mt-0.5">

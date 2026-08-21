@@ -126,6 +126,12 @@
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 0% 100%;
     background-repeat: no-repeat;
+    /* `clone` gives every line of a wrapped link its own underline. Without it
+       the gradient is sliced across one box, so a name breaking over two lines
+       (10 of them on the leadership roster) underlines only the first. Matches
+       .article-link--card and .text-link, which already clone. */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   /* Hidden at rest, sweeps in on hover — nav items and breadcrumbs.

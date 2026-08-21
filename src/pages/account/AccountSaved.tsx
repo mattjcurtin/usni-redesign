@@ -45,7 +45,7 @@ export default function AccountSaved() {
                   </p>
                   <Link
                     to={a.href}
-                    className="font-headline text-[21px] text-navy-bolder leading-snug hover:text-navy-bright"
+                    className="link-underline-hover font-headline text-[21px] text-navy-bolder leading-snug hover:text-navy-bright transition-colors"
                   >
                     {a.title}
                   </Link>
