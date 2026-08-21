@@ -268,6 +268,33 @@
   }
 }
 
+/* Off-canvas account menu: the panel flies in from the left, its scrim fades.
+   Both are mount-time animations — the drawer unmounts when closed. */
+@keyframes drawer-in-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes overlay-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.drawer-in-left {
+  animation: drawer-in-left 0.28s ease-out;
+}
+
+.overlay-fade-in {
+  animation: overlay-fade-in 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer-in-left,
+  .overlay-fade-in {
+    animation: none;
+  }
+}
+
 @keyframes link-underline-sweep {
   from {
     background-size: 0% 1px;

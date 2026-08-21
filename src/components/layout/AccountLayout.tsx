@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -88,7 +88,7 @@ function Avatar() {
   )
 }
 
-function SidebarNav() {
+function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname } = useLocation()
   return (
     <nav aria-label="Account" className="flex flex-col gap-6">
@@ -104,6 +104,7 @@ function SidebarNav() {
                 <li key={item.href}>
                   <Link
                     to={item.href}
+                    onClick={onNavigate}
                     aria-current={active ? 'page' : undefined}
                     className={`flex items-center justify-between gap-3 px-3 py-2.5 font-body text-[15px] border-l-2 transition-colors ${
                       active
@@ -126,6 +127,7 @@ function SidebarNav() {
       <div className="border-t border-[#c4c9d4] pt-4">
         <Link
           to="/login"
+          onClick={onNavigate}
           className="flex w-full items-center justify-center gap-2 bg-navy-bolder text-white
                      font-body font-bold text-[15px] px-4 py-3 border border-navy-bolder
                      hover:bg-navy-bright hover:border-navy-bright transition-colors"
@@ -135,6 +137,69 @@ function SidebarNav() {
         </Link>
       </div>
     </nav>
+  )
+}
+
+function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
+  return (
+    <>
+      <Avatar />
+      <div className="h-px bg-[#c4c9d4]" />
+      <SidebarNav onNavigate={onNavigate} />
+    </>
+  )
+}
+
+/** Off-canvas account nav for narrow screens. */
+function AccountDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="lg:hidden fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Account menu">
+      <div
+        className="overlay-fade-in absolute inset-0 bg-navy-boldest/70 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <div
+        id="account-drawer"
+        className="drawer-in-left absolute inset-y-0 left-0 w-[86%] max-w-[330px]
+                   bg-[#f4f6fb] border-r border-[#c4c9d4] shadow-2xl
+                   overflow-y-auto overscroll-contain p-6 pt-5 flex flex-col gap-7"
+      >
+        <div className="flex items-center justify-between">
+          <p className="font-body font-bold text-[11px] uppercase tracking-[0.1em] text-neutral-subtle">
+            Account menu
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close account menu"
+            className="flex items-center justify-center w-9 h-9 bg-navy-subtle text-white hover:bg-navy-bright transition-colors"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M3 3l10 10M13 3L3 13" />
+            </svg>
+          </button>
+        </div>
+
+        <SidebarBody onNavigate={onClose} />
+      </div>
+    </div>
   )
 }
 
@@ -150,6 +215,14 @@ export default function AccountLayout({
   actions?: ReactNode
   children: ReactNode
 }) {
+  const { pathname } = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // Reaching a new account page closes the drawer, including via browser back.
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [pathname])
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -175,11 +248,28 @@ export default function AccountLayout({
           <div className="container-site">
             <div className="flex flex-col lg:flex-row gap-10 lg:gap-14 lg:items-start">
 
-              {/* Sidebar */}
-              <aside className="w-full lg:w-[280px] lg:flex-shrink-0 bg-[#f4f6fb] border border-[#e2e8f0] p-6 flex flex-col gap-7 lg:sticky lg:top-8">
-                <Avatar />
-                <div className="h-px bg-[#c4c9d4]" />
-                <SidebarNav />
+              {/* Narrow screens get a toggle in the sidebar's place, at the top
+                  of the page, and the nav itself flies in from the left. */}
+              <button
+                type="button"
+                onClick={() => setMenuOpen(true)}
+                aria-expanded={menuOpen}
+                aria-controls="account-drawer"
+                className="lg:hidden flex items-center gap-3 w-full bg-white border border-[#c4c9d4]
+                           px-5 py-4 font-body font-bold text-[16px] text-navy-bolder
+                           hover:border-navy-bright hover:text-navy-bright transition-colors"
+              >
+                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M3 5h14M3 10h14M3 15h14" />
+                </svg>
+                Account menu
+              </button>
+
+              <AccountDrawer open={menuOpen} onClose={() => setMenuOpen(false)} />
+
+              {/* Sidebar — the persistent rail from lg up */}
+              <aside className="hidden lg:flex w-full lg:w-[280px] lg:flex-shrink-0 bg-[#f4f6fb] border border-[#e2e8f0] p-6 flex-col gap-7 lg:sticky lg:top-8">
+                <SidebarBody />
               </aside>
 
               {/* Content */}
