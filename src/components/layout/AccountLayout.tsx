@@ -2,7 +2,9 @@ import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import AccountNotifications from '@/components/ui/AccountNotifications'
 import { member, membership } from '@/data/account'
+import { PLACEHOLDER_IMAGE } from '@/data/leadership'
 
 /**
  * Shell for every /account page.
@@ -56,16 +58,23 @@ export const ACCOUNT_NAV: NavGroup[] = [
 function Avatar() {
   return (
     <div className="flex flex-col items-center gap-3">
-      <div className="w-28 h-28 rounded-full bg-white border border-[#c4c9d4] flex items-center justify-center overflow-hidden">
-        <i className="fa-solid fa-user text-[46px] text-[#c4c9d4]" aria-hidden="true" />
+      {/* Default portrait is the same watermark the staff roster falls back to,
+          here ringed in gold. The edit control sits on the lower-left arc. */}
+      <div className="relative w-32 h-32">
+        <div className="w-32 h-32 rounded-full overflow-hidden border-[5px] border-gold bg-tan-subtlest">
+          <img src={PLACEHOLDER_IMAGE} alt="" aria-hidden="true" className="w-full h-full object-cover" />
+        </div>
+        <button
+          type="button"
+          aria-label="Edit photo"
+          title="Edit photo"
+          className="absolute bottom-0 left-0 flex items-center justify-center w-10 h-10 rounded-full
+                     bg-navy-bright text-white border-2 border-white shadow-md
+                     hover:bg-navy-bolder transition-colors"
+        >
+          <i className="fa-solid fa-pen text-[14px]" aria-hidden="true" />
+        </button>
       </div>
-      <button
-        type="button"
-        className="inline-flex items-center gap-1.5 font-body text-[13px] text-[#023e7d] hover:underline"
-      >
-        <i className="fa-solid fa-camera" aria-hidden="true" />
-        Edit photo
-      </button>
       <p className="font-headline text-[22px] text-navy-bolder leading-tight text-center">
         {member.salutation} {member.lastName}
       </p>
@@ -148,13 +157,16 @@ export default function AccountLayout({
         {/* Banner — the live site's photographic header, flattened to the
             redesign's pale-blue band so the member's own data leads instead. */}
         <div className="bg-[#ebf4ff]">
-          <div className="container-site py-10 lg:py-14">
-            <p className="font-body font-medium text-sm uppercase tracking-[0.08em] text-[#023e7d] mb-2">
-              My Account
-            </p>
-            <h1 className="font-headline text-[36px] lg:text-[48px] text-navy-bolder leading-[1.1]">
-              Welcome back, {member.firstName}
-            </h1>
+          <div className="container-site py-10 lg:py-14 flex flex-wrap items-start justify-between gap-6">
+            <div className="min-w-0">
+              <p className="font-body font-medium text-sm uppercase tracking-[0.08em] text-[#023e7d] mb-2">
+                My Account
+              </p>
+              <h1 className="font-headline text-[36px] lg:text-[48px] text-navy-bolder leading-[1.1]">
+                Welcome back, {member.firstName}
+              </h1>
+            </div>
+            <AccountNotifications />
           </div>
         </div>
 

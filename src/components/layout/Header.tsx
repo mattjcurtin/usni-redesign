@@ -416,12 +416,19 @@ function ArchivesLink() {
 }
 
 /* ─── Mobile Menu (full-screen accordion) ───────────────────────────────────── */
+/** True on any /account screen, where the utility link points home rather than to sign-in. */
+function useOnAccount() {
+  const { pathname } = useLocation()
+  return pathname === '/account' || pathname.startsWith('/account/')
+}
+
 function MobileMenu({ open, onClose, onSearchOpen, cartCount }: {
   open: boolean
   onClose: () => void
   onSearchOpen: () => void
   cartCount: number
 }) {
+  const onAccount = useOnAccount()
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
 
   useEffect(() => {
@@ -467,8 +474,8 @@ function MobileMenu({ open, onClose, onSearchOpen, cartCount }: {
       ),
     },
     {
-      label: 'Member Login',
-      href: '/login',
+      label: onAccount ? 'My Account' : 'Member Login',
+      href: onAccount ? '/account' : '/login',
       icon: (
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -578,6 +585,7 @@ function MobileMenu({ open, onClose, onSearchOpen, cartCount }: {
 /* ─── Header ────────────────────────────────────────────────────────────────── */
 export default function Header() {
   const { pathname, search } = useLocation()
+  const onAccount = useOnAccount()
   /* Preview-only query params (?previewMobileOpen=1, ?previewSearchOpen=1, ?previewNavOpen=Membership)
      let the design-system docs force a specific interactive state open on mount. Unused in production. */
   const previewParams = new URLSearchParams(search)
@@ -650,12 +658,14 @@ export default function Header() {
                   </span>
                 )}
               </a>
-              <a href="/login" className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[18px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
+              <a href={onAccount ? '/account' : '/login'} className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[18px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
                 </svg>
-                <span className="article-link article-link--nav pb-0.5">Login/Register</span>
+                <span className="article-link article-link--nav pb-0.5">
+                  {onAccount ? 'My Account' : 'Login/Register'}
+                </span>
               </a>
               <a
                 href="/giving/donate"

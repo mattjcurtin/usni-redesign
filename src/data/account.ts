@@ -304,9 +304,102 @@ export const partnerDiscounts = [
   { name: 'Brooks Brothers', offer: '15% off full-price merchandise', detail: 'Corporate Membership Program, U.S. and Canadian stores.', code: 'USNI-BB' },
 ]
 
-/** The Member Updates feed that currently dominates the live account landing page. */
-export const memberUpdates = [
-  { title: 'Our Summer Membership Sale — Extended!', blurb: 'In response to overwhelming demand, we’ve extended our America 250th membership promotion until 31 August.' },
-  { title: 'Save and Celebrate America’s 250-Year Legacy', blurb: 'America turns 250 next month. Honor this milestone by renewing your commitment to the Naval Institute.' },
-  { title: 'Proceedings Digital Magazine Archive Now Live', blurb: 'It’s now easier than ever to reach our full archive of flippable Proceedings PDFs in one place.' },
+export interface MemberUpdate {
+  id: string
+  title: string
+  /** Publication date, already formatted for display. */
+  date: string
+  /** One-line dek shown in the notifications list. */
+  blurb: string
+  /** Unread on first load — drives the bell's badge count. */
+  unread: boolean
+  body: string[]
+  promo?: { code: string; note: string }
+  cta?: { label: string; href: string }
+  footnote?: string
+}
+
+/**
+ * The Member Updates feed. On the live site this is a promotional river that
+ * takes the whole account landing page; here it moves into the account hero as
+ * a notification bell, so a member's own records lead instead.
+ *
+ * Content mirrors the live /user/member-updates nodes.
+ */
+export const memberUpdates: MemberUpdate[] = [
+  {
+    id: 'summer-membership-sale-extended',
+    title: 'Our Summer Membership Sale — Extended!',
+    date: '4 August 2026',
+    blurb: 'One more month to take advantage of our biggest membership sale of the year.',
+    unread: true,
+    body: [
+      'In response to overwhelming demand, we’ve decided to extend our America 250th membership promotion to 11:59pm ET, 31 August 2026. That means you have one more month to take advantage of our biggest membership sale of the year.',
+      'Now’s the time to get $25 off when you renew your current membership — or give a gift of membership to someone in your life who’s interested in sea power.',
+    ],
+    promo: { code: 'USA250', note: 'Use this code at checkout to take $25 off.' },
+    cta: { label: 'Renew or gift membership', href: '/membership/join' },
+    footnote:
+      'Discount not valid for Student or Life tiers. To renew a Naval History membership, reach out to Member Services at member@usni.org or call 1-800-233-8764 to access your discount.',
+  },
+  {
+    id: 'members-get-20-ships-store',
+    title: 'Members Get 20% Off Our Ship’s Store',
+    date: '22 July 2026',
+    blurb: 'The Ship’s Store is now open to everyone — members save 20% year-round.',
+    unread: true,
+    body: [
+      'Our Naval Institute Ship’s Store is now open to everyone.',
+      'Members — don’t forget that you get 20% off any purchase in our Ship’s Store year-round. Just use your member code at checkout.',
+      'A few tips for using the store: you will need to make an account on the store site to purchase, as it is managed outside of usni.org. When filling out your shipping address, use the autofill dropdown when it appears, and select your state from the dropdown rather than typing it. All items are made to order and ship in about four weeks.',
+    ],
+    promo: { code: 'WORDEN20', note: 'Get 20% off any purchase, year-round.' },
+    cta: { label: 'Browse our store', href: '/ships-store' },
+    footnote:
+      'Problem with your order or navigating the site? Contact our partner Marco Promotions directly at stores@marcopromos.com.',
+  },
+  {
+    id: 'save-and-celebrate-250-year-legacy',
+    title: 'Save and Celebrate America’s 250-Year Legacy',
+    date: '26 June 2026',
+    blurb: 'America turns 250 next month. Honor the milestone by renewing your commitment.',
+    unread: true,
+    body: [
+      'America turns 250 next month. Honor this milestone anniversary by renewing your commitment to the Naval Institute.',
+      'Get $25 off your membership now through 31 July 2026. Not up for renewal yet? Gift a membership to a family member or friend instead.',
+    ],
+    promo: { code: 'USA250', note: 'Use this code at checkout to take $25 off.' },
+    cta: { label: 'Renew or gift membership', href: '/membership/join' },
+    footnote:
+      'Discount not valid for Student or Life tiers. To renew a Naval History membership, reach out to Member Services at member@usni.org or call 1-800-233-8764 to access your discount.',
+  },
+  {
+    id: '250th-sale-extended',
+    title: 'Our 250th Sale Has Been Extended',
+    date: '6 November 2025',
+    blurb: '$25 off membership and $20 off Naval History subscriptions through the end of the year.',
+    unread: false,
+    body: [
+      'The U.S. Naval Institute recognizes that many in our community have been impacted by the recent government shutdown. In response, we are extending our 250th sale into the holiday season. You can now get $25 off membership and $20 off Naval History subscriptions until 11:59pm ET on 31 December 2025.',
+      'Save $25 on new, renewed, and gift memberships with code CELEBRATE250. Membership benefits include the monthly Proceedings magazine, up to 40% off Naval Institute Press books, a subscription to our member-exclusive USNI News: Sea Scroll weekly newsletter, and 20% off items in our Ship’s Store year-round.',
+      'Save $20 on Naval History magazine subscriptions with code HISTORY250. Note that your membership discount and the 250th discount cannot be used together — you must choose one or the other.',
+    ],
+    promo: { code: 'CELEBRATE250', note: 'Save $25 on new, renewed, and gift memberships.' },
+    cta: { label: 'Join or renew', href: '/membership/join' },
+    footnote:
+      'Membership discount not valid for Student or Life tiers. The Naval History discount is not valid for the 1-year digital tier.',
+  },
+  {
+    id: 'proceedings-digital-archive-live',
+    title: 'Proceedings Digital Magazine Archive Now Live',
+    date: '12 August 2025',
+    blurb: 'Our full archive of flippable Proceedings magazine PDFs is now in one place.',
+    unread: false,
+    body: [
+      'Our Proceedings digital archive is now live. It’s easier than ever to reach our full archive of flippable magazine PDFs in one place.',
+      'Just log into your account and go to the Proceedings digital edition archive to browse the full library, dating back to the very first issue.',
+      'This digital version retains the magazine’s original print format as a flippable PDF. You can page through the print edition, zoom in and out on text, search keywords, and jump to the articles you want to read from the table of contents.',
+    ],
+    cta: { label: 'Browse the archive', href: '/proceedings/all-issues' },
+  },
 ]

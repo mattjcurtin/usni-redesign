@@ -7,7 +7,6 @@ import {
   giving,
   givingTotals,
   membership,
-  memberUpdates,
   orders,
   savedArticles,
   subscriptions,
@@ -19,7 +18,8 @@ import {
  * The live site opens with a promotional Member Updates feed and, for personal
  * data, a member number above "Your Membership information is temporarily
  * unavailable online." This page inverts that: status first, then the member's
- * own records, with the promo feed last.
+ * own records. The promo feed moves to the notification bell in the hero
+ * (see AccountNotifications), so it stays reachable without leading the page.
  */
 export default function AccountDashboard() {
   const [autoRenew, setAutoRenew] = useState(membership.autoRenew)
@@ -203,20 +203,6 @@ export default function AccountDashboard() {
         </AccountCard>
       </div>
 
-      {/* ── Member updates, demoted to the bottom ─────────────────────── */}
-      <AccountCard title="Member updates">
-        <ul className="flex flex-col">
-          {memberUpdates.map(u => (
-            <li key={u.title} className="py-4 border-b border-[#e8eaed] last:border-b-0 last:pb-0 first:pt-0">
-              <p className="font-body font-medium text-[11px] uppercase tracking-[0.08em] text-[#c1121f] mb-1">
-                Member Update
-              </p>
-              <p className="font-headline text-[19px] text-navy-bolder leading-snug">{u.title}</p>
-              <p className="font-body text-[14px] text-neutral-subtle leading-relaxed mt-1">{u.blurb}</p>
-            </li>
-          ))}
-        </ul>
-      </AccountCard>
     </AccountLayout>
   )
 }
