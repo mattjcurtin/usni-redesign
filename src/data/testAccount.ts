@@ -26,7 +26,11 @@ export const ACCOUNT_ADDRESS: OnFileAddress = {
   name: 'Mr. Matt Curtin',
   lines: ['291 Wood Road'],
   city: 'Annapolis',
-  state: 'MD',
+  // Full name, not 'MD': every checkout's State control is a <select> whose
+  // options are full state names, so an abbreviation matches no option. React
+  // then leaves the control blank while still holding the value, so the field
+  // looked empty to the buyer but passed validation.
+  state: 'Maryland',
   zip: '21402',
   country: 'United States',
 }

@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { useCart } from '@/context/CartContext'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import {
@@ -35,6 +37,11 @@ import {
  */
 export default function NavalHistorySubscribeConfirmation() {
   const [searchParams] = useSearchParams()
+  const { setCartCount } = useCart()
+
+  // The order is placed — the badge should not still show its items.
+  useEffect(() => { setCartCount(0) }, [setCartCount])
+
 
   const term   = (searchParams.get('term') === '3' ? '3' : '1') as Term
   const region = (searchParams.get('region') === 'international' ? 'international' : 'us') as Region

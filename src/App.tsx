@@ -47,6 +47,8 @@ import BookProduct from '@/pages/BookProduct'
 import BooksCollection from '@/pages/BooksCollection'
 import BooksNewReleases from '@/pages/BooksNewReleases'
 import BooksCart from '@/pages/BooksCart'
+import BooksCheckout from '@/pages/BooksCheckout'
+import BooksConfirmation from '@/pages/BooksConfirmation'
 import NavalHistory from '@/pages/NavalHistory'
 import NavalHistorySubscribe from '@/pages/NavalHistorySubscribe'
 import NavalHistorySubscribeCart from '@/pages/NavalHistorySubscribeCart'
@@ -119,6 +121,8 @@ export default function App() {
         <Route path="/books/collection" element={<BooksCollection />} />
         <Route path="/books/new-releases" element={<BooksNewReleases />} />
         <Route path="/books/cart" element={<BooksCart />} />
+        <Route path="/books/checkout" element={<BooksCheckout />} />
+        <Route path="/books/confirmation" element={<BooksConfirmation />} />
         <Route path="/naval-history" element={<NavalHistory />} />
         <Route path="/naval-history/subscribe" element={<NavalHistorySubscribe />} />
         <Route path="/naval-history/subscribe/cart" element={<NavalHistorySubscribeCart />} />

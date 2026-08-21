@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
-import { aiWarfightingBook } from '@/data/bookProductData'
-import type { BookProductData } from '@/data/bookProductData'
-
-const BOOK_CATALOG: Record<string, BookProductData> = {
-  'ai-warfighting': aiWarfightingBook,
-}
+import { BOOK_CATALOG } from '@/data/booksOrder'
 
 export default function BooksCartItems() {
   const [searchParams] = useSearchParams()
@@ -25,9 +20,10 @@ export default function BooksCartItems() {
 
   const subtotal = priceNum * qty
 
+  // The badge counts books, not rows — bumping the stepper has to move it.
   useEffect(() => {
-    setCartCount(removed ? 0 : 1)
-  }, [removed, setCartCount])
+    setCartCount(removed ? 0 : qty)
+  }, [removed, qty, setCartCount])
 
   const handleCheckout = () => {
     const params = new URLSearchParams({ id: bookId, format, price, qty: String(qty) })
