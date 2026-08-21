@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import membershipHero from '@/assets/images/membership-hero.png'
@@ -7,6 +7,9 @@ import { isTestLogin } from '@/data/testAccount'
 
 export default function Login() {
   const navigate = useNavigate()
+  // Set by the account area's Log out control, so the page can confirm it.
+  const [params] = useSearchParams()
+  const loggedOut = params.get('logged-out') === '1'
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
   const [error, setError]       = useState(false)
@@ -35,6 +38,35 @@ export default function Login() {
         {/* ── Two-column sign-in section ── */}
         <section className="py-16 lg:py-24">
           <div className="container-site">
+            {loggedOut && (
+              <div
+                role="status"
+                className="bg-[#dbeace] px-6 py-5 mb-10 lg:mb-12 flex items-start gap-4"
+              >
+                <svg
+                  className="w-7 h-7 flex-shrink-0 text-[#1d2535]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M8.5 12.5l2.5 2.5 4.5-5" />
+                </svg>
+                <div className="min-w-0">
+                  <p className="font-body font-bold text-[17px] text-[#1d2535] leading-snug">
+                    You’ve been logged out
+                  </p>
+                  <p className="font-body text-[17px] text-[#1d2535] leading-snug">
+                    Don’t worry, you can log back in below
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col lg:flex-row lg:items-start gap-12 lg:gap-16 xl:gap-24">
 
               {/* Left — welcome content */}

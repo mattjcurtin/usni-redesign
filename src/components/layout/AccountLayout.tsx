@@ -126,7 +126,7 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
       ))}
       <div className="border-t border-[#c4c9d4] pt-4">
         <Link
-          to="/login"
+          to="/login?logged-out=1"
           onClick={onNavigate}
           className="flex w-full items-center justify-center gap-2 bg-navy-bolder text-white
                      font-body font-bold text-[15px] px-4 py-3 border border-navy-bolder
