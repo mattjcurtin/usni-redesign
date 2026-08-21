@@ -143,7 +143,7 @@ export default function AccountNotifications() {
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-haspopup="true"
-        className={`relative flex items-center gap-2.5 border px-4 py-3 font-body font-bold text-[15px] transition-colors ${
+        className={`relative flex items-center gap-4 border px-4 py-3 font-body font-bold text-[15px] transition-colors ${
           open
             ? 'bg-navy-bolder border-navy-bolder text-white'
             : 'bg-white border-[#c4c9d4] text-navy-bolder hover:border-navy-bright hover:text-navy-bright'

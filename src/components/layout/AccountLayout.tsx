@@ -59,9 +59,10 @@ function Avatar() {
   return (
     <div className="flex flex-col items-center gap-3">
       {/* Default portrait is the same watermark the staff roster falls back to,
-          here ringed in gold. The edit control sits on the lower-left arc. */}
+          in the same tan ring it uses (see LeadershipRoster). The edit control
+          sits on the lower-left arc. */}
       <div className="relative w-32 h-32">
-        <div className="w-32 h-32 rounded-full overflow-hidden border-[5px] border-gold bg-tan-subtlest">
+        <div className="w-32 h-32 rounded-full overflow-hidden border-[6px] border-tan bg-tan-subtlest">
           <img src={PLACEHOLDER_IMAGE} alt="" aria-hidden="true" className="w-full h-full object-cover" />
         </div>
         <button
@@ -157,7 +158,7 @@ export default function AccountLayout({
         {/* Banner — the live site's photographic header, flattened to the
             redesign's pale-blue band so the member's own data leads instead. */}
         <div className="bg-[#ebf4ff]">
-          <div className="container-site py-10 lg:py-14 flex flex-wrap items-start justify-between gap-6">
+          <div className="container-site py-10 lg:py-14 flex flex-wrap items-center justify-between gap-6">
             <div className="min-w-0">
               <p className="font-body font-medium text-sm uppercase tracking-[0.08em] text-[#023e7d] mb-2">
                 My Account
