@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect, useId } from 'react'
-import { Button } from '@/components/ui/Button'
+import { Button, type ButtonVariant } from '@/components/ui/Button'
 
 const MONTHS = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
 const YEARS = Array.from({ length: 12 }, (_, i) => String(2025 + i))
@@ -25,13 +25,45 @@ function InlineSelect({
   )
 }
 
+/** What the form actually learned about the card, for callers that save it. */
+export interface CardDetails {
+  brand: string
+  last4: string
+  /** Formatted to match the saved-card records, e.g. "04 / 2029". */
+  expires: string
+}
+
+/** First digit is enough to name the brand, and Discover is not accepted. */
+function brandFor(firstDigit: string): string {
+  if (firstDigit === '4') return 'Visa'
+  if (firstDigit === '5') return 'Mastercard'
+  if (firstDigit === '3') return 'American Express'
+  return 'Card'
+}
+
 interface CreditCardModalProps {
   open: boolean
   onClose: () => void
-  onSuccess: (last4: string) => void
+  /**
+   * Callers that only need the last four can keep a one-parameter handler;
+   * the account pages take the second argument to build a saved-card row.
+   */
+  onSuccess: (last4: string, details: CardDetails) => void
+  /** Defaults suit checkout; the account pages are adding a card, not paying. */
+  title?: string
+  submitLabel?: string
+  /** Gold reads as primary at checkout, navy on the account's light surfaces. */
+  submitVariant?: ButtonVariant
 }
 
-export default function CreditCardModal({ open, onClose, onSuccess }: CreditCardModalProps) {
+export default function CreditCardModal({
+  open,
+  onClose,
+  onSuccess,
+  title = 'Pay with Credit Card',
+  submitLabel = 'Submit',
+  submitVariant = 'primary',
+}: CreditCardModalProps) {
   const fieldId = useId()
   const [cardGroups, setCardGroups] = useState(['', '', '', ''])
   const cardRef0 = useRef<HTMLInputElement>(null)
@@ -81,7 +113,11 @@ export default function CreditCardModal({ open, onClose, onSuccess }: CreditCard
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!isValid) return
-    onSuccess(cardGroups[3])
+    onSuccess(cardGroups[3], {
+      brand: brandFor(cardGroups[0].charAt(0)),
+      last4: cardGroups[3],
+      expires: `${expiryMonth} / ${expiryYear}`,
+    })
   }
 
   return (
@@ -108,7 +144,7 @@ export default function CreditCardModal({ open, onClose, onSuccess }: CreditCard
 
         <form onSubmit={handleSubmit} noValidate className="px-8 pt-8 pb-8 flex flex-col gap-6">
           <h2 id="credit-card-modal-title" className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">
-            Pay with Credit Card
+            {title}
           </h2>
 
           {/* Card number — four inputs, so the visual label names a group rather
@@ -166,8 +202,8 @@ export default function CreditCardModal({ open, onClose, onSuccess }: CreditCard
             </div>
           </div>
 
-          <Button type="submit" variant="primary" size="lg" fullWidth disabled={!isValid}>
-            Submit
+          <Button type="submit" variant={submitVariant} size="lg" fullWidth disabled={!isValid}>
+            {submitLabel}
           </Button>
         </form>
       </div>

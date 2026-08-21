@@ -1,6 +1,6 @@
 import { type AnchorHTMLAttributes, type ButtonHTMLAttributes } from 'react'
 
-type ButtonVariant = 'primary' | 'outline' | 'outline-dark' | 'link'
+export type ButtonVariant = 'primary' | 'navy' | 'outline' | 'outline-dark' | 'link'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonBaseProps {
@@ -16,6 +16,9 @@ const base = 'inline-flex items-center justify-center gap-2 font-body font-bold 
 
 const variants: Record<ButtonVariant, string> = {
   primary: 'bg-gold text-navy-bolder hover:bg-gold-dark border border-gold',
+  // Solid navy — the primary action on light interior surfaces such as the
+  // account pages and their modals, where gold reads as secondary.
+  navy: 'bg-navy-bolder text-white hover:bg-navy-bright border border-navy-bolder hover:border-navy-bright',
   outline: 'bg-transparent text-white border border-white hover:bg-white hover:text-navy-bright',
   'outline-dark': 'bg-transparent text-navy-bolder border border-navy-bolder hover:bg-navy-bolder hover:text-white',
   link: 'bg-transparent p-0 text-link',

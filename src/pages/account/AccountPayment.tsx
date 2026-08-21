@@ -1,8 +1,22 @@
+import { useState } from 'react'
 import AccountLayout from '@/components/layout/AccountLayout'
 import { AccountCard, Badge, DataTable, Td } from '@/components/ui/AccountCard'
-import { paymentMethods } from '@/data/account'
+import CreditCardModal, { type CardDetails } from '@/components/ui/CreditCardModal'
+import Alert from '@/components/ui/Alert'
+import { paymentMethods as seedMethods, type PaymentMethodRecord } from '@/data/account'
 
 export default function AccountPayment() {
+  const [methods, setMethods] = useState<PaymentMethodRecord[]>(seedMethods)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [saved, setSaved] = useState<string | null>(null)
+
+  /** A card added here is not yet carrying any renewal, so usedFor is empty. */
+  const handleAdd = (details: CardDetails) => {
+    setMethods(prev => [...prev, { ...details, isDefault: false, usedFor: [] }])
+    setSaved(`${details.brand} ending in ${details.last4} added.`)
+    setModalOpen(false)
+  }
+
   return (
     <AccountLayout
       title="Payment methods"
@@ -10,6 +24,7 @@ export default function AccountPayment() {
       actions={
         <button
           type="button"
+          onClick={() => { setSaved(null); setModalOpen(true) }}
           className="inline-flex items-center gap-2 bg-navy-bolder text-white font-body font-bold text-[15px] px-5 py-3 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors"
         >
           <i className="fa-solid fa-plus text-[12px]" aria-hidden="true" />
@@ -17,9 +32,15 @@ export default function AccountPayment() {
         </button>
       }
     >
+      {saved && (
+        <Alert variant="success" title={saved}>
+          Prototype only — nothing is persisted between page loads.
+        </Alert>
+      )}
+
       <AccountCard>
         <DataTable caption="Saved payment methods" columns={['Card', 'Expires', 'Used for', '']}>
-          {paymentMethods.map(m => (
+          {methods.map(m => (
             <tr key={m.last4} className="border-b border-[#e8eaed] last:border-b-0">
               <Td className="whitespace-nowrap">
                 <span className="font-bold text-navy-bolder">{m.brand} ····&nbsp;{m.last4}</span>
@@ -59,6 +80,15 @@ export default function AccountPayment() {
           will switch off.
         </p>
       </div>
+
+      <CreditCardModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSuccess={(_last4, details) => handleAdd(details)}
+        title="Add a credit card"
+        submitLabel="Save card"
+        submitVariant="navy"
+      />
     </AccountLayout>
   )
 }
