@@ -1,4 +1,5 @@
 import { useId, useRef, useState } from 'react'
+import Alert from '@/components/ui/Alert'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -250,15 +251,9 @@ export default function NavalHistorySubscribeCheckout() {
 
                 <div ref={alertRef}>
                   {showErrors && missing.length > 0 && (
-                    <div role="alert" className="flex gap-3 items-start border border-l-4 border-red-600 bg-red-50 px-5 py-4 scroll-mt-28">
-                      <i className="fa-solid fa-circle-exclamation text-red-600 text-[15px] mt-[3px] flex-shrink-0" aria-hidden="true" />
-                      <div>
-                        <p className="font-body font-bold text-[15px] text-[#1d2535] mb-0.5">Please complete the required fields</p>
-                        <p className="font-body text-[14px] text-[#1d2535] leading-relaxed">
-                          The following {missing.length === 1 ? 'item is' : 'items are'} required: {missing.join(', ')}.
-                        </p>
-                      </div>
-                    </div>
+                    <Alert variant="danger" title="Please complete the required fields" className="scroll-mt-28">
+                      The following {missing.length === 1 ? 'item is' : 'items are'} required: {missing.join(', ')}.
+                    </Alert>
                   )}
                 </div>
 

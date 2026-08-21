@@ -10,6 +10,7 @@ import { PLAN_LABELS, TERM_LABELS, makeOrderNumber } from '@/data/transactions'
 import { militaryStatuses, services, suffixes } from '@/data/essaySubmission'
 import { ACCOUNT_ADDRESS, ACCOUNT_CARD, isTestLogin } from '@/data/testAccount'
 import { ChoiceOption, SignedInAs, addressLines } from '@/components/ui/SavedOnFile'
+import Alert from '@/components/ui/Alert'
 
 const US_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
@@ -113,18 +114,10 @@ function RequiredFieldsAlert({
   missingFields: string[]; alertRef: React.RefObject<HTMLDivElement>
 }) {
   return (
-    <div
-      ref={alertRef}
-      role="alert"
-      className="flex gap-3 items-start border border-l-4 border-red-600 bg-red-50 px-5 py-4 scroll-mt-28"
-    >
-      <i className="fa-solid fa-circle-exclamation text-red-600 text-[15px] mt-[3px] flex-shrink-0" aria-hidden="true" />
-      <div>
-        <p className="font-body font-bold text-[15px] text-[#1d2535] mb-0.5">Please complete the required fields</p>
-        <p className="font-body text-[14px] text-[#1d2535] leading-relaxed">
-          The following {missingFields.length === 1 ? 'item is' : 'items are'} required: {missingFields.join(', ')}.
-        </p>
-      </div>
+    <div ref={alertRef} className="scroll-mt-28">
+      <Alert variant="danger" title="Please complete the required fields">
+        The following {missingFields.length === 1 ? 'item is' : 'items are'} required: {missingFields.join(', ')}.
+      </Alert>
     </div>
   )
 }

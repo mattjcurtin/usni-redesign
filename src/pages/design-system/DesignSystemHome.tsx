@@ -24,6 +24,11 @@ const sections: Section[] = [
     href: '/design-system/cards',
   },
   {
+    title: 'Alerts',
+    description: 'Success, warning, information, and danger status messages.',
+    href: '/design-system/alerts',
+  },
+  {
     title: 'Forms & Inputs',
     description: 'Search, newsletter, and checkout form patterns.',
     href: '/design-system/forms',

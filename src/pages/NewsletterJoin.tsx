@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import Alert from '@/components/ui/Alert'
 
 const AGE_RANGES = ['Under 18', '18–24', '25–34', '35–44', '45–54', '55–64', '65 or older']
 const SALUTATIONS = ['Mr.', 'Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.', 'Adm.', 'CAPT', 'CDR', 'LCDR', 'MAJ', 'COL', 'GEN']
@@ -177,17 +178,13 @@ export default function NewsletterJoin() {
                   {/* Error summary — keyboard and screen-reader users land here on a failed submit */}
                   <div ref={summaryRef}>
                     {errorCount > 0 && (
-                      <div
-                        role="alert"
-                        className="border border-l-4 border-[#c1121f] bg-[#fef6f6] px-5 py-4 mb-6"
+                      <Alert
+                        variant="danger"
+                        title={`${errorCount} ${errorCount === 1 ? 'field needs' : 'fields need'} attention`}
+                        className="mb-6"
                       >
-                        <p className="font-body font-bold text-base text-navy-bolder mb-1">
-                          {errorCount} {errorCount === 1 ? 'field needs' : 'fields need'} attention
-                        </p>
-                        <p className="font-body text-sm text-neutral-subtle">
-                          Fix the highlighted fields below, then subscribe again.
-                        </p>
-                      </div>
+                        Fix the highlighted fields below, then subscribe again.
+                      </Alert>
                     )}
                   </div>
 

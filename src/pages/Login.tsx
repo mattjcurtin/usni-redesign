@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import membershipHero from '@/assets/images/membership-hero.png'
 import { isTestLogin } from '@/data/testAccount'
+import Alert from '@/components/ui/Alert'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -39,32 +40,9 @@ export default function Login() {
         <section className="py-16 lg:py-24">
           <div className="container-site">
             {loggedOut && (
-              <div
-                role="status"
-                className="bg-[#dbeace] px-6 py-5 mb-10 lg:mb-12 flex items-start gap-4"
-              >
-                <svg
-                  className="w-7 h-7 flex-shrink-0 text-[#1d2535]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M8.5 12.5l2.5 2.5 4.5-5" />
-                </svg>
-                <div className="min-w-0">
-                  <p className="font-body font-bold text-[17px] text-[#1d2535] leading-snug">
-                    You’ve been logged out
-                  </p>
-                  <p className="font-body text-[17px] text-[#1d2535] leading-snug">
-                    Don’t worry, you can log back in below
-                  </p>
-                </div>
-              </div>
+              <Alert variant="success" title="You’ve been logged out" className="mb-10 lg:mb-12">
+                Don’t worry, you can log back in below.
+              </Alert>
             )}
 
             <div className="flex flex-col lg:flex-row lg:items-start gap-12 lg:gap-16 xl:gap-24">

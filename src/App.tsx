@@ -70,6 +70,7 @@ import DesignSystemHome from '@/pages/design-system/DesignSystemHome'
 import StyleGuide from '@/pages/design-system/StyleGuide'
 import DesignSystemButtons from '@/pages/design-system/Buttons'
 import DesignSystemCards from '@/pages/design-system/Cards'
+import DsAlerts from '@/pages/design-system/Alerts'
 import DesignSystemForms from '@/pages/design-system/Forms'
 import DesignSystemNavigation from '@/pages/design-system/Navigation'
 import DesignSystemIconography from '@/pages/design-system/Iconography'
@@ -165,6 +166,7 @@ export default function App() {
         <Route path="/design-system/style-guide" element={<StyleGuide />} />
         <Route path="/design-system/buttons" element={<DesignSystemButtons />} />
         <Route path="/design-system/cards" element={<DesignSystemCards />} />
+        <Route path="/design-system/alerts" element={<DsAlerts />} />
         <Route path="/design-system/forms" element={<DesignSystemForms />} />
         <Route path="/design-system/navigation" element={<DesignSystemNavigation />} />
         <Route path="/design-system/iconography" element={<DesignSystemIconography />} />

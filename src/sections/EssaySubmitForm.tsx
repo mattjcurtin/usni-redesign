@@ -20,6 +20,7 @@ import {
   ALLOWED_FILE_EXT,
 } from '@/data/essaySubmission'
 import { contestFullTitle, isPhotoEntry, type EssayContest } from '@/data/essayContests'
+import Alert from '@/components/ui/Alert'
 
 /** Upload rules per entry kind. Photos come in batches; an essay is one file. */
 const PHOTO_FILE_EXT = '.jpg, .jpeg, .tif, .tiff'
@@ -586,17 +587,13 @@ export default function EssaySubmitForm({ contest }: { contest: EssayContest }) 
           {/* Error summary — keyboard and screen-reader users land here on a failed submit */}
           <div ref={summaryRef}>
             {errorCount > 0 && (
-              <div
-                role="alert"
-                className="border border-l-4 border-[#c1121f] bg-[#fef6f6] px-5 py-4 mb-8"
+              <Alert
+                variant="danger"
+                title={`${errorCount} ${errorCount === 1 ? 'field needs' : 'fields need'} attention`}
+                className="mb-8"
               >
-                <p className="font-body font-bold text-base text-navy-bolder mb-1">
-                  {errorCount} {errorCount === 1 ? 'field needs' : 'fields need'} attention
-                </p>
-                <p className="font-body text-sm text-neutral-subtle">
-                  Scroll down to the highlighted fields to fix them, then submit again.
-                </p>
-              </div>
+                Scroll down to the highlighted fields to fix them, then submit again.
+              </Alert>
             )}
           </div>
 

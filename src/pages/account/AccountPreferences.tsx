@@ -2,6 +2,7 @@ import { useState } from 'react'
 import AccountLayout from '@/components/layout/AccountLayout'
 import { AccountCard, Toggle } from '@/components/ui/AccountCard'
 import { mailPreferences, newsletterInterests } from '@/data/account'
+import Alert from '@/components/ui/Alert'
 
 /**
  * Email and mail preferences.
@@ -28,12 +29,9 @@ export default function AccountPreferences() {
       lede="What the Institute sends you, and how."
     >
       {saved && (
-        <div role="alert" className="border border-l-4 border-[#0a5c2e] bg-[#e6f7ed] px-5 py-4">
-          <p className="font-body font-bold text-[15px] text-navy-bolder">Preferences saved</p>
-          <p className="font-body text-[14px] text-neutral-subtle">
-            Prototype only — nothing is persisted between page loads.
-          </p>
-        </div>
+        <Alert variant="success" title="Preferences saved">
+          Prototype only — nothing is persisted between page loads.
+        </Alert>
       )}
 
       <AccountCard title={`Newsletters (${subscribedCount} of ${newsletterInterests.length})`}>

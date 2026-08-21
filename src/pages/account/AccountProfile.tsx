@@ -4,6 +4,7 @@ import { AccountCard } from '@/components/ui/AccountCard'
 import { Field, SelectInput, TextInput, CheckboxField } from '@/components/ui/FormField'
 import { countries, militaryStatuses, services, suffixes } from '@/data/essaySubmission'
 import { member } from '@/data/account'
+import Alert from '@/components/ui/Alert'
 
 /**
  * Profile / Edit Account.
@@ -41,12 +42,9 @@ export default function AccountProfile() {
       lede="Your name, service record, and how the Institute reaches you."
     >
       {saved && (
-        <div role="alert" className="border border-l-4 border-[#0a5c2e] bg-[#e6f7ed] px-5 py-4">
-          <p className="font-body font-bold text-[15px] text-navy-bolder">Changes saved</p>
-          <p className="font-body text-[14px] text-neutral-subtle">
-            Prototype only — nothing is persisted between page loads.
-          </p>
-        </div>
+        <Alert variant="success" title="Changes saved">
+          Prototype only — nothing is persisted between page loads.
+        </Alert>
       )}
 
       <form

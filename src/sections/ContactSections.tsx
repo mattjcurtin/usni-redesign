@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Alert from '@/components/ui/Alert'
 import { Field, SelectInput, TextArea, TextInput } from '@/components/ui/FormField'
 import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
 import { useState } from 'react'
@@ -161,12 +162,9 @@ export function ContactGeneral() {
             >
               <p className="font-headline text-[26px] text-navy-bolder leading-tight">Send us a message</p>
               {showErrors && missing.length > 0 && (
-                <div role="alert" className="border border-l-4 border-[#c1121f] bg-[#fef6f6] px-5 py-4">
-                  <p className="font-body font-bold text-[15px] text-navy-bolder mb-0.5">
-                    Please complete the required fields
-                  </p>
-                  <p className="font-body text-[14px] text-neutral-subtle">{missing.join(', ')}.</p>
-                </div>
+                <Alert variant="danger" title="Please complete the required fields">
+                  {missing.join(', ')}.
+                </Alert>
               )}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Field label="Your name" htmlFor="ct-name" required error={err(form.name)} className="flex-1">
@@ -338,12 +336,9 @@ export function ContactArchives() {
           </DetailBlock>
         </div>
 
-        <div className="border border-l-4 border-[#bcd8f7] bg-[#ebf4ff] px-5 py-4 max-w-[820px]">
-          <p className="font-body font-bold text-[15px] text-navy-bolder mb-1">Response times</p>
-          <p className="font-body text-[15px] text-neutral-subtle leading-relaxed">
-            {archivesContact.turnaround}
-          </p>
-        </div>
+        <Alert variant="info" title="Response times" className="max-w-[820px]">
+          {archivesContact.turnaround}
+        </Alert>
       </div>
     </Section>
   )
