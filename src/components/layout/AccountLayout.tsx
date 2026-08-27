@@ -12,8 +12,8 @@ import { PLACEHOLDER_IMAGE } from '@/data/leadership'
  * The live Drupal account uses a banner plus a persistent left sidebar holding an
  * avatar and a flat nav list (see project-references/account-section-audit.md).
  * That shape is kept because members know it; what changes is the grouping — the
- * live list mixes a member's own records, marketing content, and developer keys
- * into one undifferentiated column.
+ * live list mixes a member's own records with marketing content in one
+ * undifferentiated column.
  */
 
 interface NavItem {
@@ -43,6 +43,7 @@ export const ACCOUNT_NAV: NavGroup[] = [
       { label: 'Subscriptions', href: '/account/subscriptions' },
       { label: 'Giving history', href: '/account/giving' },
       { label: 'Saved articles', href: '/account/saved' },
+      { label: 'Wishlist', href: '/account/wishlist' },
     ],
   },
   {
@@ -50,7 +51,6 @@ export const ACCOUNT_NAV: NavGroup[] = [
     items: [
       { label: 'Partner discounts', href: '/account/benefits' },
       { label: 'Email & mail preferences', href: '/account/preferences' },
-      { label: 'API keys', href: '/account/api-keys' },
     ],
   },
 ]
@@ -279,8 +279,12 @@ export default function AccountLayout({
                     <h2 className="font-headline text-[30px] lg:text-[34px] text-navy-bolder leading-[1.15]">
                       {title}
                     </h2>
+                    {/* Lede measure is 760px rather than 620px: every account
+                        lede is a single sentence, and the longest of them
+                        (Wishlist, Payment methods) run to ~700px at 15px Inter,
+                        so 620 broke one word onto a second line. */}
                     {lede && (
-                      <p className="font-body text-[15px] text-neutral-subtle leading-relaxed mt-1.5 max-w-[620px]">
+                      <p className="font-body text-[15px] text-neutral-subtle leading-relaxed mt-1.5 max-w-[760px]">
                         {lede}
                       </p>
                     )}

@@ -8,7 +8,7 @@ const navItems = [
   { label: 'Professional Military Education', href: '/books/pme' },
   { label: 'Oral Histories', href: '/books/oral-histories' },
   { label: 'About the Press', href: '/books/about' },
-  { label: 'Contact the Press', href: '/books/contact' },
+  { label: 'Contact the Press', href: '/contact#press' },
 ]
 
 export default function BooksSubNav() {

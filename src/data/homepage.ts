@@ -32,7 +32,7 @@ export const archivesDropdown: NavItem[] = [
   { label: 'Oral Histories', href: '/archive/oral-histories' },
   { label: 'Memoirs', href: '/archive/memoirs' },
   { label: 'Photos', href: 'https://photos.usni.org', external: true },
-  { label: 'Contact the Archives', href: '/archive/contact' },
+  { label: 'Contact the Archives', href: '/contact#archives' },
 ]
 
 export const navItems: NavItem[] = [
@@ -43,7 +43,7 @@ export const navItems: NavItem[] = [
       { label: 'Overview', href: '/membership' },
       { label: 'Plans & Pricing', href: '/membership/join' },
       { label: 'Renew', href: '/login' },
-      { label: 'Contact Member Services', href: '/membership/contact' },
+      { label: 'Contact Member Services', href: '/contact#membership' },
       { label: 'Join', href: '/membership/join' },
     ],
     megaCta: {
@@ -89,7 +89,7 @@ export const navItems: NavItem[] = [
       { label: 'All Issues', href: '/naval-history/all-issues' },
       { label: 'Essay Contests', href: '/essay-contests' },
       { label: 'Submission Guidelines', href: '/naval-history/submissions' },
-      { label: 'Contact Naval History', href: '/naval-history/contact' },
+      { label: 'Contact Naval History', href: '/contact#general' },
       { label: 'Subscribe', href: '/naval-history/subscribe' },
     ],
     megaCta: {
@@ -113,7 +113,7 @@ export const navItems: NavItem[] = [
       { label: 'Professional Military Education', href: '/books/pme' },
       { label: 'Oral Histories', href: '/archive/oral-histories' },
       { label: 'About the Press', href: '/books/about' },
-      { label: 'Contact the Press', href: '/books/contact' },
+      { label: 'Contact the Press', href: '/contact#press' },
     ],
     megaCta: {
       eyebrow: 'Featured New Release',
@@ -138,7 +138,7 @@ export const navItems: NavItem[] = [
       { label: 'Leadership', href: '/about/leadership' },
       { label: 'Jack C. Taylor Conference Center', href: '/about/taylor-conference-center' },
       { label: 'Media Inquiries', href: '/about/media' },
-      { label: 'Contact USNI', href: '/about/contact' },
+      { label: 'Contact USNI', href: '/contact#general' },
     ],
     megaCta: {
       headline: '150+ Years of Independent Thought',
@@ -160,7 +160,7 @@ export const navItems: NavItem[] = [
       { label: 'Leadership & Staff', href: '/giving/leadership' },
       { label: 'Recognition Societies', href: '/giving/recognition' },
       { label: 'Corporate', href: '/giving/corporate' },
-      { label: 'Contact the Foundation', href: '/giving/contact' },
+      { label: 'Contact the Foundation', href: '/contact#foundation' },
       { label: 'Donate Today', href: '/giving/donate' },
     ],
     megaCta: {

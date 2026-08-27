@@ -20,7 +20,7 @@ const links = [
     headline: 'Contact Naval History',
     body: 'Have a question for the editorial team? Reach out about subscriptions, submissions, advertising, or any other Naval History Magazine inquiry.',
     cta: 'Contact Naval History',
-    href: '/naval-history/contact',
+    href: '/contact#general',
     icon: 'fa-solid fa-envelope',
   },
 ]

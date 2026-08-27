@@ -8,6 +8,8 @@
  * `membership.statusAvailable === false`.
  */
 
+import { allBooks, type Book } from '@/data/books'
+
 export interface Entitlement {
   label: string
   detail: string
@@ -68,6 +70,13 @@ export interface SavedArticle {
   href: string
 }
 
+export interface WishlistItem {
+  /** Resolved from the Press catalogue rather than restated, so a price or
+      cover change in one place doesn't leave the wishlist quoting stale copy. */
+  book: Book
+  addedOn: string
+}
+
 export interface AddressRecord {
   label: string
   isDefault: boolean
@@ -115,16 +124,16 @@ export const membership: Membership = {
 }
 
 /**
- * Derived from the roles the live site uses to gate access:
+ * Derived from the member-facing roles the live site uses to gate access:
  * online_member, proceedings_subscriber, naval_history_subscriber,
- * combat_fleets_subscriber, api_subscriber.
+ * combat_fleets_subscriber. Administrative roles are deliberately absent —
+ * this list is what a member's dues buy, not what an operator can do.
  */
 export const entitlements: Entitlement[] = [
   { label: 'Proceedings', detail: 'Print and digital, plus the full archive', role: 'proceedings_subscriber', active: true },
   { label: 'Naval History', detail: 'Digital access; print available as an add-on', role: 'naval_history_subscriber', active: true },
   { label: 'Digital archive', detail: 'Every issue back to 1874', role: 'online_member', active: true },
   { label: 'Combat Fleets', detail: 'Reference database — not on your plan', role: 'combat_fleets_subscriber', active: false },
-  { label: 'API access', detail: 'Developer keys — not on your plan', role: 'api_subscriber', active: false },
 ]
 
 export const orders: OrderRecord[] = [
@@ -251,6 +260,23 @@ export const savedArticles: SavedArticle[] = [
     href: '/naval-history/mitscher-at-midway',
   },
 ]
+
+/**
+ * Books saved from the Press catalogue. The product page has offered an "Add to
+ * Wishlist" control all along with nowhere for it to land; this is that list.
+ */
+const wishlistSeed: { id: string; addedOn: string }[] = [
+  { id: 'nr9',  addedOn: 'August 18, 2026' },
+  { id: 'ex3',  addedOn: 'August 4, 2026' },
+  { id: 'bs1',  addedOn: 'July 22, 2026' },
+  { id: 'nr2',  addedOn: 'June 30, 2026' },
+  { id: 'bs8',  addedOn: 'May 12, 2026' },
+]
+
+export const wishlist: WishlistItem[] = wishlistSeed.flatMap(entry => {
+  const book = allBooks.find(b => b.id === entry.id)
+  return book ? [{ book, addedOn: entry.addedOn }] : []
+})
 
 export const addresses: AddressRecord[] = [
   {

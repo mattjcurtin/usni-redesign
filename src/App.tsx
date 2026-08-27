@@ -39,6 +39,7 @@ import ProceedingsPodcast from '@/pages/ProceedingsPodcast'
 import BooksAndPress from '@/pages/BooksAndPress'
 import ProceedingsArticle from '@/pages/ProceedingsArticle'
 import ProceedingsContact from '@/pages/ProceedingsContact'
+import ProceedingsSubmissions from '@/pages/ProceedingsSubmissions'
 import MembershipCart from '@/pages/MembershipCart'
 import MembershipCheckout from '@/pages/MembershipCheckout'
 import MembershipConfirmation from '@/pages/MembershipConfirmation'
@@ -88,9 +89,9 @@ import AccountOrders from '@/pages/account/AccountOrders'
 import AccountSubscriptions from '@/pages/account/AccountSubscriptions'
 import AccountGiving from '@/pages/account/AccountGiving'
 import AccountSaved from '@/pages/account/AccountSaved'
+import AccountWishlist from '@/pages/account/AccountWishlist'
 import AccountPreferences from '@/pages/account/AccountPreferences'
 import AccountBenefits from '@/pages/account/AccountBenefits'
-import AccountApiKeys from '@/pages/account/AccountApiKeys'
 import Contact from '@/pages/Contact'
 import NotFound from '@/pages/NotFound'
 
@@ -119,6 +120,7 @@ export default function App() {
         <Route path="/proceedings/all-issues" element={<ProceedingsAllIssues />} />
         <Route path="/proceedings/podcast" element={<ProceedingsPodcast />} />
         <Route path="/proceedings/contact" element={<ProceedingsContact />} />
+        <Route path="/proceedings/submissions" element={<ProceedingsSubmissions />} />
         <Route path="/books" element={<BooksAndPress />} />
         <Route path="/books/collection" element={<BooksCollection />} />
         <Route path="/books/new-releases" element={<BooksNewReleases />} />
@@ -144,9 +146,9 @@ export default function App() {
         <Route path="/account/subscriptions" element={<AccountSubscriptions />} />
         <Route path="/account/giving" element={<AccountGiving />} />
         <Route path="/account/saved" element={<AccountSaved />} />
+        <Route path="/account/wishlist" element={<AccountWishlist />} />
         <Route path="/account/preferences" element={<AccountPreferences />} />
         <Route path="/account/benefits" element={<AccountBenefits />} />
-        <Route path="/account/api-keys" element={<AccountApiKeys />} />
         <Route path="/proceedings/three-mefs" element={<ProceedingsArticle />} />
         <Route path="/proceedings/fortifying-digital-watch" element={<ProceedingsArticleFortifying />} />
         <Route path="/proceedings/naval-aviation-got-better" element={<ProceedingsArticleGrubb />} />
