@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Pagination from '@/components/ui/Pagination'
+import IssueCoverCard from '@/components/ui/IssueCoverCard'
 
 import aug26Cover from '@/assets/images/proceedings-magazine-aug26-cover.png'
 import jul26Cover from '@/assets/images/proceedings-magazine-jul26-cover.png'
@@ -53,24 +54,6 @@ const months = [
 const selectClasses =
   'font-body text-sm text-navy-bolder border border-[#94A3B8] px-3 py-2.5 pr-8 outline-none ' +
   'focus:border-navy-bright focus:shadow-[0_0_0_3px_rgba(4,102,200,0.15)] bg-white transition'
-
-function IssueCard({ issue }: { issue: Issue }) {
-  return (
-    <a href={issue.href} className="group flex flex-col">
-      <div className="aspect-[534/728] overflow-hidden bg-neutral-subtlest">
-        <img
-          src={issue.cover}
-          alt={`Proceedings ${issue.month} ${issue.year} cover`}
-          className="w-full h-full object-cover shadow-md group-hover:opacity-90 transition-opacity"
-        />
-      </div>
-      <p className="font-body font-bold text-[17px] lg:text-[18px] text-navy-bolder leading-snug mt-4 group-hover:text-navy-subtle transition-colors">
-        Proceedings &ndash; {issue.month} {issue.year}
-        <span className="block">{issue.vol}</span>
-      </p>
-    </a>
-  )
-}
 
 export default function ProceedingsAllIssuesGrid() {
   const [year, setYear] = useState('all')
@@ -129,7 +112,15 @@ export default function ProceedingsAllIssuesGrid() {
         {filtered.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-10 lg:gap-y-12">
             {filtered.map((issue) => (
-              <IssueCard key={`${issue.month}-${issue.year}`} issue={issue} />
+              <IssueCoverCard
+                key={`${issue.month}-${issue.year}`}
+                href={issue.href}
+                cover={issue.cover}
+                alt={`Proceedings ${issue.month} ${issue.year} cover`}
+                title={`Proceedings \u2013 ${issue.month} ${issue.year}`}
+                subtitle={issue.vol}
+                aspect="aspect-[534/728]"
+              />
             ))}
           </div>
         ) : (

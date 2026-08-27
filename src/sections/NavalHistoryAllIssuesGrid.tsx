@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Pagination from '@/components/ui/Pagination'
+import IssueCoverCard from '@/components/ui/IssueCoverCard'
 
 import aug26Cover from '@/assets/images/naval-history-magazine-aug26-cover.jpg'
 import jun26Cover from '@/assets/images/naval-history-magazine-jun26-cover.jpg'
@@ -53,42 +54,6 @@ const months = ['February', 'April', 'June', 'August', 'October', 'December']
 const selectClasses =
   'font-body text-sm text-navy-bolder border border-[#94A3B8] px-3 py-2.5 pr-8 outline-none ' +
   'focus:border-navy-bright focus:shadow-[0_0_0_3px_rgba(4,102,200,0.15)] bg-white transition'
-
-function IssueCard({ issue }: { issue: Issue }) {
-  return (
-    <a href={issue.href} className="group flex flex-col">
-      {/* No overflow-hidden on the aspect box: the cover lifts out of it on
-          hover and the deepened shadow falls outside it — the same move the
-          book cards use. Clipping would eat both. */}
-      <div className="aspect-[2400/3175] bg-neutral-subtlest">
-        <img
-          src={issue.cover}
-          alt={`Naval History ${issue.month} ${issue.year} cover`}
-          loading="lazy"
-          /* Hand-rolled shadows rather than shadow-md/shadow-xl: those carry a
-             negative spread and a big downward offset, so on a tall cover the
-             blur pools under the bottom edge and pinches out at the corners,
-             reading as a shadow cut off at the sides. Zero horizontal offset
-             and no spread reduction wraps all four edges evenly. */
-          className="w-full h-full object-cover transition-[transform,box-shadow] duration-300
-            shadow-[0_2px_8px_rgba(0,18,51,0.14)]
-            group-hover:-translate-y-2 group-hover:shadow-[0_10px_26px_rgba(0,18,51,0.24)]"
-        />
-      </div>
-      <p className="font-body font-bold text-[17px] lg:text-[18px] text-navy-bolder leading-snug mt-4 group-hover:text-navy-subtle transition-colors">
-        {/* article-link--card sweeps the blue underline from a hover anywhere
-            on the card. Both lines carry it, as one span each rather than a
-            block wrapper: the class clones its gradient per rendered line, so a
-            long issue name that wraps still underlines every line of itself. */}
-        <span className="article-link article-link--card">
-          Naval History &ndash; {issue.month} {issue.year}
-        </span>
-        <br />
-        <span className="article-link article-link--card">{issue.vol}</span>
-      </p>
-    </a>
-  )
-}
 
 export default function NavalHistoryAllIssuesGrid() {
   const [year, setYear] = useState('all')
@@ -148,7 +113,15 @@ export default function NavalHistoryAllIssuesGrid() {
         {filtered.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-6 lg:gap-x-8 gap-y-10 lg:gap-y-12">
             {filtered.map((issue) => (
-              <IssueCard key={`${issue.month}-${issue.year}`} issue={issue} />
+              <IssueCoverCard
+                key={`${issue.month}-${issue.year}`}
+                href={issue.href}
+                cover={issue.cover}
+                alt={`Naval History ${issue.month} ${issue.year} cover`}
+                title={`Naval History \u2013 ${issue.month} ${issue.year}`}
+                subtitle={issue.vol}
+                aspect="aspect-[2400/3175]"
+              />
             ))}
           </div>
         ) : (
