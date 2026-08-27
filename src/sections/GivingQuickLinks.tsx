@@ -28,7 +28,7 @@ const links = [
     headline: 'Contact the Foundation',
     body: 'Reach our development team with questions about giving, pledges, planned gifts, or any aspect of supporting the Naval Institute.',
     cta: 'Contact the Foundation',
-    href: '/giving/contact',
+    href: '/contact#foundation',
     icon: 'fa-solid fa-envelope',
   },
 ]

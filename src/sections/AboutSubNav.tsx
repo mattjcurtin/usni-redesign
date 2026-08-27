@@ -15,7 +15,7 @@ const navItems = [
   { label: 'Leadership & Staff', href: '/about/leadership' },
   { label: 'Jack C. Taylor Conference Center', href: '/about/taylor-conference-center' },
   { label: 'Media Inquiries', href: '/about/media' },
-  { label: 'Contact USNI', href: '/about/contact' },
+  { label: 'Contact USNI', href: '/contact#general' },
 ]
 
 function isActive(pathname: string, href: string) {

@@ -54,7 +54,7 @@ export default function NavalHistoryCartItems() {
           <p className="font-body text-[16px] text-[#1d2535] leading-[1.5]">
             Thank you for subscribing to Naval History! Check the format and term below before
             proceeding to checkout. If you have any questions, please{' '}
-            <a href="/proceedings/contact" className="transition-colors text-link">
+            <a href="/contact#general" className="transition-colors text-link">
               contact us
             </a>.
           </p>
