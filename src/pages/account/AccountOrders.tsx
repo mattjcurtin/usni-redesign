@@ -79,7 +79,7 @@ export default function AccountOrders() {
         ) : (
           <DataTable
             caption="Your order history"
-            columns={['Order', 'Date', 'Items', 'Total', 'Status', 'Receipt']}
+            columns={['Order', 'Date', 'Items', 'Total', 'Status', 'Details']}
           >
             {visible.map(o => (
               <tr key={o.number} className="border-b border-[#e8eaed] last:border-b-0">
@@ -94,7 +94,7 @@ export default function AccountOrders() {
                       to={o.receiptHref}
                       className="inline-flex items-center gap-1.5 font-body font-semibold text-[14px] whitespace-nowrap text-link"
                     >
-                      View receipt
+                      View details
                       <i className="fa-solid fa-arrow-right text-[11px]" aria-hidden="true" />
                     </Link>
                   ) : (

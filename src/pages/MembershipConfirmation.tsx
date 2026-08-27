@@ -73,8 +73,7 @@ export default function MembershipConfirmation() {
       body: (
         <>
           A confirmation with this order number has been emailed to{' '}
-          <span className="font-bold text-[#1d2535]">{email}</span>. Keep it for your records — it
-          doubles as proof of membership until your card arrives.
+          <span className="font-bold text-[#1d2535]">{email}</span>. Keep it for your records.
         </>
       ),
     },
@@ -88,16 +87,17 @@ export default function MembershipConfirmation() {
       ),
     },
     {
-      title: isGift ? 'The recipient hears from us next' : 'Your member packet ships within two weeks',
+      // No packet or card: the Institute no longer mails either, so this step is
+      // about the magazines only.
+      title: isGift ? 'The recipient hears from us next' : 'Watch for your magazines in the mail',
       body: isGift ? (
         <>
           {giftName ? <span className="font-bold text-[#1d2535]">{giftName}</span> : 'Your recipient'}{' '}
-          will receive a note announcing the gift, followed by their member card and first issue.
+          will receive a note announcing the gift, followed by their first issue.
         </>
       ) : (
         <>
-          Your member card and welcome materials go out by mail. Print issues begin with the next
-          published number, typically four to six weeks out.
+          Print issues begin with the next published number, typically four to six weeks out.
         </>
       ),
     },
