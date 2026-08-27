@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import AccountLayout from '@/components/layout/AccountLayout'
 import { AccountCard, Badge, DataRow, SectionLink, Toggle } from '@/components/ui/AccountCard'
+import Modal from '@/components/ui/Modal'
+import Alert from '@/components/ui/Alert'
 import {
-  entitlements,
   giving,
   givingTotals,
   membership,
@@ -24,11 +25,23 @@ import {
  */
 export default function AccountDashboard() {
   const [autoRenew, setAutoRenew] = useState(membership.autoRenew)
+  const [confirmOff, setConfirmOff] = useState(false)
   const recentOrders = orders.slice(0, 3)
   const towardCircle = Math.min(
     100,
     Math.round((givingTotals.yearToDate / givingTotals.leadershipCircleThreshold) * 100),
   )
+
+  /*
+   * Switching auto-renew off lapses the membership, so it asks first; switching
+   * it back on is harmless and stays a single tap. The toggle itself does not
+   * move until the member confirms — flipping it and then undoing it on cancel
+   * would read as though the setting had already changed.
+   */
+  const handleAutoRenew = () => {
+    if (autoRenew) setConfirmOff(true)
+    else setAutoRenew(true)
+  }
 
   return (
     <AccountLayout
@@ -55,7 +68,7 @@ export default function AccountDashboard() {
             {[
               { label: 'Term', value: membership.term },
               { label: 'Renews on', value: membership.renewsOn },
-              { label: 'Dues', value: `$${membership.price}/year` },
+              { label: 'Price', value: `$${membership.price}/year` },
             ].map(stat => (
               <div key={stat.label} className="px-6 py-4">
                 <p className="font-body font-semibold text-[12px] uppercase tracking-[0.06em] text-neutral-subtle">
@@ -68,7 +81,7 @@ export default function AccountDashboard() {
 
           <div className="px-6 py-5 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-start gap-3 max-w-[460px]">
-              <Toggle on={autoRenew} label="Auto-renew membership" onChange={() => setAutoRenew(!autoRenew)} />
+              <Toggle on={autoRenew} label="Auto-renew membership" onChange={handleAutoRenew} />
               <p className="font-body text-[14px] text-neutral-subtle leading-relaxed">
                 {autoRenew ? (
                   <>
@@ -108,26 +121,6 @@ export default function AccountDashboard() {
           </p>
         </div>
       )}
-
-      {/* ── Entitlements ──────────────────────────────────────────────── */}
-      <AccountCard title="What your membership includes">
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-          {entitlements.map(e => (
-            <li key={e.role} className="flex items-start gap-3">
-              <i
-                className={`fa-solid ${e.active ? 'fa-circle-check text-[#0a5c2e]' : 'fa-circle-minus text-[#c4c9d4]'} text-[15px] mt-0.5 flex-shrink-0`}
-                aria-hidden="true"
-              />
-              <div className="min-w-0">
-                <p className={`font-body font-bold text-[15px] ${e.active ? 'text-navy-bolder' : 'text-neutral-subtle'}`}>
-                  {e.label}
-                </p>
-                <p className="font-body text-[13px] text-neutral-subtle leading-snug">{e.detail}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </AccountCard>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* ── Recent orders ───────────────────────────────────────────── */}
@@ -234,6 +227,46 @@ export default function AccountDashboard() {
           </div>
         </AccountCard>
       </div>
+
+      {/* ── Confirm turning auto-renew off ────────────────────────────── */}
+      <Modal
+        open={confirmOff}
+        onClose={() => setConfirmOff(false)}
+        title="Turn off auto-renew?"
+        maxWidth="520px"
+      >
+        <Alert variant="warning" title={`Your membership would end on ${membership.renewsOn}`}>
+          We won’t charge your card again. On that date your {membership.plan} lapses, and access
+          to <em>Proceedings</em>, <em>Naval History</em>, and the digital archive ends with it.
+        </Alert>
+
+        <p className="font-body text-[15px] text-neutral-subtle leading-relaxed">
+          You can turn auto-renew back on at any time before {membership.renewsOn} and nothing will
+          change.
+        </p>
+
+        {/* The safe choice is the solid button and comes first, so the
+            destructive one is never the default action under a stray tap. */}
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setAutoRenew(false)
+              setConfirmOff(false)
+            }}
+            className="inline-flex items-center justify-center font-body font-bold text-[15px] text-[#c1121f] px-5 py-3 border border-[#c1121f] hover:bg-[#c1121f] hover:text-white transition-colors"
+          >
+            Turn off auto-renew
+          </button>
+          <button
+            type="button"
+            onClick={() => setConfirmOff(false)}
+            className="inline-flex items-center justify-center bg-navy-bolder text-white font-body font-bold text-[15px] px-5 py-3 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors"
+          >
+            Keep auto-renew on
+          </button>
+        </div>
+      </Modal>
 
     </AccountLayout>
   )
