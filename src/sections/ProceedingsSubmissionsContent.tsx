@@ -7,23 +7,17 @@ import type { ReactNode } from 'react'
  * section for section: an unheaded intro, then "Submission Guidelines and
  * Categories" listing seven departments as name / word count / description, then
  * "Additional Information" as four paragraphs with a rule before the standing
- * disclaimer. One reading column throughout, with the two section titles centred
- * between rules, as they are there.
+ * disclaimer. One reading column throughout.
  *
  * What changes is the styling, not the structure: the redesign's type scale,
  * navy tokens, and link treatment in place of the Drupal theme's.
  */
 
-/** Section title, centred between rules — the live page's featurette heading. */
 function SectionTitle({ children }: { children: ReactNode }) {
   return (
-    <div className="flex items-center gap-5 lg:gap-7">
-      <span className="h-px flex-1 bg-[#0466C8]" aria-hidden="true" />
-      <h2 className="font-headline text-[30px] lg:text-[40px] text-navy-bolder leading-[1.15] text-center">
-        {children}
-      </h2>
-      <span className="h-px flex-1 bg-[#0466C8]" aria-hidden="true" />
-    </div>
+    <h2 className="font-headline text-[30px] lg:text-[40px] text-navy-bolder leading-[1.15]">
+      {children}
+    </h2>
   )
 }
 
@@ -143,7 +137,7 @@ export default function ProceedingsSubmissionsContent() {
             <div className="flex flex-col gap-7">
               {categories.map(cat => (
                 <div key={cat.name} className="flex flex-col gap-1">
-                  <h3 className="font-body font-bold text-[18px] text-navy-bolder leading-snug">
+                  <h3 className="font-headline text-[24px] text-navy-bolder leading-tight">
                     {cat.name}
                   </h3>
                   <p className="font-body font-bold text-[15px] text-navy-bolder leading-snug">
