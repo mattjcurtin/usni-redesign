@@ -1,97 +1,131 @@
 import type { ReactNode } from 'react'
-import Alert from '@/components/ui/Alert'
-import { ButtonLink } from '@/components/ui/Button'
-import { submissionCategories } from '@/data/proceedingsSubmissions'
 
 /**
  * Proceedings submission guidelines.
  *
- * The live page is one undifferentiated column: how to submit, seven department
- * descriptions, and four paragraphs of policy all set at the same weight, with
- * each word limit demoted to an `<h6>` subtitle under its department name. Three
- * things change here. Submitting comes first as its own band, because that is
- * what the page is for. The departments become a card grid with the word limit
- * promoted to a badge, since the limit is what a writer checks before reading
- * anything else. And the two policy paragraphs that carry consequences — the AI
- * checker, and payment — are pulled out as alerts rather than left buried mid-run.
+ * Follows the live page at /periodicals/proceedings-magazine/submission-guidelines
+ * section for section: an unheaded intro, then "Submission Guidelines and
+ * Categories" listing seven departments as name / word count / description, then
+ * "Additional Information" as four paragraphs with a rule before the standing
+ * disclaimer. One reading column throughout, with the two section titles centred
+ * between rules, as they are there.
+ *
+ * What changes is the styling, not the structure: the redesign's type scale,
+ * navy tokens, and link treatment in place of the Drupal theme's.
  */
 
-const ARTICLE_FORM = '/proceedings/submissions/article-form'
-
-function SectionHeading({ children }: { children: ReactNode }) {
+/** Section title, centred between rules — the live page's featurette heading. */
+function SectionTitle({ children }: { children: ReactNode }) {
   return (
-    <div className="border-b border-[#0466C8] pb-4">
-      <h2 className="font-headline text-[32px] lg:text-[36px] text-navy-bolder leading-[1.2]">
+    <div className="flex items-center gap-5 lg:gap-7">
+      <span className="h-px flex-1 bg-[#0466C8]" aria-hidden="true" />
+      <h2 className="font-headline text-[30px] lg:text-[40px] text-navy-bolder leading-[1.15] text-center">
         {children}
       </h2>
+      <span className="h-px flex-1 bg-[#0466C8]" aria-hidden="true" />
     </div>
   )
 }
 
-function Label({ children }: { children: ReactNode }) {
+function Body({ children }: { children: ReactNode }) {
   return (
-    <p className="font-body font-bold text-[12px] uppercase tracking-[0.08em] text-neutral-subtle">
-      {children}
-    </p>
+    <p className="font-body text-base text-navy-bolder leading-[1.75]">{children}</p>
   )
 }
 
-/* ── How to submit ───────────────────────────────────────────────────────── */
+interface Category {
+  name: string
+  /** Parenthetical, exactly as the live page states it. */
+  limit: string
+  description: ReactNode
+}
 
-function HowToSubmit() {
+const categories: Category[] = [
+  {
+    name: 'Feature articles',
+    limit: '(2,500-word maximum, not including endnotes)',
+    description:
+      'These pieces deal with major issues facing the Sea Services, are instructive, accessible, offer fresh ways of looking at military matters, or describe situations and circumstances of which military professionals should be aware.',
+  },
+  {
+    name: 'Now Hear This/Nobody Asked Me, But . . .',
+    limit: '(650-word maximum)',
+    description:
+      "Both these columns are commentaries that express a reader's view on an issue of consequence to the national security community, and often challenge conventional thinking.",
+  },
+  {
+    name: 'Comment and Discussion',
+    limit: '(500-word maximum)',
+    description: (
+      <>
+        The equivalent of letters to the editor, &ldquo;Comment and Discussion&rdquo; items are
+        commentaries on articles that have run in <em>Proceedings</em> previously. This department
+        is where our independent forum gets a workout and, fittingly, it has its own email address,{' '}
+        <a href="mailto:commentanddiscussion@usni.org" className="text-link">
+          commentanddiscussion@usni.org
+        </a>
+        .
+      </>
+    ),
+  },
+  {
+    name: 'Professional Notes',
+    limit: '(1,000-word maximum, not including endnotes)',
+    description:
+      'This department—the oldest and among the most popular in the magazine—is the place for tips, advice, and instruction on shiphandling, small unit tactics, organization, training, or other more technical matters. Prof Notes attempt to identify and explain specific problems and, if possible, promote a solution.',
+  },
+  {
+    name: 'Book Reviews',
+    limit: '(650-word maximum)',
+    description: (
+      <>
+        All book reviews are commissioned by the editorial staff. If you would like to review books
+        for <em>Proceedings</em>, send a brief email to Book Review Editor, Jennifer Pompi, (
+        <a href="mailto:jpompi@usni.org?subject=Book%20Reviews" className="text-link">
+          jpompi@usni.org
+        </a>
+        ) describing your writing experience and the subjects you feel qualified to review.
+      </>
+    ),
+  },
+  {
+    name: 'Leadership Forum',
+    limit: '(1200-word maximum)',
+    description: 'This is a monthly departmental column devoted to lessons in leadership.',
+  },
+  {
+    name: 'From the Deckplates',
+    limit: '(1000 words maximum)',
+    description:
+      'This is a column for enlisted professionals to highlight issues and problems affecting the Navy today, and offering solutions for implementation.',
+  },
+]
+
+export default function ProceedingsSubmissionsContent() {
   return (
-    <section className="bg-white py-14 lg:py-16">
-      <div className="container-site flex flex-col gap-8 lg:gap-10">
-        <SectionHeading>How to submit</SectionHeading>
+    <section className="bg-white py-12 lg:py-16">
+      {/* One column at roughly the width the live page reads at, centred inside
+          the site container rather than run to its full 1312px. */}
+      <div className="container-site">
+        <div className="max-w-[1100px] mx-auto flex flex-col gap-12 lg:gap-14">
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          {/* ── Intro ─────────────────────────────────────────────────── */}
+          <div className="flex flex-col gap-5">
+            <Body>
+              <em>Proceedings</em> manuscripts should be submitted via our online portal as a
+              Microsoft Word document:{' '}
+              <a href="/proceedings/submissions/article-form" className="text-link">
+                Article Submission Form
+              </a>
+              . Illustrations and graphics should be embedded in the document or sent as separate
+              attachments to{' '}
+              <a href="mailto:articlequestions@usni.org" className="text-link">
+                articlequestions@usni.org
+              </a>
+              . If submitting by U.S. mail, send manuscripts to:
+            </Body>
 
-          {/* The portal is the route the magazine wants used, so it is the only
-              panel with a filled border and a button. */}
-          <div className="border-2 border-navy-bold bg-[#ebf4ff] p-6 lg:p-7 flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Preferred</Label>
-              <h3 className="font-headline text-[24px] text-navy-bolder leading-tight">
-                Through the online portal
-              </h3>
-            </div>
-            <p className="font-body text-base text-navy-bolder leading-[1.7] flex-1">
-              Submit your manuscript as a Microsoft Word document. Illustrations and graphics
-              should be embedded in the document, or sent as separate attachments.
-            </p>
-            <ButtonLink href={ARTICLE_FORM} variant="navy" size="md" fullWidth>
-              <i className="fa-solid fa-file-arrow-up text-[14px]" aria-hidden="true" />
-              Article Submission Form
-            </ButtonLink>
-          </div>
-
-          <div className="border border-navy-subtle p-6 lg:p-7 flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Artwork</Label>
-              <h3 className="font-headline text-[24px] text-navy-bolder leading-tight">
-                Illustrations and graphics
-              </h3>
-            </div>
-            <p className="font-body text-base text-navy-bolder leading-[1.7] flex-1">
-              Embed them in the document, or send them as separate attachments to the
-              articles desk.
-            </p>
-            <a
-              href="mailto:articlequestions@usni.org"
-              className="font-body font-bold text-base w-fit text-link"
-            >
-              articlequestions@usni.org
-            </a>
-          </div>
-
-          <div className="border border-navy-subtle p-6 lg:p-7 flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Label>Also accepted</Label>
-              <h3 className="font-headline text-[24px] text-navy-bolder leading-tight">
-                By U.S. mail
-              </h3>
-            </div>
-            <address className="font-body text-base text-navy-bolder leading-[1.7] not-italic flex-1">
+            <address className="font-body text-base text-navy-bolder leading-[1.75] not-italic pl-4 lg:pl-6">
               Editor-in-Chief, <em>Proceedings</em>
               <br />
               U.S. Naval Institute
@@ -102,147 +136,69 @@ function HowToSubmit() {
             </address>
           </div>
 
-        </div>
-      </div>
-    </section>
-  )
-}
+          {/* ── Submission Guidelines and Categories ──────────────────── */}
+          <div className="flex flex-col gap-8 lg:gap-10">
+            <SectionTitle>Submission Guidelines and Categories</SectionTitle>
 
-/* ── Categories ──────────────────────────────────────────────────────────── */
-
-function Categories() {
-  return (
-    <section className="bg-surface-subtle py-14 lg:py-16">
-      <div className="container-site flex flex-col gap-8 lg:gap-10">
-        <div className="flex flex-col gap-5">
-          <SectionHeading>Guidelines and categories</SectionHeading>
-          <p className="font-body text-base lg:text-lg text-neutral-subtle leading-[1.7] max-w-[760px]">
-            Every department has its own length and its own purpose. Name the one you are
-            writing for in your submission — it tells the editors how to read the piece.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {submissionCategories.map(cat => (
-            <article
-              key={cat.name}
-              className="bg-white border border-navy-subtle p-6 flex flex-col gap-4"
-            >
-              <div className="flex flex-col gap-3">
-                <h3 className="font-headline text-[24px] text-navy-bolder leading-tight">
-                  {cat.name}
-                </h3>
-                {/* The limit is the first thing a writer checks, so it reads as a
-                    spec rather than as a subtitle the way the live page sets it. */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 bg-[#ebf4ff] border border-[#bcd8f7] px-2.5 py-1 font-body font-bold text-[13px] text-[#023e7d]">
-                    <i className="fa-solid fa-pen-nib text-[11px]" aria-hidden="true" />
-                    {cat.wordLimit} max
-                  </span>
-                  {cat.endnotesExcluded && (
-                    <span className="font-body text-[13px] text-neutral-subtle">
-                      excluding endnotes
-                    </span>
-                  )}
-                  {cat.commissioned && (
-                    <span className="inline-flex items-center bg-[#fff8d6] border border-[#f0d98a] px-2.5 py-1 font-body font-bold text-[13px] text-[#7a5c00]">
-                      By assignment
-                    </span>
-                  )}
+            <div className="flex flex-col gap-7">
+              {categories.map(cat => (
+                <div key={cat.name} className="flex flex-col gap-1">
+                  <h3 className="font-body font-bold text-[18px] text-navy-bolder leading-snug">
+                    {cat.name}
+                  </h3>
+                  <p className="font-body font-bold text-[15px] text-navy-bolder leading-snug">
+                    {cat.limit}
+                  </p>
+                  <div className="mt-1">
+                    <Body>{cat.description}</Body>
+                  </div>
                 </div>
-              </div>
-
-              <p className="font-body text-[15px] text-navy-bolder leading-[1.7] flex-1">
-                {cat.description}
-              </p>
-
-              {cat.email && (
-                <a
-                  href={`mailto:${cat.email.address}`}
-                  className="font-body font-bold text-[15px] w-fit text-link"
-                >
-                  {cat.email.address}
-                </a>
-              )}
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ── What happens next ───────────────────────────────────────────────────── */
-
-function WhatHappensNext() {
-  return (
-    <section className="bg-white py-14 lg:py-16">
-      <div className="container-site flex flex-col gap-8 lg:gap-10">
-        <SectionHeading>What happens next</SectionHeading>
-
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 lg:items-start">
-
-          {/* Left: the review process as prose */}
-          <div className="flex-1 min-w-0 flex flex-col gap-6">
-            <p className="font-body text-base lg:text-lg text-navy-bolder leading-[1.7]">
-              Submissions are reviewed by the editorial staff of <em>Proceedings</em> and by the{' '}
-              <a href="/about/leadership#editorial-board" className="text-link">
-                Editorial Board
-              </a>
-              , which meets once a month. This peer review process can take up to ten weeks,
-              depending on when in the monthly review cycle an article is received. You can
-              expect further communication from us in that time frame, accepting or regretfully
-              rejecting the submission.
-            </p>
-
-            <Alert variant="danger" title="Generative AI will disqualify a submission">
-              The editorial staff runs both a plagiarism checker and an artificial intelligence
-              checker in the initial review. If we determine a tool such as ChatGPT was used to
-              write the piece, it will be rejected without further review. Using such a tool to
-              format endnotes is fine — Chicago Manual of Style, please.
-            </Alert>
-
-            <Alert variant="success" title="The Naval Institute pays on publication">
-              Nonmembers published in <em>Proceedings</em> also receive a complimentary one-year
-              membership in the Naval Institute.
-            </Alert>
+              ))}
+            </div>
           </div>
 
-          {/* Right: the standing disclaimer, set apart because it describes the
-              publisher rather than the submission. */}
-          <aside className="flex-none w-full lg:w-[350px] bg-surface-subtle border-l-2 border-navy-bold p-6 flex flex-col gap-3">
-            <Label>About the forum</Label>
-            <p className="font-body text-[15px] text-navy-bolder leading-[1.7]">
-              The U.S. Naval Institute is a private, self-supporting, not-for-profit professional
-              society that publishes <em>Proceedings</em> as part of the open forum it maintains
-              for the Sea Services. The Naval Institute is not an agency of the U.S. government;
-              the opinions expressed in these pages are the personal views of the authors.
-            </p>
-          </aside>
+          {/* ── Additional Information ────────────────────────────────── */}
+          <div className="flex flex-col gap-8 lg:gap-10">
+            <SectionTitle>Additional Information</SectionTitle>
 
-        </div>
+            <div className="flex flex-col gap-5">
+              <Body>
+                Submissions are reviewed by the editorial staff of <em>Proceedings</em> and by the{' '}
+                <a href="/about/leadership#editorial-board" className="text-link">
+                  Editorial Board
+                </a>
+                , which meets once a month. This peer review process can take up to ten weeks,
+                depending on when in the monthly review cycle an article is received. You can expect
+                further communication from us in that time frame accepting or regretfully rejecting
+                the submission.
+              </Body>
 
-        {/* Closing action, so the page ends where it began. */}
-        <div className="border-t border-border-light pt-8 flex flex-wrap items-center gap-4">
-          <ButtonLink href={ARTICLE_FORM} variant="primary" size="lg">
-            <i className="fa-solid fa-file-arrow-up text-[14px]" aria-hidden="true" />
-            Start a submission
-          </ButtonLink>
-          <ButtonLink href="/proceedings/contact" variant="outline-dark" size="lg">
-            Contact Proceedings
-          </ButtonLink>
+              <Body>
+                Of note, the editorial staff uses both a plagiarism and artificial intelligence
+                checker in the initial review process. If it is determined a tool such as ChatGPT
+                was used to write the essay, it will be rejected without further review. It is fine
+                to use such a tool to format endnotes (Chicago Manual of Style please).
+              </Body>
+
+              <Body>
+                The U.S. Naval Institute pays upon publication. Nonmembers published in{' '}
+                <em>Proceedings</em> receive a complimentary one-year membership in the Naval
+                Institute.
+              </Body>
+
+              <hr className="border-t border-border-light my-2" />
+
+              <Body>
+                The U.S. Naval Institute is a private, self-supporting, not-for-profit professional
+                society that publishes Proceedings as part of the open forum it maintains for the
+                Sea Services. The Naval Institute is not an agency of the U.S. government; the
+                opinions expressed in these pages are the personal views of the authors.
+              </Body>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
-  )
-}
-
-export default function ProceedingsSubmissionsContent() {
-  return (
-    <>
-      <HowToSubmit />
-      <Categories />
-      <WhatHappensNext />
-    </>
   )
 }
