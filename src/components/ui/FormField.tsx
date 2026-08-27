@@ -32,6 +32,8 @@ interface FieldProps {
   required?: boolean
   /** Guidance shown under the control. */
   help?: ReactNode
+  /** Disclosure rendered beside the label — see InfoTooltip. */
+  tooltip?: ReactNode
   /** Validation message; when set the control renders in its error state. */
   error?: string
   /** Live counter or similar, shown under the control opposite `help`. */
@@ -45,6 +47,7 @@ export function Field({
   htmlFor,
   required,
   help,
+  tooltip,
   error,
   hint,
   children,
@@ -52,15 +55,20 @@ export function Field({
 }: FieldProps) {
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
-      <label htmlFor={htmlFor} className="font-body font-semibold text-sm text-navy-bolder">
-        {label}
-        {required && (
-          <span className="text-[#c1121f] ml-1" aria-hidden="true">
-            *
-          </span>
-        )}
-        {required && <span className="sr-only"> (required)</span>}
-      </label>
+      {/* The tooltip is a sibling of the label, not a child: it contains a
+          button, and a button inside a <label> steals the label's click. */}
+      <div className="flex items-center">
+        <label htmlFor={htmlFor} className="font-body font-semibold text-sm text-navy-bolder">
+          {label}
+          {required && (
+            <span className="text-[#c1121f] ml-1" aria-hidden="true">
+              *
+            </span>
+          )}
+          {required && <span className="sr-only"> (required)</span>}
+        </label>
+        {tooltip}
+      </div>
 
       {children}
 

@@ -46,13 +46,6 @@ export const ACCOUNT_NAV: NavGroup[] = [
       { label: 'Wishlist', href: '/account/wishlist' },
     ],
   },
-  {
-    title: 'Member benefits',
-    items: [
-      { label: 'Partner discounts', href: '/account/benefits' },
-      { label: 'Email & mail preferences', href: '/account/preferences' },
-    ],
-  },
 ]
 
 function Avatar() {

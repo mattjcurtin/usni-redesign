@@ -90,8 +90,6 @@ import AccountSubscriptions from '@/pages/account/AccountSubscriptions'
 import AccountGiving from '@/pages/account/AccountGiving'
 import AccountSaved from '@/pages/account/AccountSaved'
 import AccountWishlist from '@/pages/account/AccountWishlist'
-import AccountPreferences from '@/pages/account/AccountPreferences'
-import AccountBenefits from '@/pages/account/AccountBenefits'
 import Contact from '@/pages/Contact'
 import NotFound from '@/pages/NotFound'
 
@@ -147,8 +145,6 @@ export default function App() {
         <Route path="/account/giving" element={<AccountGiving />} />
         <Route path="/account/saved" element={<AccountSaved />} />
         <Route path="/account/wishlist" element={<AccountWishlist />} />
-        <Route path="/account/preferences" element={<AccountPreferences />} />
-        <Route path="/account/benefits" element={<AccountBenefits />} />
         <Route path="/proceedings/three-mefs" element={<ProceedingsArticle />} />
         <Route path="/proceedings/fortifying-digital-watch" element={<ProceedingsArticleFortifying />} />
         <Route path="/proceedings/naval-aviation-got-better" element={<ProceedingsArticleGrubb />} />

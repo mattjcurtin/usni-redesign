@@ -103,9 +103,15 @@ export const member = {
   email: 'member@example.com',
   phone: '(410) 268-6110',
   acceptsTexts: false,
+  // These three have to be a combination the Profile form can actually
+  // represent: 'Veteran' matched no militaryStatuses option, so that select
+  // rendered empty. 'Retired' also squares with the Service guidance — retired
+  // members pick their branch, while veterans pick Civilian and name the branch
+  // under Military status.
   service: 'U.S. Navy',
-  militaryStatus: 'Veteran',
-  rank: 'LCDR',
+  militaryStatus: 'Retired',
+  // Spelled out, not abbreviated: it has to match an option in ranksForService().
+  rank: 'Lieutenant Commander',
   suffix: '',
   graduationYear: '2004',
   memberSince: 'March 2019',
@@ -320,14 +326,6 @@ export const mailPreferences = [
   { id: 'print-renewal', label: 'Renewal notices by mail', detail: 'In addition to email reminders.', enabled: true },
   { id: 'print-catalog', label: 'Naval Institute Press catalog', detail: 'Two mailings a year.', enabled: true },
   { id: 'print-appeals', label: 'Foundation appeals by mail', detail: 'Year-end and spring giving appeals.', enabled: false },
-]
-
-/** From /partners on the live site. */
-export const partnerDiscounts = [
-  { name: 'Enterprise Rent-A-Car', offer: 'Member rates at 5,500+ locations', detail: 'Great cars, low rates, free pickup.', code: 'USNI-ENT' },
-  { name: 'Alamo Rent A Car', offer: 'Everyday low member pricing', detail: 'Skip the counter with self-serve check-in.', code: 'USNI-ALM' },
-  { name: 'National Car Rental', offer: 'Up to 20% off rentals', detail: 'Emerald Club privileges included.', code: 'USNI-NAT' },
-  { name: 'Brooks Brothers', offer: '15% off full-price merchandise', detail: 'Corporate Membership Program, U.S. and Canadian stores.', code: 'USNI-BB' },
 ]
 
 export interface MemberUpdate {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useId, useRef } from 'react'
+import { useState, useEffect, useId, useRef, type ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useCart } from '@/context/CartContext'
 import Header from '@/components/layout/Header'
@@ -8,6 +8,7 @@ import CreditCardModal from '@/components/ui/CreditCardModal'
 import { AcceptedCards } from '@/components/ui/CardBrandIcons'
 import { PRIORITY_LABELS, makeOrderNumber } from '@/data/transactions'
 import { countries, militaryStatuses, services, suffixes, usStates } from '@/data/essaySubmission'
+import { GradYearHelpTooltip, ServiceHelpTooltip } from '@/components/ui/FieldHelp'
 import { ACCOUNT_ADDRESS, ACCOUNT_CARD, isTestLogin } from '@/data/testAccount'
 import { ChoiceOption, SignedInAs, addressLines } from '@/components/ui/SavedOnFile'
 import Alert from '@/components/ui/Alert'
@@ -15,17 +16,23 @@ import Alert from '@/components/ui/Alert'
 // ─── Field components ──────────────────────────────────────────────────────────
 
 function FormInput({
-  label, placeholder, value, onChange, type = 'text', className = '', required = false, error = false,
+  label, placeholder, value, onChange, type = 'text', className = '', required = false, error = false, tooltip,
 }: {
   label: string; placeholder: string; value: string; onChange: (v: string) => void
   type?: string; className?: string; required?: boolean; error?: boolean
+  tooltip?: ReactNode
 }) {
   const id = useId()
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
-      <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
-        {label}{required && <span className="text-red-500"> *</span>}
-      </label>
+      {/* Tooltip sits beside the label, not inside it: a button inside a
+          <label> swallows the click that should focus the control. */}
+      <div className="flex items-center">
+        <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
+          {label}{required && <span className="text-red-500"> *</span>}
+        </label>
+        {tooltip}
+      </div>
       <input
         id={id}
         type={type}
@@ -98,18 +105,24 @@ function AddressFields({
 
 /** Label + select bound by a generated id. */
 function LabelledSelect({
-  label, placeholder, options, value, onChange, className = '', required = false, error = false,
+  label, placeholder, options, value, onChange, className = '', required = false, error = false, tooltip,
 }: {
   label: string; placeholder: string; options: string[]
   value: string; onChange: (v: string) => void
   className?: string; required?: boolean; error?: boolean
+  tooltip?: ReactNode
 }) {
   const id = useId()
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
-      <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
-        {label}{required && <span className="text-red-500"> *</span>}
-      </label>
+      {/* Tooltip sits beside the label, not inside it: a button inside a
+          <label> swallows the click that should focus the control. */}
+      <div className="flex items-center">
+        <label htmlFor={id} className="font-body font-bold text-[14px] text-[#1d2535]">
+          {label}{required && <span className="text-red-500"> *</span>}
+        </label>
+        {tooltip}
+      </div>
       <InlineSelect id={id} placeholder={placeholder} options={options} value={value} onChange={onChange} error={error} />
     </div>
   )
@@ -348,13 +361,13 @@ export default function DonateCheckout() {
                           <p className="font-body font-bold text-[12px] uppercase tracking-[0.08em] text-[#4e576a] mb-4">Service Information</p>
                           <div className="flex flex-col gap-5">
                             <div className="flex gap-5">
-                              <LabelledSelect label="Service" placeholder="— Select —" options={services} value={service} onChange={setService} className="flex-1" required error={showErrors && !service} />
+                              <LabelledSelect label="Service" placeholder="— Select —" options={services} value={service} onChange={setService} className="flex-1" required error={showErrors && !service} tooltip={<ServiceHelpTooltip />} />
                               <LabelledSelect label="Military Status" placeholder="— Select —" options={militaryStatuses} value={militaryStatus} onChange={setMilitary} className="flex-1" required error={showErrors && !militaryStatus} />
                             </div>
                             <div className="flex gap-5">
                               <FormInput label="Rank / Title" placeholder="Enter rank or title" value={rank} onChange={setRank} className="flex-1" required error={fieldError(rank)} />
                               <LabelledSelect label="Suffix" placeholder="— None —" options={suffixes} value={suffix} onChange={setSuffix} className="flex-1" />
-                              <FormInput label="Graduation Year" placeholder="YYYY" value={gradYear} onChange={setGradYear} className="w-36" />
+                              <FormInput label="Graduation Year" placeholder="YYYY" value={gradYear} onChange={setGradYear} className="w-36" tooltip={<GradYearHelpTooltip align="right" />} />
                             </div>
                           </div>
                         </div>

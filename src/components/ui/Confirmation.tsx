@@ -135,7 +135,9 @@ export function PrintReceiptButton() {
       className="print-hide inline-flex items-center gap-2 font-body font-semibold text-[15px] text-link"
     >
       <i className="fa-solid fa-print" aria-hidden="true" />
-      Print this receipt
+      {/* Just "Print": the button sits in a ReceiptCard header whose title
+          already names what is being printed. */}
+      Print
     </button>
   )
 }

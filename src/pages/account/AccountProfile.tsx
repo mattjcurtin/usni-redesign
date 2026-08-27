@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import AccountLayout from '@/components/layout/AccountLayout'
 import { AccountCard } from '@/components/ui/AccountCard'
 import { Field, SelectInput, TextInput, CheckboxField } from '@/components/ui/FormField'
-import { countries, militaryStatuses, services, suffixes } from '@/data/essaySubmission'
+import { militaryStatuses, ranksForService, services, suffixes } from '@/data/essaySubmission'
+import { GradYearHelpTooltip, ServiceHelpTooltip } from '@/components/ui/FieldHelp'
 import { member } from '@/data/account'
 import Alert from '@/components/ui/Alert'
 
@@ -26,10 +27,14 @@ export default function AccountProfile() {
     gradYear: member.graduationYear,
     email: member.email,
     phone: member.phone,
-    country: 'United States',
     acceptsTexts: member.acceptsTexts,
   })
   const [saved, setSaved] = useState(false)
+
+  /* Rank/title is keyed to the service, the way the essay submission form
+     already does it: the live site's single flat menu makes a Navy lieutenant
+     scroll past every Marine and Coast Guard rank to find theirs. */
+  const rankOptions = useMemo(() => ranksForService(form.service), [form.service])
 
   const set = (k: keyof typeof form, v: string | boolean) => {
     setForm(prev => ({ ...prev, [k]: v }))
@@ -74,8 +79,16 @@ export default function AccountProfile() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Service" htmlFor="ac-service">
-                <SelectInput id="ac-service" value={form.service} onChange={e => set('service', e.target.value)}>
+              <Field label="Service" htmlFor="ac-service" tooltip={<ServiceHelpTooltip />}>
+                <SelectInput
+                  id="ac-service"
+                  value={form.service}
+                  // A new service offers a different rank list, so any prior pick is stale.
+                  onChange={e => {
+                    setForm(prev => ({ ...prev, service: e.target.value, rank: '' }))
+                    setSaved(false)
+                  }}
+                >
                   <option value="">Select…</option>
                   {services.map(s => <option key={s}>{s}</option>)}
                 </SelectInput>
@@ -86,17 +99,30 @@ export default function AccountProfile() {
                   {militaryStatuses.map(s => <option key={s}>{s}</option>)}
                 </SelectInput>
               </Field>
-              <Field label="Rank / title" htmlFor="ac-rank">
-                <TextInput id="ac-rank" value={form.rank} onChange={e => set('rank', e.target.value)} />
+              <Field
+                label="Rank / title"
+                htmlFor="ac-rank"
+                help={form.service ? undefined : 'Choose a service first.'}
+              >
+                <SelectInput
+                  id="ac-rank"
+                  value={form.rank}
+                  disabled={!form.service}
+                  onChange={e => set('rank', e.target.value)}
+                  className={!form.service ? 'opacity-50 cursor-not-allowed' : ''}
+                >
+                  <option value="">Select…</option>
+                  {rankOptions.map(r => <option key={r}>{r}</option>)}
+                </SelectInput>
               </Field>
-              <Field label="Graduation year" htmlFor="ac-grad">
+              <Field label="Graduation year" htmlFor="ac-grad" tooltip={<GradYearHelpTooltip align="right" />}>
                 <TextInput id="ac-grad" inputMode="numeric" value={form.gradYear} onChange={e => set('gradYear', e.target.value)} />
               </Field>
             </div>
           </div>
         </AccountCard>
 
-        <AccountCard title="How we reach you">
+        <AccountCard title="Contact info">
           <div className="flex flex-col gap-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field
@@ -111,11 +137,6 @@ export default function AccountProfile() {
                 <TextInput id="ac-phone" type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} />
               </Field>
             </div>
-            <Field label="Country" htmlFor="ac-country">
-              <SelectInput id="ac-country" value={form.country} onChange={e => set('country', e.target.value)}>
-                {countries.map(c => <option key={c}>{c}</option>)}
-              </SelectInput>
-            </Field>
             <CheckboxField
               id="ac-texts"
               checked={form.acceptsTexts}

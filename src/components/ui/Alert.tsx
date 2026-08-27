@@ -7,7 +7,7 @@ import type { ReactNode } from 'react'
  *
  * The four palettes are the ones already in the codebase, so converting an
  * existing hand-rolled panel to this component is a no-op visually:
- *   success  #0a5c2e on #e6f7ed   (was AccountProfile, AccountPreferences)
+ *   success  #0a5c2e on #e6f7ed   (was AccountProfile)
  *   warning  #ffaa00 on #fff8d6   (was Login, CartItems, ProceedingsContact)
  *   info     #0466c8 on #ebf4ff   (was ContactSections, EssaySubmitForm)
  *   danger   #c1121f on #fef6f6   (was ContactSections, NewsletterJoin)

@@ -107,9 +107,11 @@ export default function AccountNotifications() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<MemberUpdate | null>(null)
   const [read, setRead] = useState<string[]>(() => memberUpdates.filter(u => !u.unread).map(u => u.id))
+  const [dismissed, setDismissed] = useState<string[]>([])
   const wrapRef = useRef<HTMLDivElement>(null)
 
-  const unreadCount = memberUpdates.filter(u => !read.includes(u.id)).length
+  const visible = memberUpdates.filter(u => !dismissed.includes(u.id))
+  const unreadCount = visible.filter(u => !read.includes(u.id)).length
 
   // Clicking anywhere outside the bell or its panel dismisses the dropdown.
   useEffect(() => {
@@ -132,6 +134,14 @@ export default function AccountNotifications() {
     setRead(prev => (prev.includes(update.id) ? prev : [...prev, update.id]))
     setActive(update)
     setOpen(false)
+  }, [])
+
+  const dismiss = useCallback((id: string) => {
+    setDismissed(prev => (prev.includes(id) ? prev : [...prev, id]))
+  }, [])
+
+  const dismissAll = useCallback(() => {
+    setDismissed(memberUpdates.map(u => u.id))
   }, [])
 
   return (
@@ -176,58 +186,105 @@ export default function AccountNotifications() {
           className="absolute right-0 top-[calc(100%+8px)] z-50 w-[min(420px,calc(100vw-2.5rem))]
                      bg-white border border-[#c4c9d4] shadow-xl"
         >
-          <div className="flex items-baseline justify-between gap-4 px-5 py-3.5 border-b border-[#e2e8f0] bg-[#f8fafd]">
-            <h3 className="font-headline text-[19px] text-navy-bolder leading-tight">Member updates</h3>
-            <p className="font-body text-[13px] text-neutral-subtle">
-              {unreadCount} new
-            </p>
+          <div className="flex items-center justify-between gap-4 px-5 py-3.5 border-b border-[#e2e8f0] bg-[#f8fafd]">
+            <div className="flex items-baseline gap-2.5 min-w-0">
+              <h3 className="font-headline text-[19px] text-navy-bolder leading-tight">Member updates</h3>
+              {unreadCount > 0 && (
+                <p className="font-body text-[13px] text-neutral-subtle flex-shrink-0">
+                  {unreadCount} new
+                </p>
+              )}
+            </div>
+            {visible.length > 0 && (
+              <button
+                type="button"
+                onClick={dismissAll}
+                className="font-body font-semibold text-[13px] text-link flex-shrink-0"
+              >
+                Dismiss all
+              </button>
+            )}
           </div>
 
-          <ul className="flex flex-col max-h-[min(60vh,460px)] overflow-y-auto">
-            {memberUpdates.map(update => {
-              const isUnread = !read.includes(update.id)
-              return (
-                <li key={update.id} className="border-b border-[#e8eaed] last:border-b-0">
-                  <button
-                    type="button"
-                    onClick={() => openUpdate(update)}
-                    className={`w-full text-left px-5 py-4 flex gap-3 transition-colors hover:bg-[#ebf4ff] ${
-                      isUnread ? 'bg-white' : 'bg-[#fbfcfe]'
-                    }`}
+          {visible.length === 0 ? (
+            <div className="flex flex-col items-center text-center gap-2 px-6 py-9">
+              <span className="w-10 h-10 bg-[#ebf4ff] flex items-center justify-center" aria-hidden="true">
+                <i className="fa-solid fa-check text-[16px] text-[#023e7d]" />
+              </span>
+              <p className="font-body font-bold text-[15px] text-navy-bolder">You're all caught up</p>
+              <p className="font-body text-[13px] text-neutral-subtle leading-relaxed">
+                New updates will appear here as they are published.
+              </p>
+            </div>
+          ) : (
+            <ul className="flex flex-col max-h-[min(60vh,460px)] overflow-y-auto">
+              {visible.map(update => {
+                const isUnread = !read.includes(update.id)
+                return (
+                  /* Row is a flex container rather than one big button: the
+                     dismiss control is a second button, and a button cannot
+                     nest inside another. Hover and the read tint move up here
+                     so both children share them. */
+                  <li
+                    key={update.id}
+                    className={`border-b border-[#e8eaed] last:border-b-0 flex items-stretch transition-colors
+                      hover:bg-[#ebf4ff] ${isUnread ? 'bg-white' : 'bg-[#fbfcfe]'}`}
                   >
-                    <span
-                      className={`flex-shrink-0 w-2 h-2 rounded-full mt-[7px] ${
-                        isUnread ? 'bg-[#c1121f]' : 'bg-transparent'
-                      }`}
-                      aria-hidden="true"
-                    />
-                    <span className="min-w-0 flex flex-col gap-1">
+                    <button
+                      type="button"
+                      onClick={() => openUpdate(update)}
+                      className="flex-1 min-w-0 text-left pl-5 pr-2 py-4 flex gap-3"
+                    >
                       <span
-                        className={`font-body text-[15px] leading-snug ${
-                          isUnread ? 'font-bold text-navy-bolder' : 'font-semibold text-neutral-subtle'
+                        className={`flex-shrink-0 w-2 h-2 rounded-full mt-[7px] ${
+                          isUnread ? 'bg-[#c1121f]' : 'bg-transparent'
                         }`}
-                      >
-                        {update.title}
+                        aria-hidden="true"
+                      />
+                      <span className="min-w-0 flex flex-col gap-1">
+                        <span
+                          className={`font-body text-[15px] leading-snug ${
+                            isUnread ? 'font-bold text-navy-bolder' : 'font-semibold text-neutral-subtle'
+                          }`}
+                        >
+                          {update.title}
+                        </span>
+                        <span className="font-body text-[13px] text-neutral-subtle leading-snug">
+                          {update.blurb}
+                        </span>
+                        {/* Date and the New pill share the last line, so a long
+                            title never pushes the pill onto a row of its own. */}
+                        <span className="flex items-center gap-2 mt-0.5">
+                          <span className="font-body text-[12px] text-[#8a91a1]">{update.date}</span>
+                          {isUnread && (
+                            <span className="font-body font-bold text-[10px] uppercase tracking-[0.08em] text-[#c1121f] border border-[#f0b7bc] bg-[#fdf0f1] px-1.5 py-0.5 leading-none">
+                              New
+                            </span>
+                          )}
+                        </span>
                       </span>
-                      <span className="font-body text-[13px] text-neutral-subtle leading-snug">
-                        {update.blurb}
-                      </span>
-                      {/* Date and the New pill share the last line, so a long
-                          title never pushes the pill onto a row of its own. */}
-                      <span className="flex items-center gap-2 mt-0.5">
-                        <span className="font-body text-[12px] text-[#8a91a1]">{update.date}</span>
-                        {isUnread && (
-                          <span className="font-body font-bold text-[10px] uppercase tracking-[0.08em] text-[#c1121f] border border-[#f0b7bc] bg-[#fdf0f1] px-1.5 py-0.5 leading-none">
-                            New
-                          </span>
-                        )}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+                    </button>
+
+                    {/* Always rendered, not hover-revealed: the panel is
+                        reachable by keyboard and touch, where hover never
+                        fires. */}
+                    <button
+                      type="button"
+                      onClick={() => dismiss(update.id)}
+                      aria-label={`Dismiss ${update.title}`}
+                      title="Dismiss"
+                      className="flex-shrink-0 flex items-start justify-center w-11 pt-4 pb-4
+                                 text-[#8a91a1] hover:text-[#c1121f] transition-colors"
+                    >
+                      <svg className="w-3.5 h-3.5 mt-1" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <path d="M2.5 2.5l9 9M11.5 2.5l-9 9" />
+                      </svg>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
         </div>
       )}
 
