@@ -103,9 +103,15 @@ export const member = {
   email: 'member@example.com',
   phone: '(410) 268-6110',
   acceptsTexts: false,
+  // These three have to be a combination the Profile form can actually
+  // represent: 'Veteran' matched no militaryStatuses option, so that select
+  // rendered empty. 'Retired' also squares with the Service guidance — retired
+  // members pick their branch, while veterans pick Civilian and name the branch
+  // under Military status.
   service: 'U.S. Navy',
-  militaryStatus: 'Veteran',
-  rank: 'LCDR',
+  militaryStatus: 'Retired',
+  // Spelled out, not abbreviated: it has to match an option in ranksForService().
+  rank: 'Lieutenant Commander',
   suffix: '',
   graduationYear: '2004',
   memberSince: 'March 2019',
