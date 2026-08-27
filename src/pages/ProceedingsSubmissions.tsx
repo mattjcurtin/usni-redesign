@@ -9,8 +9,9 @@ import ProceedingsSubmissionsContent from '@/sections/ProceedingsSubmissionsCont
  *
  * The Proceedings sub-nav and the Contact page have both linked here all along
  * (ProceedingsSubNav, ProceedingsContactContent's closing banner) with nothing
- * at the other end. Content is transcribed from the live page at
- * /periodicals/proceedings-magazine/submission-guidelines.
+ * at the other end. Structure and copy follow the live page at
+ * /periodicals/proceedings-magazine/submission-guidelines section for
+ * section; only the styling is the redesign's.
  */
 export default function ProceedingsSubmissions() {
   return (
@@ -19,18 +20,10 @@ export default function ProceedingsSubmissions() {
       <main className="flex-1">
         <ProceedingsSubNav />
 
-        {/* No eyebrow: the breadcrumb already names Proceedings one line above,
-            the way the Contact Proceedings header does. */}
+        {/* No eyebrow or lede: the live page's header is the title alone, and
+            the breadcrumb already names Proceedings a line above. */}
         <PageHero
-          title="Submission Guidelines"
-          description={
-            <>
-              <em>Proceedings</em> is built on the ideas of those who serve. If you have
-              something to say — a fresh argument, a hard-won lesson, or a challenge to
-              conventional thinking — here is how to put it in front of the naval community
-              that reads us.
-            </>
-          }
+          title="Proceedings Submission Guidelines"
           breadcrumb={
             <nav
               aria-label="Breadcrumb"
