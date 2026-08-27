@@ -10,6 +10,7 @@ import {
   orders,
   savedArticles,
   subscriptions,
+  wishlist,
 } from '@/data/account'
 
 /**
@@ -182,6 +183,34 @@ export default function AccountDashboard() {
                 <p className="font-body text-[13px] text-neutral-subtle mt-0.5">
                   {a.publication} · {a.issue}
                 </p>
+              </li>
+            ))}
+          </ul>
+        </AccountCard>
+
+        {/* ── Wishlist ────────────────────────────────────────────────── */}
+        <AccountCard title="Wishlist" action={<SectionLink to="/account/wishlist">All saved books</SectionLink>}>
+          <ul className="flex flex-col">
+            {wishlist.slice(0, 3).map(({ book }) => (
+              <li key={book.id} className="flex items-start gap-3 py-3 border-b border-[#e8eaed] last:border-b-0 last:pb-0 first:pt-0">
+                <img
+                  src={book.image}
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  className="flex-shrink-0 w-10 aspect-[2/3] object-cover shadow-[0_2px_8px_rgba(0,18,51,0.14)]"
+                />
+                <div className="min-w-0 flex-1">
+                  <Link
+                    to={book.href}
+                    className="link-underline-hover font-body font-bold text-[15px] text-navy-bolder hover:text-navy-bright transition-colors"
+                  >
+                    {book.title}
+                  </Link>
+                  <p className="font-body text-[13px] text-neutral-subtle mt-0.5">
+                    {book.format} · ${book.price.toFixed(2)}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>
