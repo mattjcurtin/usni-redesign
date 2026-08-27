@@ -10,6 +10,7 @@ import imgMarianas      from '@/assets/images/naval-history-articles/Friendly Fi
 import imgUC5           from '@/assets/images/naval-history-articles/The Ill-Fated UC-5 .jpg'
 import imgAviator       from '@/assets/images/naval-history-articles/At 100 Years Old, a Korean War Aviator Receives a Long-Overdue Medal of Honor.webp'
 
+import imgCvrJA26  from '@/assets/images/naval-history-magazine-aug26-cover.jpg'
 import imgCvrMJ26  from '@/assets/images/nh-magazine-covers/NH_Cvr_MJ26.webp'
 import imgCvrMA26  from '@/assets/images/nh-magazine-covers/NH_Cvr_MA26.webp'
 import imgCvrJF26  from '@/assets/images/nh-magazine-covers/NH_Cvr_JF26_FNL.webp'
@@ -126,13 +127,18 @@ export const latestIssueCol2: Article[] = [
 ]
 
 // Magazine archive
+// Issues are labelled by their cover month the way usni.org labels them —
+// August 2026, June 2026 — not by the two-month span printed on the cover.
+// Only the August 2026 issue has a page in the prototype; the rest resolve to
+// the archive so no card is a dead end.
 export const magazineIssues = [
-  { month: 'May/Jun 2026', vol: 'Vol. 40, No. 3', cover: imgCvrMJ26, href: '/naval-history/may-jun-2026' },
-  { month: 'Mar/Apr 2026', vol: 'Vol. 40, No. 2', cover: imgCvrMA26, href: '/naval-history/mar-apr-2026' },
-  { month: 'Jan/Feb 2026', vol: 'Vol. 40, No. 1', cover: imgCvrJF26, href: '/naval-history/jan-feb-2026' },
-  { month: 'Nov/Dec 2025', vol: 'Vol. 39, No. 6', cover: imgCvrND25, href: '/naval-history/nov-dec-2025' },
-  { month: 'Sep/Oct 2025', vol: 'Vol. 39, No. 5', cover: imgCvrSO25, href: '/naval-history/sep-oct-2025' },
-  { month: 'Jul/Aug 2025', vol: 'Vol. 39, No. 4', cover: imgCvrJA25, href: '/naval-history/jul-aug-2025' },
-  { month: 'May/Jun 2025', vol: 'Vol. 39, No. 3', cover: imgCvrMJ25, href: '/naval-history/may-jun-2025' },
-  { month: 'Mar/Apr 2025', vol: 'Vol. 39, No. 2', cover: imgCvrMA25, href: '/naval-history/mar-apr-2025' },
+  { month: 'August 2026', vol: 'Vol. 40, No. 4', cover: imgCvrJA26, href: '/naval-history/aug-2026' },
+  { month: 'June 2026', vol: 'Vol. 40, No. 3', cover: imgCvrMJ26, href: '/naval-history/all-issues' },
+  { month: 'April 2026', vol: 'Vol. 40, No. 2', cover: imgCvrMA26, href: '/naval-history/all-issues' },
+  { month: 'February 2026', vol: 'Vol. 40, No. 1', cover: imgCvrJF26, href: '/naval-history/all-issues' },
+  { month: 'December 2025', vol: 'Vol. 39, No. 6', cover: imgCvrND25, href: '/naval-history/all-issues' },
+  { month: 'October 2025', vol: 'Vol. 39, No. 5', cover: imgCvrSO25, href: '/naval-history/all-issues' },
+  { month: 'August 2025', vol: 'Vol. 39, No. 4', cover: imgCvrJA25, href: '/naval-history/all-issues' },
+  { month: 'June 2025', vol: 'Vol. 39, No. 3', cover: imgCvrMJ25, href: '/naval-history/all-issues' },
+  { month: 'April 2025', vol: 'Vol. 39, No. 2', cover: imgCvrMA25, href: '/naval-history/all-issues' },
 ]

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 const navItems = [
-  { label: 'Current Issue', href: '/naval-history/mar-apr-2026' },
+  { label: 'Current Issue', href: '/naval-history/aug-2026' },
   { label: 'All Issues', href: '/naval-history/all-issues' },
   { label: 'Essay Contests', href: '/essay-contests' },
   { label: 'Submission Guidelines', href: '/naval-history/submissions' },

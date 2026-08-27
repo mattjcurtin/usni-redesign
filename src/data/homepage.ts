@@ -85,7 +85,7 @@ export const navItems: NavItem[] = [
     href: '/naval-history',
     children: [
       { label: 'Browse Naval History', href: '/naval-history' },
-      { label: 'Current Issue', href: '/naval-history/current' },
+      { label: 'Current Issue', href: '/naval-history/aug-2026' },
       { label: 'All Issues', href: '/naval-history/all-issues' },
       { label: 'Essay Contests', href: '/essay-contests' },
       { label: 'Submission Guidelines', href: '/naval-history/submissions' },

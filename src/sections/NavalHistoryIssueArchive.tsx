@@ -38,7 +38,7 @@ export default function NavalHistoryIssueArchive() {
         {/* CTA */}
         <div className="flex justify-center">
           <a
-            href="/naval-history/archive"
+            href="/naval-history/all-issues"
             className="inline-flex items-center justify-center bg-navy-bold text-white font-body font-bold text-sm tracking-[-0.3px] px-8 py-3.5 border border-navy-bold hover:bg-navy-bright hover:border-navy-bright transition-colors w-full sm:w-[350px]"
           >
             View the full archive
