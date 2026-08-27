@@ -14,12 +14,18 @@ function BookCard({ book }: { book: Book }) {
         <img
           src={book.image}
           alt={book.title}
-          className="w-full h-full object-cover group-hover:-translate-y-2 transition-transform duration-300"
+          /* Shadow on the image, not the box, so it travels with the lift.
+             Hand-rolled rather than shadow-sm/shadow-xl: those carry a negative
+             spread and a downward offset, which on a tall cover pools the blur
+             under the bottom edge and pinches it out at the corners. */
+          className="w-full h-full object-cover transition-[transform,box-shadow] duration-300
+            shadow-[0_2px_8px_rgba(0,18,51,0.14)]
+            group-hover:-translate-y-2 group-hover:shadow-[0_10px_26px_rgba(0,18,51,0.24)]"
         />
       </div>
       <div className="flex flex-col gap-1">
         <h3 className="font-headline text-[20px] leading-snug text-navy-bolder group-hover:text-navy-subtle transition-colors">
-          {book.title}
+          <span className="article-link article-link--card">{book.title}</span>
         </h3>
         <p className="font-body text-sm text-neutral-subtle">{book.format}</p>
         <div className="flex items-center gap-2 mt-0.5">
@@ -120,9 +126,15 @@ export default function BooksProductSection({
             </button>
           )}
 
+          {/* -mt-7/pt-7 buys the scrollport 28px of headroom above the covers.
+              overflow-x: auto forces overflow-y to compute to auto as well, so
+              the scrollport clips at the track's top edge — which is exactly
+              where a lifted cover and its shadow want to be. The lift is 8px
+              and the shadow reaches 16px past it, so 28px clears both; the
+              negative margin cancels the padding, leaving spacing unchanged. */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+            className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mt-7 pt-7"
             onScroll={updateArrows}
           >
             {books.map((book) => (
