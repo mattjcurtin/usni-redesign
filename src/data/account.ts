@@ -322,14 +322,6 @@ export const mailPreferences = [
   { id: 'print-appeals', label: 'Foundation appeals by mail', detail: 'Year-end and spring giving appeals.', enabled: false },
 ]
 
-/** From /partners on the live site. */
-export const partnerDiscounts = [
-  { name: 'Enterprise Rent-A-Car', offer: 'Member rates at 5,500+ locations', detail: 'Great cars, low rates, free pickup.', code: 'USNI-ENT' },
-  { name: 'Alamo Rent A Car', offer: 'Everyday low member pricing', detail: 'Skip the counter with self-serve check-in.', code: 'USNI-ALM' },
-  { name: 'National Car Rental', offer: 'Up to 20% off rentals', detail: 'Emerald Club privileges included.', code: 'USNI-NAT' },
-  { name: 'Brooks Brothers', offer: '15% off full-price merchandise', detail: 'Corporate Membership Program, U.S. and Canadian stores.', code: 'USNI-BB' },
-]
-
 export interface MemberUpdate {
   id: string
   title: string

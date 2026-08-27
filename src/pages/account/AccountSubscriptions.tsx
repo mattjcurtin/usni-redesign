@@ -54,12 +54,6 @@ export default function AccountSubscriptions() {
                       : `Ends on ${s.renewsOn} unless you renew.`}
                   </p>
                 </div>
-                <Link
-                  to="/account/preferences"
-                  className="font-body font-semibold text-[14px] text-link"
-                >
-                  Change delivery or email format
-                </Link>
               </div>
             </div>
           </AccountCard>
