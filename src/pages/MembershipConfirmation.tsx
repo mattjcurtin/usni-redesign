@@ -73,7 +73,7 @@ export default function MembershipConfirmation() {
       body: (
         <>
           A confirmation with this order number has been emailed to{' '}
-          <span className="font-bold text-[#1d2535]">{email}</span>. Keep it for your records.
+          <a href={`mailto:${email}`} className="text-link">{email}</a>. Keep it for your records.
         </>
       ),
     },

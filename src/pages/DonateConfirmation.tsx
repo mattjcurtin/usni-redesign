@@ -60,7 +60,7 @@ export default function DonateConfirmation() {
       body: (
         <>
           An itemized receipt has been emailed to{' '}
-          <span className="font-bold text-[#1d2535]">{email}</span>. The Naval Institute Foundation
+          <a href={`mailto:${email}`} className="text-link">{email}</a>. The Naval Institute Foundation
           is a 501(c)(3) public charity, Tax ID {FOUNDATION_TAX_ID}, and your gift is
           tax-deductible to the extent allowed by law.
         </>

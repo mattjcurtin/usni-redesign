@@ -63,7 +63,7 @@ export default function NavalHistorySubscribeConfirmation() {
       body: (
         <>
           A confirmation carrying this order number has been emailed to{' '}
-          <span className="font-bold text-[#1d2535]">{email}</span>.
+          <a href={`mailto:${email}`} className="text-link">{email}</a>.
         </>
       ),
     },
