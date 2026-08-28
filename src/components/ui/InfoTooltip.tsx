@@ -65,8 +65,8 @@ export default function InfoTooltip({
           id={panelId}
           role="status"
           className={`absolute top-[calc(100%+8px)] z-40 w-[min(320px,calc(100vw-3rem))]
-                      bg-white border border-[#c4c9d4] shadow-xl px-4 py-3.5
-                      font-body font-normal text-[14px] text-navy-bolder leading-relaxed
+                      bg-navy-boldest border border-navy-bold shadow-xl px-4 py-3.5
+                      font-body font-normal text-[14px] text-white leading-relaxed
                       ${align === 'right' ? 'right-0' : 'left-0'}`}
         >
           {children}
