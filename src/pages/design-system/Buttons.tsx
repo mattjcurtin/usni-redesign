@@ -6,6 +6,7 @@ import PropsTable from '@/components/design-system/PropsTable'
 import { Button, ButtonLink, NavyButtonLink } from '@/components/ui/Button'
 import ButtonLinkCTA from '@/components/ui/ButtonLinkCTA'
 import SharePopover from '@/components/ui/SharePopover'
+import SaveArticleButton from '@/components/ui/SaveArticleButton'
 
 const VARIANTS = ['primary', 'outline', 'outline-dark', 'link'] as const
 const SIZES = ['sm', 'md', 'lg'] as const
@@ -130,6 +131,21 @@ export default function Buttons() {
           <CodeBlock code={`import SharePopover from '@/components/ui/SharePopover'
 
 <SharePopover title={article.headline} url={articleUrl} />`} />
+        </DocSection>
+
+        <DocSection title="Save Article Button">
+          <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-6 max-w-2xl">
+            A bookmark toggle that sits beside Share at the top of every article. Saved articles collect under{' '}
+            <code className="font-mono text-xs bg-neutral-subtlest px-1.5 py-0.5">/account/saved</code>. Click to
+            toggle between the Save and Saved states.
+          </p>
+          <div className="border border-border-light bg-white p-8 mb-6 flex justify-start gap-3">
+            <SaveArticleButton />
+            <SaveArticleButton defaultSaved />
+          </div>
+          <CodeBlock code={`import SaveArticleButton from '@/components/ui/SaveArticleButton'
+
+<SaveArticleButton />`} />
         </DocSection>
       </div>
     </DesignSystemLayout>
