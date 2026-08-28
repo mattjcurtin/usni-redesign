@@ -241,8 +241,8 @@ export default function AccountDashboard() {
         </Alert>
 
         <p className="font-body text-[15px] text-neutral-subtle leading-relaxed">
-          You can turn auto-renew back on at any time before {membership.renewsOn} and nothing will
-          change.
+          You can turn auto-renew back on at any time before{' '}
+          <strong className="font-semibold">{membership.renewsOn}</strong> and nothing will change.
         </p>
 
         {/* The safe choice is the solid button and comes first, so the

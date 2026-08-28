@@ -1,4 +1,5 @@
 import SharePopover from '@/components/ui/SharePopover'
+import SaveArticleButton from '@/components/ui/SaveArticleButton'
 
 interface ArticleHeaderProps {
   publication?: string
@@ -88,11 +89,13 @@ export default function ArticleHeader({
           </p>
 
           {/* Date/Author + right-aligned buttons */}
-          <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
 
-            <div>
+            {/* Capped at half the measure so a long author list wraps inside
+                its own column rather than displacing the buttons. */}
+            <div className="min-w-0 md:flex-1 md:max-w-[50%]">
               {/* Date + Publication */}
-              <div className="flex items-center gap-2.5 mb-2">
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 mb-2">
                 <span className="font-body font-bold text-sm text-navy-bolder">{date}</span>
                 {magazineName && (
                   <>
@@ -122,8 +125,9 @@ export default function ArticleHeader({
             </div>
 
             {/* Buttons — outline blue, right-aligned */}
-            <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex flex-wrap items-center gap-3 flex-shrink-0">
               <SharePopover title={title} />
+              <SaveArticleButton />
               <button
                 type="button"
                 onClick={() => document.getElementById('article-comments')?.scrollIntoView({ behavior: 'smooth' })}
