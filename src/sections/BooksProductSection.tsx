@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import type { Book } from '@/data/books'
+import BookPrice from '@/components/ui/BookPrice'
 
 function BookCard({ book }: { book: Book }) {
   return (
@@ -28,9 +29,8 @@ function BookCard({ book }: { book: Book }) {
           <span className="article-link article-link--card">{book.title}</span>
         </h3>
         <p className="font-body text-sm text-neutral-subtle">{book.format}</p>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span className="font-body font-bold text-sm text-navy-bolder">${book.price.toFixed(2)}</span>
-          <span className="font-body text-sm text-neutral-subtle line-through">${book.originalPrice.toFixed(2)}</span>
+        <div className="mt-1">
+          <BookPrice listPrice={book.originalPrice} memberPrice={book.price} size="sm" />
         </div>
       </div>
     </a>

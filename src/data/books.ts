@@ -28,7 +28,13 @@ export interface Book {
   title: string
   author: string
   format: 'Hardcover' | 'Paperback'
+  /**
+   * The **member** price — what the reader pays with USNI membership. Named
+   * `price` because it is the figure the cart and product CTAs transact on; see
+   * BookProductHero, which renders the pair as "Members save N%".
+   */
   price: number
+  /** The list price a non-member pays. Struck through wherever both are shown. */
   originalPrice: number
   image: string
   href: string

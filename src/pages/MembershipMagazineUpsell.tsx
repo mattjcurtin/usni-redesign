@@ -226,7 +226,7 @@ export default function MembershipMagazineUpsell() {
                         </span>
                         <div className="flex items-baseline gap-2">
                           {originalPrice && (
-                            <span className="font-body text-base text-neutral-subtle line-through">
+                            <span className="font-body text-[16px] text-neutral-subtle">
                               ${originalPrice}
                             </span>
                           )}

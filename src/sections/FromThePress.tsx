@@ -32,7 +32,7 @@ function CarouselCard({ book }: { book: Book }) {
         <p className="font-body text-sm text-neutral-subtle">{book.format}</p>
         <div className="flex items-center gap-2 mt-0.5">
           <span className="font-body font-bold text-sm text-navy-bolder">${book.price.toFixed(2)}</span>
-          <span className="font-body text-sm text-neutral-subtle line-through">${book.originalPrice.toFixed(2)}</span>
+          <span className="font-body text-[16px] text-neutral-subtle">${book.originalPrice.toFixed(2)}</span>
         </div>
       </div>
     </a>
@@ -149,7 +149,7 @@ export default function FromThePress() {
                 <span className="font-headline text-[28px] text-navy-bolder leading-none">
                   ${featured.price.toFixed(2)}
                 </span>
-                <span className="font-body text-sm text-neutral-subtle line-through">
+                <span className="font-body text-[16px] text-neutral-subtle">
                   ${featured.originalPrice.toFixed(2)}
                 </span>
                 <span className="font-body text-xs font-bold text-[#0a5c2e] bg-[#e6f7ed] px-2 py-1">

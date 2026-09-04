@@ -212,7 +212,7 @@ function TierCard({
             <div className="flex flex-col items-end flex-shrink-0">
               <div className="flex items-baseline gap-1.5">
                 {originalPrice && (
-                  <span className="font-body text-sm text-neutral-subtle line-through">
+                  <span className="font-body text-[16px] text-neutral-subtle">
                     ${originalPrice.toLocaleString()}
                   </span>
                 )}

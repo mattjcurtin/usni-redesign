@@ -1,6 +1,7 @@
 import type { CollectionTitle } from '@/data/bookCollections'
 import { collectionCover } from '@/data/bookCollections'
 import usniIcon from '@/assets/images/usni-icon-gold.svg'
+import BookPrice from '@/components/ui/BookPrice'
 
 /**
  * One title in a collection bibliography.
@@ -73,23 +74,14 @@ export default function CollectionTitleCard({ title }: { title: CollectionTitle 
         )}
 
         {title.href ? (
-          <div className="mt-1.5 flex flex-col gap-0.5">
-            <div className="flex items-baseline gap-2">
-              {title.format && (
-                <span className="font-body text-[13px] text-neutral-subtle">
-                  {title.format}
-                </span>
-              )}
-              {title.price !== undefined && (
-                <span className="font-body font-bold text-sm text-navy-bolder">
-                  ${title.price.toFixed(2)}
-                </span>
-              )}
-            </div>
-            {title.memberPrice !== undefined && (
-              <span className="font-body text-[12px] text-neutral-subtle">
-                Members ${title.memberPrice.toFixed(2)}
+          <div className="mt-2 flex flex-col gap-1.5">
+            {title.format && (
+              <span className="font-body text-[13px] text-neutral-subtle leading-none">
+                {title.format}
               </span>
+            )}
+            {title.price !== undefined && (
+              <BookPrice listPrice={title.price} memberPrice={title.memberPrice} />
             )}
           </div>
         ) : (
