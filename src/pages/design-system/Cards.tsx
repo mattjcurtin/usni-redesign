@@ -8,6 +8,9 @@ import SmallFeature from '@/components/cards/SmallFeature'
 import LargeFeature from '@/components/cards/LargeFeature'
 import XSmallFeature from '@/components/cards/XSmallFeature'
 import AdUnit from '@/components/ui/AdUnit'
+import CollectionTitleCard from '@/components/cards/CollectionTitleCard'
+import CollectionTeaserCard from '@/components/cards/CollectionTeaserCard'
+import { seriesBySlug, seriesHref } from '@/data/bookCollections'
 import type { Article } from '@/types'
 import imgAIWarfighting from '@/assets/images/books/ai-warfighting.jpg'
 import img250YearCelebration from '@/assets/images/250-year-celebration.png'
@@ -50,6 +53,12 @@ const articles: Article[] = [
 ]
 
 const demoArticle = articles[0]
+
+/* Real entries from the Blue & Gold bibliography, so the two states of the
+   collection card can be shown side by side as they actually occur. */
+const demoSeries = seriesBySlug('blue-and-gold')
+const demoTitleLinked = demoSeries?.titles.find((t) => t.href)
+const demoTitleUnlinked = demoSeries?.titles.find((t) => !t.href)
 
 const demoPlainCard = {
   headline: 'Become a Member',
@@ -152,6 +161,77 @@ export default function Cards() {
   cta="Join Today"
   href="/membership/join"
 />`} />
+        </DocSection>
+
+        <DocSection title="Collection Title Card">
+          <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-6 max-w-2xl">
+            One title in a Books &amp; Press collection bibliography — the series pages and the military
+            reading lists. Two states: a title with a product page is a link with a hover lift and a
+            price, and a title the Press lists but no longer sells renders as a reference entry — the
+            USNI mark framed as a book plate, no lift, and its availability where the price would
+            be. The frame owns the 2:3 shape and the cover is absolutely positioned inside it, so every
+            cover in a row scales alike and crops from the centre.
+          </p>
+          <DocLabel>Available and unavailable, as they appear together in a grid</DocLabel>
+          <div className="border border-border-light bg-white p-6 mb-6">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-10 max-w-md pt-7">
+              {demoTitleLinked && <CollectionTitleCard title={demoTitleLinked} />}
+              {demoTitleUnlinked && <CollectionTitleCard title={demoTitleUnlinked} />}
+            </div>
+          </div>
+          <CodeBlock code={`import CollectionTitleCard from '@/components/cards/CollectionTitleCard'
+
+<CollectionTitleCard title={title} />`} />
+          <div className="mt-6">
+            <PropsTable
+              rows={[
+                {
+                  name: 'title',
+                  type: 'CollectionTitle',
+                  description:
+                    'Entry from a collection in src/data/bookCollections.ts. Omitting href selects the unavailable state; availability then supplies the note shown in place of the price.',
+                },
+              ]}
+            />
+          </div>
+        </DocSection>
+
+        <DocSection title="Collection Teaser Card">
+          <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-6 max-w-2xl">
+            Teaser for a whole collection, used on the Professional Military Education hub and in the
+            cross-links at the foot of every series page. These pages have no photography of their own,
+            so the card leads with three real covers from the series, bottom-aligned on a fixed-height
+            shelf so every card&rsquo;s title lands on the same baseline across a grid. Nothing on the card
+            states a count — series grow and titles go out of print, and a number is a claim someone has
+            to maintain. A series with no covers yet falls back to its own hero photograph full-bleed in
+            the shelf, and failing that to a quiet “New series” label.
+          </p>
+          <div className="border border-border-light bg-white p-6 mb-6 max-w-sm">
+            {demoSeries && (
+              <CollectionTeaserCard collection={demoSeries} href={seriesHref(demoSeries.slug)} />
+            )}
+          </div>
+          <CodeBlock code={`import CollectionTeaserCard from '@/components/cards/CollectionTeaserCard'
+import { seriesHref } from '@/data/bookCollections'
+
+<CollectionTeaserCard collection={collection} href={seriesHref(collection.slug)} />`} />
+          <div className="mt-6">
+            <PropsTable
+              rows={[
+                {
+                  name: 'collection',
+                  type: 'BookCollection',
+                  description:
+                    'The collection to tease. Cover art is pulled from its first three purchasable titles.',
+                },
+                {
+                  name: 'href',
+                  type: 'string',
+                  description: 'Where the card links. Use seriesHref(slug) for a series page.',
+                },
+              ]}
+            />
+          </div>
         </DocSection>
 
         <DocSection title="Ad Unit">
