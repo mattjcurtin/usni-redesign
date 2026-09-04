@@ -235,13 +235,17 @@ export default function BooksCheckout() {
               {/* ── Left: forms ── */}
               <div className="flex-1 min-w-0 flex flex-col gap-8">
 
-                <div ref={alertRef}>
-                  {showErrors && missing.length > 0 && (
+                {/* Only mounted when there is something to say — an empty
+                    wrapper still consumes the column's gap and knocked the
+                    first card out of line with the order summary. The ref
+                    attaches on mount, before the scroll fires. */}
+                {showErrors && missing.length > 0 && (
+                  <div ref={alertRef}>
                     <Alert variant="danger" title="Please complete the required fields" className="scroll-mt-28">
                       The following {missing.length === 1 ? 'item is' : 'items are'} required: {missing.join(', ')}.
                     </Alert>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 <Card title="Account Information">
                   <div className="flex">
