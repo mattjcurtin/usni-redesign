@@ -50,6 +50,9 @@ import BooksNewReleases from '@/pages/BooksNewReleases'
 import BooksCart from '@/pages/BooksCart'
 import BooksCheckout from '@/pages/BooksCheckout'
 import BooksConfirmation from '@/pages/BooksConfirmation'
+import BooksPME from '@/pages/BooksPME'
+import BooksReadingLists from '@/pages/BooksReadingLists'
+import BookSeriesPage from '@/pages/BookSeriesPage'
 import NavalHistory from '@/pages/NavalHistory'
 import NavalHistoryCurrentIssue from '@/pages/NavalHistoryCurrentIssue'
 import NavalHistoryAllIssues from '@/pages/NavalHistoryAllIssues'
@@ -125,6 +128,18 @@ export default function App() {
         <Route path="/books/cart" element={<BooksCart />} />
         <Route path="/books/checkout" element={<BooksCheckout />} />
         <Route path="/books/confirmation" element={<BooksConfirmation />} />
+        <Route path="/books/pme" element={<BooksPME />} />
+        <Route path="/books/reading-lists" element={<BooksReadingLists />} />
+        {/* One template, nine series — see src/data/bookCollections.ts */}
+        <Route path="/books/series/scarlet-and-gold" element={<BookSeriesPage slug="scarlet-and-gold" />} />
+        <Route path="/books/series/blue-and-gold" element={<BookSeriesPage slug="blue-and-gold" />} />
+        <Route path="/books/series/marine-corps-history" element={<BookSeriesPage slug="marine-corps-history" />} />
+        <Route path="/books/series/military-aviation" element={<BookSeriesPage slug="military-aviation" />} />
+        <Route path="/books/series/president-commander-in-chief" element={<BookSeriesPage slug="president-commander-in-chief" />} />
+        <Route path="/books/series/transforming-war" element={<BookSeriesPage slug="transforming-war" />} />
+        <Route path="/books/series/naval-history-sea-power" element={<BookSeriesPage slug="naval-history-sea-power" />} />
+        <Route path="/books/series/essentials-of-strategy" element={<BookSeriesPage slug="essentials-of-strategy" />} />
+        <Route path="/books/series/war-on-film" element={<BookSeriesPage slug="war-on-film" />} />
         <Route path="/naval-history" element={<NavalHistory />} />
         <Route path="/naval-history/aug-2026" element={<NavalHistoryCurrentIssue />} />
         <Route path="/naval-history/all-issues" element={<NavalHistoryAllIssues />} />
