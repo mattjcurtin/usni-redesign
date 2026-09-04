@@ -44,7 +44,7 @@ function TeaserCard({ entry }: { entry: EssayArchiveEntry }) {
   const src = archiveImage(entry.image)
 
   return (
-    <article className="group flex flex-col bg-white border border-navy-subtle h-full">
+    <article className="group flex flex-col bg-white border border-navy-subtle h-full hover:shadow-md transition-shadow">
       <div className="relative aspect-[16/10] overflow-hidden bg-navy-bolder">
         {src ? (
           <img src={src} alt={entry.imageAlt ?? ''} className="w-full h-full object-cover" />

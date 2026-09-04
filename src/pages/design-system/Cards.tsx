@@ -199,7 +199,9 @@ export default function Cards() {
         <DocSection title="Collection Teaser Card">
           <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-6 max-w-2xl">
             Teaser for a whole collection, used on the Professional Military Education hub and in the
-            cross-links at the foot of every series page. These pages have no photography of their own,
+            cross-links at the foot of every series page. On hover it does what every linked card on the
+            site does: the border holds, the shadow raises, and the title and CTA underlines sweep in
+            together. These pages have no photography of their own,
             so the card leads with three real covers from the series, bottom-aligned on a fixed-height
             shelf so every card&rsquo;s title lands on the same baseline across a grid. Nothing on the card
             states a count — series grow and titles go out of print, and a number is a claim someone has
