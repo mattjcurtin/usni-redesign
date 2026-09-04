@@ -30,19 +30,43 @@ export default function NavalHistoryCartItems() {
   const format = (searchParams.get('format') === 'digital' ? 'digital' : 'print') as Format
   const offer  = offerFor(format, region, term)
 
+  /*
+   * A membership added at the upsell step (step 2). Its presence is what puts
+   * the subscription on the member rate, so both the line item and the total
+   * read from `subPrice` rather than `offer.price`.
+   */
+  const memPlan  = searchParams.get('memPlan')
+  const memPrice = Number(searchParams.get('memPrice')) || 0
+  const hasMembership = memPlan === 'digital' || memPlan === 'full'
+  const memPlanLabel = memPlan === 'full' ? 'Full' : 'Digital'
+
+  const subPrice = hasMembership ? offer.memberPrice : offer.price
+  const orderTotal = subPrice + (hasMembership ? memPrice : 0)
+
   const [isGift, setIsGift] = useState(searchParams.get('gift') === 'true')
   const [autoRenew, setAutoRenew] = useState(searchParams.get('autoRenew') !== 'false')
 
-  useEffect(() => { setCartCount(1) }, [setCartCount])
+  useEffect(() => { setCartCount(hasMembership ? 2 : 1) }, [setCartCount, hasMembership])
 
   const handleCheckout = () => {
     const params = new URLSearchParams({
-      term, region, format, price: String(offer.price),
+      term, region, format, price: String(subPrice),
       autoRenew: String(autoRenew),
     })
     if (isGift) params.set('gift', 'true')
+    if (hasMembership) {
+      params.set('memPlan', memPlan)
+      params.set('memPrice', String(memPrice))
+    }
     navigate(`/naval-history/subscribe/checkout?${params.toString()}`)
   }
+
+  /** Back to the upsell, preserving the choices made in step 1. */
+  const editMembership = () =>
+    navigate(
+      `/naval-history/subscribe/membership-upsell?term=${term}&region=${region}` +
+        `&format=${format}&price=${offer.price}`,
+    )
 
   return (
     <section className="bg-white py-16">
@@ -81,7 +105,10 @@ export default function NavalHistoryCartItems() {
               </p>
               <div className="w-px h-5 bg-[#c4c9d4]" aria-hidden />
               <p className="font-body text-[17px] text-[#1d2535]">
-                <span className="font-bold">Price:</span> ${offer.price}
+                <span className="font-bold">Price:</span> ${subPrice}
+                {hasMembership && (
+                  <span className="text-[#4e576a]"> (member rate)</span>
+                )}
               </p>
             </div>
           </div>
@@ -90,7 +117,7 @@ export default function NavalHistoryCartItems() {
             <button
               type="button"
               onClick={() => navigate('/naval-history/subscribe')}
-              className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#002b5c] hover:text-white transition-colors"
+              className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
             >
               <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -111,14 +138,62 @@ export default function NavalHistoryCartItems() {
           </div>
         </div>
 
+        {/* Membership line item, when one was added at the upsell step */}
+        {hasMembership && (
+          <div className="flex flex-wrap items-start justify-between gap-4 border-t border-[#c4c9d4] pt-6">
+            <div className="flex flex-col gap-1">
+              <h3 className="font-headline text-[26px] text-[#023e7d] leading-[1.2]">
+                Naval Institute Membership &mdash; {memPlanLabel}
+              </h3>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <p className="font-body text-[17px] text-[#1d2535]">
+                  <span className="font-bold">Term:</span> 1 year
+                </p>
+                <div className="w-px h-5 bg-[#c4c9d4]" aria-hidden />
+                <p className="font-body text-[17px] text-[#1d2535]">
+                  <span className="font-bold">Price:</span> ${memPrice}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 flex-shrink-0 pt-1">
+              <button
+                type="button"
+                onClick={editMembership}
+                className="flex items-center gap-1.5 border border-[#002b5c] text-[#002b5c] font-body font-bold text-[13px] px-4 py-2 hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
+              >
+                Change
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    `/naval-history/subscribe/cart?term=${term}&region=${region}` +
+                      `&format=${format}&price=${offer.price}`,
+                  )
+                }
+                className="flex items-center gap-1.5 border border-[#c1121f] text-[#c1121f] font-body font-bold text-[13px] px-4 py-2 hover:bg-[#c1121f] hover:text-white transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Order total */}
         <div className="border-t border-[#c4c9d4] pt-6 flex flex-wrap items-baseline justify-between gap-4">
           <span className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Order total</span>
           <div className="text-right">
-            <span className="font-headline text-[36px] text-[#023e7d] leading-none">${offer.price}</span>
-            <p className="font-body text-[14px] text-[#4e576a] mt-1">
-              Members pay ${offer.memberPrice} — sign in at checkout to apply member pricing.
-            </p>
+            <span className="font-headline text-[36px] text-[#023e7d] leading-none">${orderTotal}</span>
+            {hasMembership ? (
+              <p className="font-body text-[14px] text-[#4e576a] mt-1">
+                Member pricing applied to your subscription.
+              </p>
+            ) : (
+              <p className="font-body text-[14px] text-[#4e576a] mt-1">
+                Members pay ${offer.memberPrice} — sign in at checkout to apply member pricing.
+              </p>
+            )}
           </div>
         </div>
 
@@ -153,7 +228,7 @@ export default function NavalHistoryCartItems() {
           <button
             type="button"
             onClick={() => navigate('/naval-history/subscribe')}
-            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-[#002b5c] hover:text-white transition-colors"
+            className="flex items-center gap-2 border border-[#002b5c] text-[#001845] font-body font-extrabold text-[20px] py-4 px-8 hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
           >
             <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10 6H2M6 2L2 6l4 4" />

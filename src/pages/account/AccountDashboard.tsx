@@ -101,7 +101,7 @@ export default function AccountDashboard() {
               </Link>
               <Link
                 to="/account/payment"
-                className="inline-flex items-center justify-center font-body font-bold text-[15px] text-navy-bolder px-5 py-3 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
+                className="inline-flex items-center justify-center font-body font-bold text-[15px] text-navy-bolder px-5 py-3 border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
               >
                 Update payment
               </Link>

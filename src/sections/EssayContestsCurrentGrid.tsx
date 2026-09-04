@@ -44,7 +44,7 @@ function ContestCard({ contest }: { contest: EssayContest }) {
           <p className="font-body font-semibold text-xs uppercase tracking-[0.1em] text-navy-subtle">
             {contest.year}
           </p>
-          <h3 className="font-headline text-xl lg:text-[22px] text-navy-bolder leading-[1.2] group-hover:text-navy-bright transition-colors">
+          <h3 className="font-headline text-xl lg:text-[22px] text-navy-bolder leading-[1.2]">
             <span className="article-link article-link--card">{contest.title}</span>
           </h3>
           {contest.division && (

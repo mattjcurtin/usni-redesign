@@ -2,6 +2,7 @@ import podcastArt from '@/assets/images/proceedings-podcast-taller.jpg'
 import appleBadge from '@/assets/images/apple-podcasts-badge.svg'
 import spotifyBadge from '@/assets/images/listen-on-spotify-badge.png'
 import googleBadge from '@/assets/images/google-podcasts-badge.webp'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 
 /**
  * Official platform badges, replacing the hand-built pill buttons that used
@@ -28,16 +29,14 @@ export default function ProceedingsPodcastHero() {
 
             {/* Breadcrumb */}
             <div className="pb-4 border-b border-[#C2DDFF]">
-              <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body font-bold text-sm lg:text-base">
-                <a href="/" className="flex items-center gap-1.5 text-navy-subtle hover:text-navy-bolder transition-colors">
-                  <i className="fa-solid fa-house text-[10px]" aria-hidden="true" />
-                  Home
-                </a>
-                <span className="text-neutral-subtle">/</span>
-                <a href="/proceedings" className="text-navy-subtle hover:text-navy-bolder transition-colors">Proceedings</a>
-                <span className="text-neutral-subtle">/</span>
-                <span className="font-normal italic text-neutral-subtle">The Proceedings Podcast</span>
-              </nav>
+              <Breadcrumb
+                trail={[
+                  { label: 'Home', href: '/' },
+                  { label: 'Proceedings', href: '/proceedings' },
+                ]}
+                current="The Proceedings Podcast"
+                homeIcon
+              />
             </div>
 
             {/* Title */}

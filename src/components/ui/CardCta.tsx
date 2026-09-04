@@ -8,8 +8,11 @@ import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
  * when the *card* is hovered, not just this row — so it must sit inside an
  * element carrying `group`. The other half is the card wrapper itself, which
  * keeps a static border and raises its shadow (`hover:shadow-md
- * transition-shadow`), and the card title, which takes
- * `article-link article-link--card` plus `group-hover:text-navy-bright`.
+ * transition-shadow`).
+ *
+ * Card headlines stay dark and static. Only the stylized link animates — the
+ * headline used to shift blue and sweep an underline as well, which meant two
+ * things moving on one hover.
  *
  * Extracted because six cards had grown four different versions of this row —
  * some sweeping the underline, some only nudging the arrow, some widening the

@@ -210,7 +210,7 @@ function BookGridCard({ book }: { book: Book }) {
         />
       </div>
       <div className="flex flex-col gap-0.5">
-        <h3 className="font-headline text-[20px] leading-snug text-navy-bolder group-hover:text-navy-subtle transition-colors line-clamp-3">
+        <h3 className="font-headline text-[20px] leading-snug text-navy-bolder line-clamp-3">
           {/* Inner span, as on the essay-contest and issue cards: the underline
               is a background gradient, and `clone` only splits it per line on an
               inline box. Putting it on the clamped h3 itself would draw one bar

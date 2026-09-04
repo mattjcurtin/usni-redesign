@@ -1,6 +1,7 @@
 import type { BookCollection } from '@/data/bookCollections'
+import SiteBreadcrumb from '@/components/ui/Breadcrumb'
 
-/** Breadcrumb trail, styled for either a light or a dark ground. */
+/** Books & Press trail, with an optional page between the section and this one. */
 function Breadcrumb({
   label,
   parent,
@@ -11,33 +12,17 @@ function Breadcrumb({
   parent?: { label: string; href: string }
   dark?: boolean
 }) {
-  const link = dark
-    ? 'font-body font-bold text-light-blue hover:text-white transition-colors'
-    : 'font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors'
-  const sep = dark ? 'text-white/40' : 'text-neutral-subtle'
-  const current = dark
-    ? 'font-body italic text-[#f4f4f6]'
-    : 'font-body italic text-neutral-subtle'
-
   return (
-    <nav
-      className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-sm pb-4 border-b ${
-        dark ? 'border-white/25' : 'border-[#C2DDFF]'
-      }`}
-      aria-label="Breadcrumb"
-    >
-      <a href="/" className={link}>Home</a>
-      <span className={sep}>/</span>
-      <a href="/books" className={link}>Books &amp; Press</a>
-      {parent && (
-        <>
-          <span className={sep}>/</span>
-          <a href={parent.href} className={link}>{parent.label}</a>
-        </>
-      )}
-      <span className={sep}>/</span>
-      <span className={current}>{label}</span>
-    </nav>
+    <SiteBreadcrumb
+      trail={[
+        { label: 'Home', href: '/' },
+        { label: 'Books & Press', href: '/books' },
+        ...(parent ? [parent] : []),
+      ]}
+      current={label}
+      tone={dark ? 'dark' : 'light'}
+      className={`pb-4 border-b ${dark ? 'border-white/25' : 'border-[#C2DDFF]'}`}
+    />
   )
 }
 

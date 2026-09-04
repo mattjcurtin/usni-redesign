@@ -1,4 +1,5 @@
 import coverImage from '@/assets/images/proceedings-magazine-april-cover.png'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 
 export default function ProceedingsIssueHero() {
   return (
@@ -11,16 +12,15 @@ export default function ProceedingsIssueHero() {
 
             {/* Breadcrumb */}
             <div className="pb-4 border-b border-[#C2DDFF]">
-              <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body font-bold text-sm lg:text-base text-white">
-                <a href="/" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-                  <i className="fa-solid fa-house text-[10px]" aria-hidden="true" />
-                  Home
-                </a>
-                <span className="text-white/40">/</span>
-                <a href="/proceedings" className="hover:text-white/80 transition-colors">Proceedings</a>
-                <span className="text-white/40">/</span>
-                <span className="font-normal italic text-[#f4f4f6]">April 2026 Issue</span>
-              </nav>
+              <Breadcrumb
+                trail={[
+                  { label: 'Home', href: '/' },
+                  { label: 'Proceedings', href: '/proceedings' },
+                ]}
+                current="April 2026 Issue"
+                tone="dark"
+                homeIcon
+              />
             </div>
 
             {/* Title */}

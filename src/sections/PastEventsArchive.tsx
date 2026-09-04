@@ -74,7 +74,7 @@ function EventCard({ event }: { event: PastEvent }) {
           {/* Stretched hit area so the whole card is clickable */}
           <a
             href={event.href}
-            className="link-underline-hover text-navy-bolder hover:text-navy-bright transition-colors
+            className="link-underline-hover text-navy-bolder
                        after:absolute after:inset-0"
           >
             {event.title}

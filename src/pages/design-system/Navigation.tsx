@@ -2,6 +2,9 @@ import { useState } from 'react'
 import DesignSystemLayout from '@/components/design-system/DesignSystemLayout'
 import DocSection from '@/components/design-system/DocSection'
 import DocLabel from '@/components/design-system/DocLabel'
+import CodeBlock from '@/components/design-system/CodeBlock'
+import PropsTable from '@/components/design-system/PropsTable'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 import BreakpointLabel from '@/components/design-system/BreakpointLabel'
 import PreviewFrame from '@/components/design-system/PreviewFrame'
 import { Button } from '@/components/ui/Button'
@@ -115,6 +118,65 @@ export default function Navigation() {
             title="Footer — mobile"
             className="border border-border-light bg-white p-6"
           />
+        </DocSection>
+
+        <DocSection title="Breadcrumb">
+          <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-6 max-w-2xl">
+            Every interior page header carries one. Below <code className="font-mono text-sm">sm</code>{' '}
+            it collapses to a single back-link — a left chevron and the immediate parent — because the
+            last crumb is a page title, and a full trail wraps to three lines above the headline it is
+            meant to sit under. From <code className="font-mono text-sm">sm</code> up the whole trail
+            renders. Both forms are in the DOM and switched with{' '}
+            <code className="font-mono text-sm">hidden</code>, which takes the inactive one out of the
+            accessibility tree too.
+          </p>
+
+          <DocLabel>Full trail (sm and up)</DocLabel>
+          <div className="border border-border-light bg-[#ebf4ff] p-6 mb-6">
+            <Breadcrumb
+              trail={[
+                { label: 'Home', href: '#' },
+                { label: 'Books & Press', href: '#' },
+              ]}
+              current="Studies in Marine Corps History and Amphibious Warfare"
+            />
+          </div>
+
+          <DocLabel>On a dark panel</DocLabel>
+          <div className="border border-border-light bg-navy-boldest p-6 mb-6">
+            <Breadcrumb
+              trail={[
+                { label: 'Home', href: '#' },
+                { label: 'Proceedings', href: '#' },
+              ]}
+              current="April 2026 Issue"
+              tone="dark"
+              homeIcon
+            />
+          </div>
+
+          <CodeBlock code={`import Breadcrumb from '@/components/ui/Breadcrumb'
+
+<Breadcrumb
+  trail={[
+    { label: 'Home', href: '/' },
+    { label: 'Books & Press', href: '/books' },
+  ]}
+  current="New Releases"
+  className="pb-4 border-b border-[#C2DDFF]"
+/>`} />
+
+          <div className="mt-6">
+            <PropsTable
+              rows={[
+                { name: 'trail', type: 'Crumb[]', description: 'Ancestors, outermost first. The last one is what the mobile back-link points at.' },
+                { name: 'current', type: 'string', description: 'The page being viewed. Rendered as text, never a link.' },
+                { name: 'tone', type: "'light' | 'dark'", default: "'light'", description: 'Use dark on a navy panel or over a photo.' },
+                { name: 'homeIcon', type: 'boolean', default: 'false', description: 'House glyph beside the first crumb.' },
+                { name: 'className', type: 'string', description: 'Wrapper layout — the dividing rule and its padding live here.' },
+              ]}
+            />
+          </div>
         </DocSection>
 
         <DocSection title="Article Meter Banner">

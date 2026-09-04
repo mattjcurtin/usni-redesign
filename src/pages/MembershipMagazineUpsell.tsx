@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import { Button } from '@/components/ui/Button'
 import nhMagazineGrid from '@/assets/images/nh-magazine-covers/nh-magazine-grid.png'
 
 type Region = 'us' | 'international'
@@ -247,17 +248,14 @@ export default function MembershipMagazineUpsell() {
                     </p>
 
                     {/* CTA */}
-                    <button
-                      type="button"
+                    <Button
+                      variant={format === 'print' ? 'navy' : 'outline-dark'}
+                      size="lg"
+                      fullWidth
                       onClick={() => handleAdd(format)}
-                      className={`flex items-center justify-center w-full font-body font-bold text-base px-6 py-4 transition-colors ${
-                        format === 'print'
-                          ? 'bg-navy-bolder text-white border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright'
-                          : 'bg-white text-navy-bolder border border-navy-bolder hover:bg-[#f0f4f8]'
-                      }`}
                     >
                       Add {FORMAT_LABELS[format]} to Cart
-                    </button>
+                    </Button>
 
                     {/* Features */}
                     <ul className="flex flex-col border-t border-[#e4e7ec] pt-5 gap-1 mt-auto">
@@ -276,13 +274,9 @@ export default function MembershipMagazineUpsell() {
           </div>
 
           {/* Skip */}
-          <button
-            type="button"
-            onClick={handleSkip}
-            className="font-body font-bold text-[16px] text-[#023e7d] border border-[#023e7d] px-8 py-4 hover:bg-[#023e7d] hover:text-white transition-colors"
-          >
+          <Button variant="outline-dark" size="lg" onClick={handleSkip}>
             No thanks, continue to cart
-          </button>
+          </Button>
 
         </div>
       </main>

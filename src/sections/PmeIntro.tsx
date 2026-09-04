@@ -88,7 +88,7 @@ export default function PmeIntro() {
               </a>{' '}
               as mainstays at the war college level. Numerous books have also been
               selected for the{' '}
-              <a href="/books/reading-lists" className="text-link">
+              <a href="/books/military-reading-lists" className="text-link">
                 CNO’s Reading List
               </a>
               . Under the guidance of the Gordon England Chair of Professional Naval
@@ -109,7 +109,7 @@ export default function PmeIntro() {
 
             <div className="pt-1">
               <a
-                href="/books/reading-lists"
+                href="/books/military-reading-lists"
                 className="inline-flex items-center gap-2.5 bg-navy-bolder text-white font-body font-bold text-sm tracking-[-0.2px] px-6 py-4 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors"
               >
                 View the Military Reading Lists

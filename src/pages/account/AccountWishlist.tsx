@@ -56,7 +56,7 @@ export default function AccountWishlist() {
             <button
               type="button"
               onClick={undoRemove}
-              className="bg-white border border-navy-bolder text-navy-bolder font-body font-bold text-[15px] px-5 py-2.5 hover:bg-navy-bolder hover:text-white transition-colors"
+              className="bg-white border border-navy-bolder text-navy-bolder font-body font-bold text-[15px] px-5 py-2.5 hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
             >
               Undo
             </button>

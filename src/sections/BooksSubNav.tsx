@@ -20,7 +20,7 @@ const navItems: SubNavItem[] = [
   {
     label: 'Professional Military Education',
     href: '/books/professional-military-education',
-    alsoActiveUnder: ['/books/series', '/books/reading-lists'],
+    alsoActiveUnder: ['/books/series', '/books/military-reading-lists'],
   },
   { label: 'Oral Histories', href: '/books/oral-histories' },
   { label: 'About the Press', href: '/books/about' },

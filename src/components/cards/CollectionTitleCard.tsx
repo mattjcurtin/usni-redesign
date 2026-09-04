@@ -48,11 +48,7 @@ export default function CollectionTitleCard({ title }: { title: CollectionTitle 
 
       <div className="flex flex-col gap-1">
         <h3
-          className={`font-headline text-[19px] leading-snug ${
-            linked
-              ? 'text-navy-bolder group-hover:text-navy-subtle transition-colors'
-              : 'text-navy-bolder'
-          }`}
+          className="font-headline text-[19px] leading-snug text-navy-bolder"
         >
           {linked ? (
             <span className="article-link article-link--card">{title.title}</span>

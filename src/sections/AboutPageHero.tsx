@@ -1,3 +1,4 @@
+import Breadcrumb from '@/components/ui/Breadcrumb'
 interface AboutPageHeroProps {
   title: string
   /** Secondary line under the title, where the source page carries one. */
@@ -25,13 +26,14 @@ export default function AboutPageHero({
       <div className="container-site flex flex-col gap-4">
 
         {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="border-b border-[#C2DDFF] pb-4 flex items-center gap-2 text-sm">
-          <a href="/" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">Home</a>
-          <span className="text-neutral-subtle">/</span>
-          <a href="/about" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">About USNI</a>
-          <span className="text-neutral-subtle">/</span>
-          <span className="font-body italic text-neutral-subtle">{breadcrumbLabel}</span>
-        </nav>
+        <Breadcrumb
+          trail={[
+            { label: 'Home', href: '/' },
+            { label: 'About USNI', href: '/about' },
+          ]}
+          current={breadcrumbLabel}
+          className="border-b border-[#C2DDFF] pb-4"
+        />
 
         {/* Page title */}
         <div className="flex flex-col gap-3">

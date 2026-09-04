@@ -107,6 +107,17 @@ export default function NavalHistorySubscribeCheckout() {
   const format = (searchParams.get('format') === 'digital' ? 'digital' : 'print') as Format
 
   const offer = offerFor(format, region, term)
+
+  /*
+   * A membership carried through from the upsell step. It puts the
+   * subscription on the member rate and adds a second line to the summary.
+   */
+  const memPlan  = searchParams.get('memPlan')
+  const memPrice = Number(searchParams.get('memPrice')) || 0
+  const hasMembership = memPlan === 'digital' || memPlan === 'full'
+  const memPlanLabel = memPlan === 'full' ? 'Full' : 'Digital'
+  const subPrice = hasMembership ? offer.memberPrice : offer.price
+  const orderTotal = subPrice + (hasMembership ? memPrice : 0)
   const isPrint = shipsPrint(format)
 
   const [tab, setTab] = useState<'create' | 'signin'>('create')
@@ -218,10 +229,14 @@ export default function NavalHistorySubscribeCheckout() {
     setShowErrors(false)
     const params = new URLSearchParams({
       term, region, format,
-      price: String(offer.price),
+      price: String(subPrice),
       order: makeOrderNumber('NHS'),
       autoRenew: String(autoRenew),
     })
+    if (hasMembership) {
+      params.set('memPlan', memPlan)
+      params.set('memPrice', String(memPrice))
+    }
     if (isGift) params.set('gift', 'true')
     if (email.trim()) params.set('email', email.trim())
     if (firstName.trim()) params.set('name', firstName.trim())
@@ -249,13 +264,17 @@ export default function NavalHistorySubscribeCheckout() {
               {/* ── Left: forms ── */}
               <div className="flex-1 min-w-0 flex flex-col gap-8">
 
-                <div ref={alertRef}>
-                  {showErrors && missing.length > 0 && (
+                {/* Only mounted when there is something to say — an empty
+                    wrapper still consumes the column's gap and knocked the
+                    first card out of line with the order summary. The ref
+                    attaches on mount, before the scroll fires. */}
+                {showErrors && missing.length > 0 && (
+                  <div ref={alertRef}>
                     <Alert variant="danger" title="Please complete the required fields" className="scroll-mt-28">
                       The following {missing.length === 1 ? 'item is' : 'items are'} required: {missing.join(', ')}.
                     </Alert>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 <Card title="Account Information">
                   <div className="flex">
@@ -527,6 +546,9 @@ export default function NavalHistorySubscribeCheckout() {
                         ['Format', FORMAT_LABELS[format]],
                         ['Term', TERM_LABELS[term]],
                         ['Region', region === 'us' ? 'United States' : 'International'],
+                        ...(hasMembership
+                          ? [['Membership', `${memPlanLabel} — $${memPrice}/yr`]]
+                          : []),
                       ].map(([label, value]) => (
                         <div key={label} className="flex justify-between items-baseline gap-4 py-3 border-b border-[#e8eaed]">
                           <span className="font-body font-bold text-[15px] text-[#1d2535]">{label}</span>
@@ -535,10 +557,12 @@ export default function NavalHistorySubscribeCheckout() {
                       ))}
                       <div className="flex justify-between items-baseline gap-4 pt-4 mt-1">
                         <span className="font-body font-bold text-[17px] text-[#1d2535]">Total</span>
-                        <span className="font-headline text-[30px] text-[#023e7d]">${offer.price}</span>
+                        <span className="font-headline text-[30px] text-[#023e7d]">${orderTotal}</span>
                       </div>
                       <p className="font-body text-[13px] text-neutral-subtle leading-[1.5] mt-2">
-                        Members pay ${offer.memberPrice}. Sign in above to apply member pricing.
+                        {hasMembership
+                          ? `Member pricing applied — subscription $${subPrice}, membership $${memPrice}.`
+                          : `Members pay $${offer.memberPrice}. Sign in above to apply member pricing.`}
                       </p>
                     </div>
 

@@ -87,8 +87,8 @@ export default function CollectionTeaserCard({
       )}
 
       <div className="flex flex-col gap-2 p-6 flex-1">
-        <h3 className="font-headline text-[21px] leading-[1.2] text-navy-bolder group-hover:text-navy-bright transition-colors">
-          <span className="article-link article-link--card">{collection.name}</span>
+        <h3 className="font-headline text-[21px] leading-[1.2] text-navy-bolder">
+          {collection.name}
         </h3>
 
         <p className="font-body text-sm text-neutral-subtle leading-[1.6] flex-1">
