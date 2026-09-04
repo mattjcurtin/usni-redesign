@@ -48,7 +48,7 @@ function FAQItem({ q, a }: { q: string; a: string }) {
         </span>
       </button>
       {open && (
-        <div className="pb-5 px-4 pr-16">
+        <div className="pt-4 pb-5 pl-4 pr-16">
           <p className="font-body text-base text-neutral-subtle leading-relaxed">{a}</p>
         </div>
       )}

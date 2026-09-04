@@ -42,6 +42,8 @@ export default {
           subtlest: '#F7F7F2',
         },
         // Utility
+        // Figma calls this one `primary-subtler`; `light-blue` is the name it
+        // has carried here since the first build and is used in ~38 files.
         'light-blue': '#C2DDFF',
         'surface-subtle': '#EEF2FF',
         'border-light': '#E2E8F0',

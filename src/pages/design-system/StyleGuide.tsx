@@ -53,7 +53,7 @@ const neutralSwatches: Swatch[] = [
 ]
 
 const utilitySwatches: Swatch[] = [
-  { name: 'light-blue', className: 'bg-light-blue', hex: '#C2DDFF', usage: 'Hero eyebrow text on dark bg' },
+  { name: 'light-blue', className: 'bg-light-blue', hex: '#C2DDFF', usage: 'Hero eyebrow on dark bg; tinted panel behind cover art (Figma: primary-subtler)' },
   { name: 'surface-subtle', className: 'bg-surface-subtle', hex: '#EEF2FF', usage: 'Light blue-tinted section bg' },
   { name: 'border-light', className: 'bg-border-light', hex: '#E2E8F0', usage: 'Card borders, dividers' },
 ]

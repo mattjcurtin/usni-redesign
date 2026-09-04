@@ -1,15 +1,38 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-const navItems = [
+interface SubNavItem {
+  label: string
+  href: string
+  /**
+   * Extra path prefixes that should light this item up. The PME hub owns the
+   * series pages and the reading lists, which live at their own routes rather
+   * than under /books/pme, so they need naming here to keep the section nav
+   * from going blank on a series page.
+   */
+  alsoActiveUnder?: string[]
+}
+
+const navItems: SubNavItem[] = [
   { label: 'Books', href: '/books/collection' },
   { label: 'New Releases', href: '/books/new-releases' },
   { label: 'Author Events', href: '/books/author-events' },
-  { label: 'Professional Military Education', href: '/books/pme' },
+  {
+    label: 'Professional Military Education',
+    href: '/books/pme',
+    alsoActiveUnder: ['/books/series', '/books/reading-lists'],
+  },
   { label: 'Oral Histories', href: '/books/oral-histories' },
   { label: 'About the Press', href: '/books/about' },
   { label: 'Contact the Press', href: '/contact#press' },
 ]
+
+function isItemActive(pathname: string, item: SubNavItem): boolean {
+  if (pathname === item.href || pathname.startsWith(item.href + '/')) return true
+  return (item.alsoActiveUnder ?? []).some(
+    (prefix) => pathname === prefix || pathname.startsWith(prefix + '/'),
+  )
+}
 
 export default function BooksSubNav() {
   const { pathname } = useLocation()
@@ -43,7 +66,7 @@ export default function BooksSubNav() {
         {open && (
           <nav className="border-t border-[#B8B49A]" aria-label="Books section navigation">
             {navItems.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+              const isActive = isItemActive(pathname, item)
               return (
                 <a
                   key={item.label}
@@ -69,7 +92,7 @@ export default function BooksSubNav() {
         aria-label="Books section navigation"
       >
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+          const isActive = isItemActive(pathname, item)
           return (
             <a
               key={item.label}
