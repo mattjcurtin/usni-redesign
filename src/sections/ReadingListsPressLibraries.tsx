@@ -44,8 +44,8 @@ export default function ReadingListsPressLibraries() {
                     className="h-11 w-auto mb-1"
                   />
                 )}
-                <h3 className="font-headline text-[22px] lg:text-[26px] text-navy-bolder leading-[1.2] group-hover:text-navy-bright transition-colors">
-                  <span className="article-link article-link--card">{entry.name}</span>
+                <h3 className="font-headline text-[22px] lg:text-[26px] text-navy-bolder leading-[1.2]">
+                  {entry.name}
                 </h3>
                 <p className="font-body text-[15px] text-neutral-subtle leading-[1.7] flex-1">
                   {entry.blurb}

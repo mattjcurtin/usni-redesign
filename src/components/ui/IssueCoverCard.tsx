@@ -50,7 +50,7 @@ export default function IssueCoverCard({
             group-hover:-translate-y-2 group-hover:shadow-[0_10px_26px_rgba(0,18,51,0.24)]"
         />
       </div>
-      <p className="font-body font-bold text-[17px] lg:text-[18px] text-navy-bolder leading-snug mt-4 group-hover:text-navy-subtle transition-colors">
+      <p className="font-body font-bold text-[17px] lg:text-[18px] text-navy-bolder leading-snug mt-4">
         {/* article-link--card sweeps the blue underline from a hover anywhere
             on the card. Both lines carry it, as one span each rather than a
             block wrapper: the class clones its gradient per rendered line, so a

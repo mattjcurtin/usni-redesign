@@ -75,8 +75,9 @@ function EventCard({ event }: { event: UsniEvent }) {
           {/* Stretched hit area so the whole card is clickable */}
           <a
             href={event.href}
-            className="link-underline-hover text-navy-bolder hover:text-navy-bright transition-colors
-                       after:absolute after:inset-0"
+            /* Static: the "View event" row below is what animates. The
+               pseudo-element still stretches the hit area over the card. */
+            className="text-navy-bolder after:absolute after:inset-0"
           >
             {event.title}
           </a>

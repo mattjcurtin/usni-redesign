@@ -95,7 +95,7 @@ function ContestPicker() {
                 className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 border border-border-light hover:border-navy-subtle bg-white px-5 py-4 transition-colors"
               >
                 <span className="flex flex-col gap-0.5 flex-1 min-w-0">
-                  <span className="font-headline text-lg text-navy-bolder leading-snug group-hover:text-[#0466c8] transition-colors">
+                  <span className="font-headline text-lg text-navy-bolder leading-snug">
                     {contest.year} {contest.title}
                   </span>
                   {contest.division && (

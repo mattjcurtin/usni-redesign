@@ -53,8 +53,8 @@ export default function GivingQuickLinks() {
                 <p className="font-body font-medium text-xs uppercase tracking-[0.08em] text-[#0466c8]">
                   {item.eyebrow}
                 </p>
-                <h3 className="font-headline text-xl text-navy-bolder leading-[1.2] group-hover:text-navy-bright transition-colors">
-                  <span className="article-link article-link--card">{item.headline}</span>
+                <h3 className="font-headline text-xl text-navy-bolder leading-[1.2]">
+                  {item.headline}
                 </h3>
                 <p className="font-body text-sm text-neutral-subtle leading-relaxed">
                   {item.body}

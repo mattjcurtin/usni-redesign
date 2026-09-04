@@ -26,7 +26,7 @@ function CarouselCard({ book }: { book: Book }) {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <h4 className="font-headline text-[18px] leading-snug text-navy-bolder group-hover:text-navy-bright transition-colors">
+        <h4 className="font-headline text-[18px] leading-snug text-navy-bolder">
           {book.title}
         </h4>
         <p className="font-body text-sm text-neutral-subtle">{book.format}</p>

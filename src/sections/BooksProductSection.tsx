@@ -25,7 +25,7 @@ function BookCard({ book }: { book: Book }) {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <h3 className="font-headline text-[20px] leading-snug text-navy-bolder group-hover:text-navy-subtle transition-colors">
+        <h3 className="font-headline text-[20px] leading-snug text-navy-bolder">
           <span className="article-link article-link--card">{book.title}</span>
         </h3>
         <p className="font-body text-sm text-neutral-subtle">{book.format}</p>
