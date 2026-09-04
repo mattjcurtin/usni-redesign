@@ -34,7 +34,7 @@ export default function CollectionCrossLinks({
             More series from the Press
           </h2>
           <a
-            href="/books/pme"
+            href="/books/professional-military-education"
             className="group font-body font-semibold text-sm text-light-blue hover:text-white transition-colors whitespace-nowrap flex items-center gap-1.5 flex-shrink-0 pb-0.5"
           >
             <span className="relative">

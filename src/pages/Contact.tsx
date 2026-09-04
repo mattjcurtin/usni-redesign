@@ -38,7 +38,7 @@ export default function Contact() {
           title="Contact USNI"
           description="Reach the right department directly — member services, the Naval Institute Foundation, the Press, or the editorial offices in Annapolis."
         />
-        <JumpLinkNav links={jumpLinks} mobileLabel="Contact USNI" />
+        <JumpLinkNav links={jumpLinks} />
 
         <ContactGeneral />
         <ContactMembership />

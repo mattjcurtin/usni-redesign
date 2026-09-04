@@ -3,6 +3,7 @@ import Footer from '@/components/layout/Footer'
 import BooksSubNav from '@/sections/BooksSubNav'
 import CollectionHero from '@/sections/CollectionHero'
 import PmeIntro from '@/sections/PmeIntro'
+import AdUnit from '@/components/ui/AdUnit'
 import PmeCollectionsGrid from '@/sections/PmeCollectionsGrid'
 import PmeReadingListsPromo from '@/sections/PmeReadingListsPromo'
 import { pmeHero } from '@/data/bookCollections'
@@ -37,9 +38,16 @@ export default function BooksPME() {
             variant: 'image',
             image: pmeHero,
             imageAlt:
-              'The national ensign flying from a ship’s stern, with a destroyer on the horizon',
+              'Midshipmen in summer whites and Marine Corps staff noncommissioned officers at an assembly',
+            /* Cover crops this 3:2 frame vertically only, so the position sets
+               how much headroom the standing SNCO gets. 40% holds the crop just
+               above centre, keeping him and the bleachers in frame and dropping
+               the out-of-focus foreground row. */
+            imagePosition: 'center 40%',
           }}
         />
+
+        <AdUnit />
 
         <PmeIntro />
 

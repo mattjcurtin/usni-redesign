@@ -1,5 +1,6 @@
 import type { BookCollection } from '@/data/bookCollections'
 import { collectionCover, purchasableTitles } from '@/data/bookCollections'
+import CardCta from '@/components/ui/CardCta'
 
 /** Covers in the shelf. Three reads as a set without crowding the card. */
 const SHELF_COVERS = 3
@@ -35,7 +36,7 @@ export default function CollectionTeaserCard({
       /* Default site card: white ground, navy-subtle hairline, blue on hover —
          matching EssayContestsCurrentGrid, AboutQuickLinks, and UpcomingEvents. */
       className="group flex flex-col bg-white border border-navy-subtle
-                 hover:border-[#0466c8] transition-colors"
+                 hover:shadow-md transition-shadow"
     >
       {/*
         Fixed height across all three states below, so the shelf edge — and
@@ -86,7 +87,7 @@ export default function CollectionTeaserCard({
       )}
 
       <div className="flex flex-col gap-2 p-6 flex-1">
-        <h3 className="font-headline text-[21px] leading-[1.2] text-navy-bolder group-hover:text-[#0466c8] transition-colors">
+        <h3 className="font-headline text-[21px] leading-[1.2] text-navy-bolder group-hover:text-navy-bright transition-colors">
           <span className="article-link article-link--card">{collection.name}</span>
         </h3>
 
@@ -94,13 +95,7 @@ export default function CollectionTeaserCard({
           {collection.summary}
         </p>
 
-        <div className="flex items-center gap-2 mt-3 font-body font-semibold text-sm text-[#0466C8]">
-          <span>Explore this series</span>
-          <i
-            className="fa-solid fa-arrow-right text-[11px] transition-transform duration-200 group-hover:translate-x-1"
-            aria-hidden="true"
-          />
-        </div>
+        <CardCta className="mt-3">Explore this series</CardCta>
       </div>
     </a>
   )

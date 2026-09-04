@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button'
 import CreditCardModal from '@/components/ui/CreditCardModal'
 import { AcceptedCards } from '@/components/ui/CardBrandIcons'
 import { PLAN_LABELS, TERM_LABELS, makeOrderNumber } from '@/data/transactions'
-import { militaryStatuses, services, suffixes } from '@/data/essaySubmission'
+import { militaryStatuses, ranksForService, services, suffixes } from '@/data/essaySubmission'
 import { GradYearHelpTooltip, ServiceHelpTooltip } from '@/components/ui/FieldHelp'
 import { ACCOUNT_ADDRESS, ACCOUNT_CARD, isTestLogin } from '@/data/testAccount'
 import { ChoiceOption, SignedInAs, addressLines } from '@/components/ui/SavedOnFile'
@@ -62,10 +62,13 @@ function FormInput({
 
 function FormSelect({
   label, placeholder, options, value, onChange, className = '', required = false, error = false, tooltip,
+  disabled = false,
 }: {
   label: string; placeholder: string; options: string[]
   value: string; onChange: (v: string) => void; className?: string; required?: boolean; error?: boolean
   tooltip?: ReactNode
+  /** For a select whose options depend on another field, e.g. rank on service. */
+  disabled?: boolean
 }) {
   const id = useId()
   return (
@@ -84,11 +87,12 @@ function FormSelect({
           value={value}
           onChange={e => onChange(e.target.value)}
           aria-invalid={error || undefined}
+          disabled={disabled}
           className={`select-field w-full bg-white border px-4 py-3 font-body text-[16px] text-[#4e576a] focus:outline-none focus:ring-2 min-h-[44px] rounded-none ${
             error
               ? 'border-red-600 focus:ring-red-600/30 focus:border-red-600'
               : 'border-[#4e576a] focus:ring-[#023e7d]/30 focus:border-[#023e7d]'
-          }`}
+          } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           <option value="" disabled>{placeholder}</option>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -408,7 +412,7 @@ export default function MembershipCheckout() {
                         </div>
                         <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
                         <FormInput label="Confirm Email Address" placeholder="your@email.com" value={confirmEmail} onChange={setConfirmEmail} type="email" required error={fieldError(confirmEmail)} />
-                        <FormInput label="Phone Number (Optional)" placeholder="(555) 555-1234" value={phone} onChange={setPhone} type="tel" />
+                        <FormInput label="Phone" placeholder="(555) 555-1234" value={phone} onChange={setPhone} type="tel" />
                         <FormInput label="Password" placeholder="Create a password" value={password} onChange={setPassword} type="password" required error={fieldError(password)} />
 
                         <div className="border-t border-[#c4c9d4] pt-5">
@@ -419,7 +423,7 @@ export default function MembershipCheckout() {
                               <FormSelect label="Military Status" placeholder="— Select —" options={militaryStatuses} value={militaryStatus} onChange={setMilitary} className="flex-1" required error={showErrors && !militaryStatus} />
                             </div>
                             <div className="flex flex-col sm:flex-row gap-5">
-                              <FormInput label="Rank / Title" placeholder="Enter rank or title" value={rank} onChange={setRank} className="flex-1" required error={fieldError(rank)} />
+                              <FormSelect label="Rank / Title" placeholder={service ? '\u2014 Select \u2014' : 'Choose a service first'} options={ranksForService(service)} value={rank} onChange={setRank} className="flex-1" required error={showErrors && !rank} disabled={!service} />
                               <FormSelect label="Suffix" placeholder="— None —" options={suffixes} value={suffix} onChange={setSuffix} className="sm:w-52" error={false} />
                               <FormInput label="Graduation Year" placeholder="YYYY" value={gradYear} onChange={setGradYear} className="sm:w-36" tooltip={<GradYearHelpTooltip align="right" />} />
                             </div>

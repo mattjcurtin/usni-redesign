@@ -375,7 +375,7 @@ function NavLink({ item, compact, isActive, forceOpen }: { item: NavItem; compac
         href={item.href}
         className={`flex items-center gap-1.5 min-[1330px]:gap-[10px] font-body font-extrabold whitespace-nowrap leading-none
                     transition-colors duration-150
-                    ${compact ? 'text-[15px] px-2.5 py-8 min-[1330px]:text-[18px] min-[1330px]:px-4' : 'text-[16px] px-2.5 py-6 min-[1330px]:text-[21px] min-[1330px]:px-5'}
+                    ${compact ? 'text-[15px] px-2.5 py-8 min-[1330px]:text-[18px] min-[1330px]:px-4' : 'text-[16px] px-2.5 py-6 min-[1330px]:text-[18px] min-[1330px]:px-5'}
                     ${open ? 'bg-navy-bolder text-white' : 'text-navy-subtle hover:text-navy-bolder'}`}
         aria-haspopup={item.children ? 'true' : undefined}
         aria-expanded={item.children ? open : undefined}
@@ -404,7 +404,7 @@ function ArchivesLink() {
     >
       <a
         href="/archives"
-        className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[18px] text-navy-subtle
+        className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[16px] text-navy-subtle
                    px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none"
       >
         <span className="article-link article-link--nav pb-0.5">Archives</span>
@@ -639,14 +639,14 @@ export default function Header() {
             <FullLogo />
             <div className="flex items-center">
               <ArchivesLink />
-              <a href="/events" className="group/nav font-body font-bold text-[15px] min-[1330px]:text-[18px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
+              <a href="/events" className="group/nav font-body font-bold text-[15px] min-[1330px]:text-[16px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
                 <span className="article-link article-link--nav pb-0.5">Events</span>
               </a>
-              <a href="/ships-store" className="group/nav font-body font-bold text-[15px] min-[1330px]:text-[18px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
+              <a href="/ships-store" className="group/nav font-body font-bold text-[15px] min-[1330px]:text-[16px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
                 <span className="article-link article-link--nav pb-0.5">Ship's Store</span>
               </a>
               <div className="w-px h-5 bg-[#c4c9d4] mx-2" />
-              <a href="/membership/cart" className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[18px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
+              <a href="/membership/cart" className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[16px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -658,7 +658,7 @@ export default function Header() {
                   </span>
                 )}
               </a>
-              <a href={onAccount ? '/account' : '/login'} className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[18px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
+              <a href={onAccount ? '/account' : '/login'} className="group/nav flex items-center gap-1.5 font-body font-bold text-[15px] min-[1330px]:text-[16px] text-navy-subtle px-2.5 min-[1330px]:px-4 py-2 hover:text-navy-bolder transition-colors whitespace-nowrap leading-none">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
@@ -670,7 +670,7 @@ export default function Header() {
               <a
                 href="/giving/donate"
                 className="ml-3 flex items-center gap-2.5 bg-gold text-navy-bolder font-body font-bold
-                           text-[15px] min-[1330px]:text-[18px] px-4 min-[1330px]:px-6 py-3 min-[1330px]:py-3.5 hover:bg-gold-dark transition-colors whitespace-nowrap leading-none"
+                           text-[15px] min-[1330px]:text-[16px] px-4 min-[1330px]:px-6 py-3 min-[1330px]:py-3.5 hover:bg-gold-dark transition-colors whitespace-nowrap leading-none"
               >
                 <img src="/donate-button-logo.svg" alt="" style={{ height: '1.4rem' }} className="w-auto" aria-hidden="true" />
                 Donate

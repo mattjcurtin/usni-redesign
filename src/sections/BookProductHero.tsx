@@ -132,7 +132,7 @@ export default function BookProductHero({ book }: Props) {
               <span className="font-headline text-[40px] text-navy-bolder leading-none">
                 ${format.price.toFixed(2)}
               </span>
-              <span className="font-body text-base text-neutral-subtle line-through">
+              <span className="font-body text-[16px] text-neutral-subtle">
                 ${format.originalPrice.toFixed(2)}
               </span>
               <span className="font-body text-sm font-bold text-[#0a5c2e] bg-[#e6f7ed] px-2 py-0.5">

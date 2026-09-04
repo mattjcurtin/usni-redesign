@@ -8,5 +8,5 @@ const links = [
 ]
 
 export default function GivingJumpNav() {
-  return <JumpLinkNav links={links} mobileLabel="Giving" />
+  return <JumpLinkNav links={links} />
 }

@@ -17,9 +17,6 @@ export default function PmeCollectionsGrid() {
           <h2 className="font-headline text-[26px] lg:text-[32px] text-navy-bolder leading-[1.15]">
             Series from the Naval Institute Press
           </h2>
-          <p className="font-body text-sm text-neutral-subtle mt-1.5">
-            Each series is edited by a scholar or practitioner in the field
-          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">

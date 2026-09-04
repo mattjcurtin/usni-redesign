@@ -5,6 +5,7 @@ import CollectionHero from '@/sections/CollectionHero'
 import CollectionIntro from '@/sections/CollectionIntro'
 import CollectionTitlesGrid from '@/sections/CollectionTitlesGrid'
 import CollectionCrossLinks from '@/sections/CollectionCrossLinks'
+import AdUnit from '@/components/ui/AdUnit'
 import NotFound from '@/pages/NotFound'
 import { seriesBySlug, purchasableTitles } from '@/data/bookCollections'
 
@@ -34,10 +35,12 @@ export default function BookSeriesPage({ slug }: { slug: string }) {
           deck={collection.editor ? `${collection.editor.name}, Series Editor` : undefined}
           description={collection.summary}
           breadcrumbLabel={collection.shortName}
-          breadcrumbParent={{ label: 'Professional Military Education', href: '/books/pme' }}
+          breadcrumbParent={{ label: 'Professional Military Education', href: '/books/professional-military-education' }}
           hero={collection.hero}
           mark={collection.mark}
         />
+
+        <AdUnit />
 
         <CollectionIntro collection={collection} />
 

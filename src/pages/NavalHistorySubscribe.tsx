@@ -124,7 +124,7 @@ export default function NavalHistorySubscribe() {
                         </h3>
                         <div className="flex items-baseline gap-2 mt-3">
                           {originalPrice && (
-                            <span className="font-body text-[18px] text-neutral-subtle line-through">
+                            <span className="font-body text-[16px] text-neutral-subtle">
                               ${originalPrice}
                             </span>
                           )}

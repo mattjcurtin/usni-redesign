@@ -15,6 +15,10 @@ import type { ReactNode } from 'react'
  * `role` defaults by variant: danger gets role="alert" so it interrupts a
  * screen reader, the rest get role="status" so they are announced politely.
  * Pass role explicitly to override.
+ *
+ * `action` puts a control on the trailing edge — an Undo for a destructive
+ * action the user took without a confirm, for instance. It wraps below the copy
+ * on narrow screens rather than squeezing the message.
  */
 
 export type AlertVariant = 'success' | 'warning' | 'info' | 'danger'
@@ -31,6 +35,7 @@ export default function Alert({
   title,
   children,
   icon = true,
+  action,
   role,
   className = '',
   id,
@@ -41,6 +46,8 @@ export default function Alert({
   children?: ReactNode
   /** Set false to drop the leading icon. */
   icon?: boolean
+  /** Control on the trailing edge, e.g. an Undo button. */
+  action?: ReactNode
   role?: 'alert' | 'status'
   className?: string
   id?: string
@@ -50,7 +57,11 @@ export default function Alert({
     <div
       id={id}
       role={role ?? (variant === 'danger' ? 'alert' : 'status')}
-      className={`flex items-start gap-3 border border-l-4 px-5 py-4 ${className}`}
+      /* An action makes the row a control bar, so it centres; without one the
+         icon still needs to sit against the first line of copy. */
+      className={`flex flex-wrap gap-3 border border-l-4 px-5 py-4 ${
+        action ? 'items-center' : 'items-start'
+      } ${className}`}
       style={{ backgroundColor: v.bg, borderColor: v.accent }}
     >
       {icon && (
@@ -60,7 +71,7 @@ export default function Alert({
           aria-hidden="true"
         />
       )}
-      <div className="min-w-0 flex flex-col gap-1">
+      <div className="min-w-0 flex-1 flex flex-col gap-1">
         {title && (
           <p className="font-body font-bold text-[16px] text-[#1d2535] leading-snug">{title}</p>
         )}
@@ -68,6 +79,8 @@ export default function Alert({
           <div className="font-body text-[15px] text-[#1d2535] leading-relaxed">{children}</div>
         )}
       </div>
+
+      {action && <div className="flex-shrink-0">{action}</div>}
     </div>
   )
 }

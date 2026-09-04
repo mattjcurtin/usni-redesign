@@ -31,9 +31,11 @@ export default function ReadingListsPressLibraries() {
             if (!series) return null
 
             return (
-              <div
+              <a
                 key={entry.seriesSlug}
-                className="bg-white border border-navy-subtle p-6 lg:p-8 flex flex-col gap-3 items-start"
+                href={seriesHref(entry.seriesSlug)}
+                className="group bg-white border border-navy-subtle hover:shadow-md
+                           transition-shadow p-6 lg:p-8 flex flex-col gap-3 items-start"
               >
                 {series.mark && (
                   <img
@@ -42,20 +44,22 @@ export default function ReadingListsPressLibraries() {
                     className="h-11 w-auto mb-1"
                   />
                 )}
-                <h3 className="font-headline text-[22px] lg:text-[26px] text-navy-bolder leading-[1.2]">
-                  {entry.name}
+                <h3 className="font-headline text-[22px] lg:text-[26px] text-navy-bolder leading-[1.2] group-hover:text-navy-bright transition-colors">
+                  <span className="article-link article-link--card">{entry.name}</span>
                 </h3>
                 <p className="font-body text-[15px] text-neutral-subtle leading-[1.7] flex-1">
                   {entry.blurb}
                 </p>
-                <a
-                  href={seriesHref(entry.seriesSlug)}
-                  className="inline-flex items-center gap-2 bg-navy-bolder text-white font-body font-bold text-sm tracking-[-0.2px] px-6 py-4 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors mt-2"
-                >
+                {/* A span, not a nested <a> — the whole card is the link. Keeps
+                    the button's look while the card owns the click and hover. */}
+                <span className="inline-flex items-center gap-2 bg-navy-bolder text-white font-body font-bold text-sm tracking-[-0.2px] px-6 py-4 border border-navy-bolder group-hover:bg-navy-bright group-hover:border-navy-bright transition-colors mt-2">
                   View this library
-                  <i className="fa-solid fa-arrow-right text-xs" aria-hidden="true" />
-                </a>
-              </div>
+                  <i
+                    className="fa-solid fa-arrow-right text-xs transition-transform duration-200 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </span>
+              </a>
             )
           })}
         </div>

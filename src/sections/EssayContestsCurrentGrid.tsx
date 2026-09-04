@@ -24,7 +24,7 @@ function ContestCard({ contest }: { contest: EssayContest }) {
   return (
     <a
       href={contest.href}
-      className="group flex flex-col bg-white border border-navy-subtle hover:border-[#0466c8] transition-colors"
+      className="group flex flex-col bg-white border border-navy-subtle hover:shadow-md transition-shadow"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-neutral-subtlest">
         <img
@@ -44,7 +44,7 @@ function ContestCard({ contest }: { contest: EssayContest }) {
           <p className="font-body font-semibold text-xs uppercase tracking-[0.1em] text-navy-subtle">
             {contest.year}
           </p>
-          <h3 className="font-headline text-xl lg:text-[22px] text-navy-bolder leading-[1.2] group-hover:text-[#0466c8] transition-colors">
+          <h3 className="font-headline text-xl lg:text-[22px] text-navy-bolder leading-[1.2] group-hover:text-navy-bright transition-colors">
             <span className="article-link article-link--card">{contest.title}</span>
           </h3>
           {contest.division && (

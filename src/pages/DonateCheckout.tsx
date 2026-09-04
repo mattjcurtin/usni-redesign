@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button'
 import CreditCardModal from '@/components/ui/CreditCardModal'
 import { AcceptedCards } from '@/components/ui/CardBrandIcons'
 import { PRIORITY_LABELS, makeOrderNumber } from '@/data/transactions'
-import { countries, militaryStatuses, services, suffixes, usStates } from '@/data/essaySubmission'
+import { countries, militaryStatuses, ranksForService, services, suffixes, usStates } from '@/data/essaySubmission'
 import { GradYearHelpTooltip, ServiceHelpTooltip } from '@/components/ui/FieldHelp'
 import { ACCOUNT_ADDRESS, ACCOUNT_CARD, isTestLogin } from '@/data/testAccount'
 import { ChoiceOption, SignedInAs, addressLines } from '@/components/ui/SavedOnFile'
@@ -52,9 +52,12 @@ function FormInput({
 
 function InlineSelect({
   placeholder, options, value, onChange, className = '', error = false, id, ariaLabel,
+  disabled = false,
 }: {
   placeholder: string; options: string[]; value: string; onChange: (v: string) => void
   className?: string; error?: boolean; id?: string; ariaLabel?: string
+  /** For a select whose options depend on another field, e.g. rank on service. */
+  disabled?: boolean
 }) {
   return (
     <div className={`relative ${className}`}>
@@ -64,11 +67,12 @@ function InlineSelect({
         value={value}
         onChange={e => onChange(e.target.value)}
         aria-invalid={error || undefined}
+        disabled={disabled}
         className={`select-field w-full bg-white border px-3 py-3 font-body text-[16px] text-[#4e576a] focus:outline-none focus:ring-2 min-h-[44px] rounded-none ${
           error
             ? 'border-red-600 focus:ring-red-600/30 focus:border-red-600'
             : 'border-[#4e576a] focus:ring-[#023e7d]/30 focus:border-[#023e7d]'
-        }`}
+        } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       >
         <option value="" disabled>{placeholder}</option>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -106,11 +110,13 @@ function AddressFields({
 /** Label + select bound by a generated id. */
 function LabelledSelect({
   label, placeholder, options, value, onChange, className = '', required = false, error = false, tooltip,
+  disabled = false,
 }: {
   label: string; placeholder: string; options: string[]
   value: string; onChange: (v: string) => void
   className?: string; required?: boolean; error?: boolean
   tooltip?: ReactNode
+  disabled?: boolean
 }) {
   const id = useId()
   return (
@@ -123,7 +129,7 @@ function LabelledSelect({
         </label>
         {tooltip}
       </div>
-      <InlineSelect id={id} placeholder={placeholder} options={options} value={value} onChange={onChange} error={error} />
+      <InlineSelect id={id} placeholder={placeholder} options={options} value={value} onChange={onChange} error={error} disabled={disabled} />
     </div>
   )
 }
@@ -223,6 +229,13 @@ export default function DonateCheckout() {
 
   const missingFields: string[] = []
   const signedIn = signedInAs !== null
+  /*
+   * On the Sign in tab, until the member actually signs in, the only thing on
+   * screen that matters is the credentials form. Billing and payment come from
+   * the account once they are in, so showing empty versions of those cards
+   * first asks for details we are about to look up.
+   */
+  const awaitingSignIn = activeTab === 'signin' && !signedIn
   if (!signedIn && (activeTab === 'guest' || activeTab === 'create')) {
     if (!firstName.trim())    missingFields.push('First Name')
     if (!lastName.trim())     missingFields.push('Last Name')
@@ -334,7 +347,7 @@ export default function DonateCheckout() {
                         </div>
                         <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
                         <FormInput label="Confirm Email Address" placeholder="your@email.com" value={confirmEmail} onChange={setConfirmEmail} type="email" required error={fieldError(confirmEmail)} />
-                        <FormInput label="Phone Number (Optional)" placeholder="(555) 555-1234" value={phone} onChange={setPhone} type="tel" />
+                        <FormInput label="Phone" placeholder="(555) 555-1234" value={phone} onChange={setPhone} type="tel" />
                         <label className="flex items-center gap-3 cursor-pointer">
                           <input
                             type="checkbox"
@@ -354,7 +367,7 @@ export default function DonateCheckout() {
                         </div>
                         <FormInput label="Email Address" placeholder="your@email.com" value={email} onChange={setEmail} type="email" required error={fieldError(email)} />
                         <FormInput label="Confirm Email Address" placeholder="your@email.com" value={confirmEmail} onChange={setConfirmEmail} type="email" required error={fieldError(confirmEmail)} />
-                        <FormInput label="Phone Number (Optional)" placeholder="(555) 555-1234" value={phone} onChange={setPhone} type="tel" />
+                        <FormInput label="Phone" placeholder="(555) 555-1234" value={phone} onChange={setPhone} type="tel" />
                         <FormInput label="Password" placeholder="Create a password" value={password} onChange={setPassword} type="password" required error={fieldError(password)} />
 
                         <div className="border-t border-[#c4c9d4] pt-5">
@@ -365,7 +378,7 @@ export default function DonateCheckout() {
                               <LabelledSelect label="Military Status" placeholder="— Select —" options={militaryStatuses} value={militaryStatus} onChange={setMilitary} className="flex-1" required error={showErrors && !militaryStatus} />
                             </div>
                             <div className="flex gap-5">
-                              <FormInput label="Rank / Title" placeholder="Enter rank or title" value={rank} onChange={setRank} className="flex-1" required error={fieldError(rank)} />
+                              <LabelledSelect label="Rank / Title" placeholder={service ? '\u2014 Select \u2014' : 'Choose a service first'} options={ranksForService(service)} value={rank} onChange={setRank} className="flex-1" required error={showErrors && !rank} disabled={!service} />
                               <LabelledSelect label="Suffix" placeholder="— None —" options={suffixes} value={suffix} onChange={setSuffix} className="flex-1" />
                               <FormInput label="Graduation Year" placeholder="YYYY" value={gradYear} onChange={setGradYear} className="w-36" tooltip={<GradYearHelpTooltip align="right" />} />
                             </div>
@@ -403,107 +416,111 @@ export default function DonateCheckout() {
                   </div>
                 </div>
 
-                {/* Card: Billing Address — required to authorize the card */}
-                <div className="border border-[#c4c9d4]">
-                  <div className="p-6 flex flex-col gap-6">
-                    <div className="flex flex-col gap-1">
-                      <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Billing Address</h2>
-                      <p className="font-body text-[15px] text-[#4e576a] leading-[1.5]">
-                        The address on file with your card issuer. Required to verify your payment and to
-                        issue your tax receipt — nothing is mailed to it.
-                      </p>
-                    </div>
-                    {signedIn ? (
-                      <div className="flex flex-col gap-3">
-                        <ChoiceOption
-                          name="dc-billing" value="file"
-                          checked={billingChoice === 'file'}
-                          onSelect={() => setBillingChoice('file')}
-                          title="Use the address on file"
-                          detail={addressLines(ACCOUNT_ADDRESS)}
-                        />
-                        <ChoiceOption
-                          name="dc-billing" value="new"
-                          checked={billingChoice === 'new'}
-                          onSelect={() => setBillingChoice('new')}
-                          title="Use a different address"
-                        >
-                          <AddressFields
-                            street={billStreet} setStreet={setBillStreet}
-                            city={billCity} setCity={setBillCity}
-                            state={billState} setState={setBillState}
-                            zip={billZip} setZip={setBillZip}
-                            country={billCountry} setCountry={setBillCountry}
-                            fieldError={fieldError} showErrors={showErrors}
-                          />
-                        </ChoiceOption>
+                {!awaitingSignIn && (
+                  <>
+                  {/* Card: Billing Address — required to authorize the card */}
+                  <div className="border border-[#c4c9d4]">
+                    <div className="p-6 flex flex-col gap-6">
+                      <div className="flex flex-col gap-1">
+                        <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Billing Address</h2>
+                        <p className="font-body text-[15px] text-[#4e576a] leading-[1.5]">
+                          The address on file with your card issuer. Required to verify your payment and to
+                          issue your tax receipt — nothing is mailed to it.
+                        </p>
                       </div>
-                    ) : (
-                          <AddressFields
-                            street={billStreet} setStreet={setBillStreet}
-                            city={billCity} setCity={setBillCity}
-                            state={billState} setState={setBillState}
-                            zip={billZip} setZip={setBillZip}
-                            country={billCountry} setCountry={setBillCountry}
-                            fieldError={fieldError} showErrors={showErrors}
+                      {signedIn ? (
+                        <div className="flex flex-col gap-3">
+                          <ChoiceOption
+                            name="dc-billing" value="file"
+                            checked={billingChoice === 'file'}
+                            onSelect={() => setBillingChoice('file')}
+                            title="Use the address on file"
+                            detail={addressLines(ACCOUNT_ADDRESS)}
                           />
-                    )}
-                  </div>
-                </div>
-
-                {/* Card: Payment Details */}
-                <div className={`border ${showErrors && !savedCardLast4 ? 'border-red-600' : 'border-[#c4c9d4]'}`}>
-                  <div className="p-6 flex flex-col gap-6">
-                    <div className="flex items-center justify-between">
-                      <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Payment Details</h2>
-                      <AcceptedCards />
+                          <ChoiceOption
+                            name="dc-billing" value="new"
+                            checked={billingChoice === 'new'}
+                            onSelect={() => setBillingChoice('new')}
+                            title="Use a different address"
+                          >
+                            <AddressFields
+                              street={billStreet} setStreet={setBillStreet}
+                              city={billCity} setCity={setBillCity}
+                              state={billState} setState={setBillState}
+                              zip={billZip} setZip={setBillZip}
+                              country={billCountry} setCountry={setBillCountry}
+                              fieldError={fieldError} showErrors={showErrors}
+                            />
+                          </ChoiceOption>
+                        </div>
+                      ) : (
+                            <AddressFields
+                              street={billStreet} setStreet={setBillStreet}
+                              city={billCity} setCity={setBillCity}
+                              state={billState} setState={setBillState}
+                              zip={billZip} setZip={setBillZip}
+                              country={billCountry} setCountry={setBillCountry}
+                              fieldError={fieldError} showErrors={showErrors}
+                            />
+                      )}
                     </div>
+                  </div>
 
-                    {signedIn ? (
-                      <div className="flex flex-col gap-3">
-                        <ChoiceOption
-                          name="dc-payment" value="file"
-                          checked={paymentChoice === 'file'}
-                          onSelect={() => { setPaymentChoice('file'); setSavedCardLast4(ACCOUNT_CARD.last4) }}
-                          title={`${ACCOUNT_CARD.brand} ····\u00a0${ACCOUNT_CARD.last4}`}
-                          detail={`Card on file · expires ${ACCOUNT_CARD.expires}`}
-                        />
-                        <ChoiceOption
-                          name="dc-payment" value="new"
-                          checked={paymentChoice === 'new'}
-                          onSelect={() => { setPaymentChoice('new'); setSavedCardLast4(null) }}
-                          title="Use a new card"
-                          detail={
-                            paymentChoice === 'new' && savedCardLast4
-                              ? `Card ending in ${savedCardLast4} added`
-                              : undefined
-                          }
-                        >
-                          <Button type="button" variant="primary" size="lg" className="self-start" onClick={() => setCardModalOpen(true)}>
+                  {/* Card: Payment Details */}
+                  <div className={`border ${showErrors && !savedCardLast4 ? 'border-red-600' : 'border-[#c4c9d4]'}`}>
+                    <div className="p-6 flex flex-col gap-6">
+                      <div className="flex items-center justify-between">
+                        <h2 className="font-headline text-[28px] text-[#1d2535] leading-[1.2]">Payment Details</h2>
+                        <AcceptedCards />
+                      </div>
+
+                      {signedIn ? (
+                        <div className="flex flex-col gap-3">
+                          <ChoiceOption
+                            name="dc-payment" value="file"
+                            checked={paymentChoice === 'file'}
+                            onSelect={() => { setPaymentChoice('file'); setSavedCardLast4(ACCOUNT_CARD.last4) }}
+                            title={`${ACCOUNT_CARD.brand} ····\u00a0${ACCOUNT_CARD.last4}`}
+                            detail={`Card on file · expires ${ACCOUNT_CARD.expires}`}
+                          />
+                          <ChoiceOption
+                            name="dc-payment" value="new"
+                            checked={paymentChoice === 'new'}
+                            onSelect={() => { setPaymentChoice('new'); setSavedCardLast4(null) }}
+                            title="Use a new card"
+                            detail={
+                              paymentChoice === 'new' && savedCardLast4
+                                ? `Card ending in ${savedCardLast4} added`
+                                : undefined
+                            }
+                          >
+                            <Button type="button" variant="primary" size="lg" className="self-start" onClick={() => setCardModalOpen(true)}>
+                              {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
+                            </Button>
+                          </ChoiceOption>
+                        </div>
+                      ) : savedCardLast4 ? (
+                        <p className="font-body text-[15px] text-[#1d2535]">
+                          The credit card ending in <span className="font-bold">{savedCardLast4}</span> was successfully added.
+                        </p>
+                      ) : null}
+
+                      <div className="flex flex-col items-start gap-4">
+                        {!signedIn && (
+                          <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
                             {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
                           </Button>
-                        </ChoiceOption>
+                        )}
+
+                        <p className="font-body text-[14px] text-[#4e576a]">
+                          Your card is charged once this order is completed. The billing address above is
+                          used to verify it.
+                        </p>
                       </div>
-                    ) : savedCardLast4 ? (
-                      <p className="font-body text-[15px] text-[#1d2535]">
-                        The credit card ending in <span className="font-bold">{savedCardLast4}</span> was successfully added.
-                      </p>
-                    ) : null}
-
-                    <div className="flex flex-col items-start gap-4">
-                      {!signedIn && (
-                        <Button type="button" variant="primary" size="lg" onClick={() => setCardModalOpen(true)}>
-                          {savedCardLast4 ? 'Change credit card' : 'Add new credit card'}
-                        </Button>
-                      )}
-
-                      <p className="font-body text-[14px] text-[#4e576a]">
-                        Your card is charged once this order is completed. The billing address above is
-                        used to verify it.
-                      </p>
                     </div>
                   </div>
-                </div>
+                  </>
+                )}
 
                 <CreditCardModal
                   open={cardModalOpen}

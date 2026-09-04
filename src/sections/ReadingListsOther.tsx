@@ -1,5 +1,5 @@
 import { emptyLists } from '@/data/readingLists'
-import ExternalLinkIcon from '@/components/ui/ExternalLinkIcon'
+import CardCta from '@/components/ui/CardCta'
 
 /**
  * The service reading lists that carry no Naval Institute Press titles.
@@ -27,23 +27,21 @@ export default function ReadingListsOther() {
               href={list.cta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-white border border-navy-subtle hover:border-[#0466c8]
-                         transition-colors p-6 flex flex-col gap-2"
+              className="group bg-white border border-navy-subtle hover:shadow-md
+                         transition-shadow p-6 flex flex-col gap-2"
             >
               <p className="font-body font-medium text-xs uppercase tracking-[0.08em] text-navy-subtle">
                 {list.service}
               </p>
-              <h3 className="font-headline text-[20px] leading-[1.25] text-navy-bolder group-hover:text-navy-subtle transition-colors">
+              <h3 className="font-headline text-[20px] leading-[1.25] text-navy-bolder group-hover:text-navy-bright transition-colors">
                 <span className="article-link article-link--card">{list.name}</span>
               </h3>
               <p className="font-body text-sm text-neutral-subtle leading-[1.65] flex-1">
                 {list.blurb}
               </p>
-              <span className="inline-flex items-center gap-2 font-body font-semibold text-sm text-[#0466C8] mt-2">
+              <CardCta external className="mt-2">
                 {list.cta.label}
-                <ExternalLinkIcon className="transition-transform duration-200 group-hover:translate-x-0.5" />
-                <span className="sr-only">(opens in a new tab)</span>
-              </span>
+              </CardCta>
             </a>
           ))}
         </div>

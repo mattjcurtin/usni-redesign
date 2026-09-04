@@ -80,7 +80,7 @@ export default function ReadingListSection({
                 className="inline-flex items-center gap-2.5 bg-navy-bolder text-white font-body font-bold text-sm tracking-[-0.2px] px-6 py-4 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors"
               >
                 {list.cta.label}
-                <ExternalLinkIcon />
+                <ExternalLinkIcon size="1.05em" />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </div>
@@ -90,12 +90,6 @@ export default function ReadingListSection({
         {/* Press titles on the list */}
         {count > 0 && (
           <div className="mt-10 lg:mt-12">
-            {list.titlesIntro && (
-              <p className="font-body font-bold text-base text-navy-bolder leading-[1.6] max-w-[780px]">
-                {list.titlesIntro}
-              </p>
-            )}
-
             <div className={GRID}>
               {list.titles.map((title, i) => (
                 <CollectionTitleCard
