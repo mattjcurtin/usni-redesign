@@ -83,7 +83,7 @@ export default function ProceedingsPodcastHero() {
             <img
               src={podcastArt}
               alt="The Proceedings Podcast cover art"
-              className="w-full shadow-lg border border-[#c2ddff]"
+              className="w-full shadow-lg"
             />
           </div>
 

@@ -25,6 +25,16 @@
   *, *::before, *::after {
     box-sizing: border-box;
   }
+
+  /* Squared corners are the site's default. Tailwind's preflight leaves
+     <button> at -webkit-appearance: button, which Safari and newer Chrome
+     render with a native corner radius — it shows up on any bare button that
+     takes a background, e.g. the accordion rows on Giving and Donate. Base
+     layer, so an explicit rounded-* utility still wins where a radius is
+     wanted (SharePopover, avatars, the cart quantity steppers). */
+  button {
+    border-radius: 0;
+  }
 }
 
 @layer components {

@@ -50,7 +50,7 @@ function AccordionItem({ title, content }: { title: string; content: string }) {
         </span>
       </button>
       {open && (
-        <div className="pb-5 px-4 pr-14">
+        <div className="pt-4 pb-5 pl-4 pr-14">
           <p className="font-body text-base text-neutral-subtle leading-relaxed">{content}</p>
         </div>
       )}
