@@ -87,6 +87,33 @@ export default function Alerts() {
           </div>
         </DocSection>
 
+        <DocSection title="With an action">
+          <p className="font-body text-sm text-neutral-subtle leading-relaxed mb-6 max-w-2xl">
+            Pass <code className="font-mono text-sm">action</code> to put a control on the trailing
+            edge. Used on the wishlist, where removing a book happens without a confirm, so the
+            acknowledgement carries the way back.
+          </p>
+          <div className="mb-6">
+            <Alert
+              variant="success"
+              title="Removed The Bluejacket&rsquo;s Manual from your wishlist"
+              action={
+                <button
+                  type="button"
+                  className="bg-white border border-navy-bolder text-navy-bolder font-body font-bold text-[15px] px-5 py-2.5 hover:bg-navy-bolder hover:text-white transition-colors"
+                >
+                  Undo
+                </button>
+              }
+            />
+          </div>
+          <CodeBlock code={`<Alert
+  variant="success"
+  title="Removed The Bluejacket's Manual from your wishlist"
+  action={<button onClick={undoRemove}>Undo</button>}
+/>`} />
+        </DocSection>
+
         <DocSection title="Usage">
           <CodeBlock
             code={`import Alert from '@/components/ui/Alert'
@@ -117,6 +144,7 @@ export default function Alerts() {
               { name: 'title', type: 'ReactNode', description: 'Bold first line. Omit for a single-line alert.' },
               { name: 'children', type: 'ReactNode', description: 'Body copy.' },
               { name: 'icon', type: 'boolean', default: 'true', description: 'Set false to drop the leading icon.' },
+              { name: 'action', type: 'ReactNode', description: 'Control on the trailing edge — an Undo for a destructive action taken without a confirm, for instance. Wraps below the copy on narrow screens.' },
               { name: 'role', type: "'alert' | 'status'", default: 'by variant', description: 'Override the announced role.' },
               { name: 'className', type: 'string', description: 'Extra classes — spacing and max-width live here.' },
               { name: 'id', type: 'string', description: 'For aria-describedby wiring.' },

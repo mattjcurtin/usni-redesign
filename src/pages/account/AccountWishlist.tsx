@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import AccountLayout from '@/components/layout/AccountLayout'
 import { AccountCard, EmptyState } from '@/components/ui/AccountCard'
 import Alert from '@/components/ui/Alert'
+import BookPrice from '@/components/ui/BookPrice'
 import { wishlist } from '@/data/account'
 
 /**
@@ -16,11 +17,28 @@ import { wishlist } from '@/data/account'
  */
 export default function AccountWishlist() {
   const [items, setItems] = useState(wishlist)
-  const [removed, setRemoved] = useState<string | null>(null)
+  /*
+   * The removed row is held whole, with the position it came from, so Undo can
+   * put it back where it was rather than appending it to the end — the list is
+   * ordered by when each book was saved.
+   */
+  const [removed, setRemoved] = useState<{ entry: (typeof wishlist)[number]; index: number } | null>(null)
 
-  const remove = (id: string, title: string) => {
+  const remove = (id: string) => {
+    const index = items.findIndex(i => i.book.id === id)
+    if (index === -1) return
+    setRemoved({ entry: items[index], index })
     setItems(items.filter(i => i.book.id !== id))
-    setRemoved(title)
+  }
+
+  const undoRemove = () => {
+    if (!removed) return
+    setItems(current => {
+      const next = [...current]
+      next.splice(removed.index, 0, removed.entry)
+      return next
+    })
+    setRemoved(null)
   }
 
   return (
@@ -29,10 +47,21 @@ export default function AccountWishlist() {
       lede="Books you've saved from the Naval Institute Press. Member pricing is applied at checkout."
     >
       {/* Removal is the one destructive action on this page and it happens
-          without a confirm, so it gets an undo-less acknowledgement rather than
-          silently reflowing the list. */}
+          without a confirm, so the acknowledgement carries the way back. */}
       {removed && (
-        <Alert variant="success" title={`Removed ${removed} from your wishlist`} />
+        <Alert
+          variant="success"
+          title={`Removed ${removed.entry.book.title} from your wishlist`}
+          action={
+            <button
+              type="button"
+              onClick={undoRemove}
+              className="bg-white border border-navy-bolder text-navy-bolder font-body font-bold text-[15px] px-5 py-2.5 hover:bg-navy-bolder hover:text-white transition-colors"
+            >
+              Undo
+            </button>
+          }
+        />
       )}
 
       {items.length === 0 ? (
@@ -79,16 +108,15 @@ export default function AccountWishlist() {
                   {book.title}
                 </Link>
                 <p className="font-body text-[14px] text-neutral-subtle mt-1">{book.author}</p>
-                <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 mt-2">
-                  <span className="font-body font-bold text-[16px] text-navy-bolder">
-                    ${book.price.toFixed(2)}
-                  </span>
-                  {book.originalPrice > book.price && (
-                    <span className="font-body text-[13px] text-neutral-subtle line-through">
-                      ${book.originalPrice.toFixed(2)}
-                    </span>
-                  )}
-                  <span className="font-body text-[13px] text-neutral-subtle">· {book.format}</span>
+                {/* Same block the book teasers use: member price and its label
+                    lead, list price and binding on the line beneath. `price` is
+                    the member figure in this data — see the Book interface. */}
+                <div className="mt-2">
+                  <BookPrice
+                    listPrice={book.originalPrice}
+                    memberPrice={book.price}
+                    format={book.format}
+                  />
                 </div>
                 <p className="font-body text-[13px] text-neutral-subtle mt-1.5">Added {addedOn}</p>
               </div>
@@ -103,7 +131,7 @@ export default function AccountWishlist() {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => remove(book.id, book.title)}
+                  onClick={() => remove(book.id)}
                   className="inline-flex items-center justify-center gap-1.5 font-body font-semibold text-[14px] text-[#c1121f] px-4 py-2 border border-transparent hover:underline whitespace-nowrap"
                 >
                   <i className="fa-solid fa-xmark text-[12px]" aria-hidden="true" />

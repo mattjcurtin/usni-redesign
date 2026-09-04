@@ -3,10 +3,22 @@
  * it sits beside, and hidden from assistive tech — the link itself carries a
  * "(opens in a new tab)" note instead.
  */
-export default function ExternalLinkIcon({ className = '' }: { className?: string }) {
+export default function ExternalLinkIcon({
+  className = '',
+  /**
+   * Height and width, relative to the surrounding type. The 0.75em default is
+   * right for an inline link; inside a button the glyph needs more to be
+   * recognisable, so callers there pass a larger value.
+   */
+  size = '0.75em',
+}: {
+  className?: string
+  size?: string
+}) {
   return (
     <svg
-      className={`inline-block w-[0.75em] h-[0.75em] flex-shrink-0 ${className}`}
+      style={{ width: size, height: size }}
+      className={`inline-block flex-shrink-0 ${className}`}
       viewBox="0 0 16 16"
       fill="none"
       stroke="currentColor"
