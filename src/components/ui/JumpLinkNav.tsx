@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export interface JumpLink {
   label: string
@@ -8,8 +8,12 @@ export interface JumpLink {
 
 interface JumpLinkNavProps {
   links: JumpLink[]
-  /** Label shown on the mobile toggle bar. */
-  mobileLabel: string
+  /**
+   * Label on the mobile toggle bar. Defaults to "On this page" — a page name
+   * here reads like the section nav directly above it and implies the links
+   * lead to other pages, which they never do.
+   */
+  mobileLabel?: string
 }
 
 /**
@@ -17,12 +21,49 @@ interface JumpLinkNavProps {
  *
  * Sits below the sticky site header and tracks which section is in view, so the
  * reader always knows where they are in a page that merges several former
- * standalone pages. Sections opt in by carrying the matching `id` plus enough
- * `scroll-mt` to clear the header and this bar.
+ * standalone pages. Sections opt in by carrying the matching `id`.
+ *
+ * Clicks are handled in JS rather than left to the browser's fragment
+ * navigation, for two reasons. The scroll is requested explicitly as `smooth`,
+ * so it does not depend on `html { scroll-behavior }` surviving whatever else
+ * is on the page. And the landing position is computed from the live height of
+ * the sticky chrome above, so a target does not have to remember a matching
+ * `scroll-mt-*` utility to avoid ending up underneath the header — the Giving
+ * sections never carried one.
  */
-export default function JumpLinkNav({ links, mobileLabel }: JumpLinkNavProps) {
+export default function JumpLinkNav({ links, mobileLabel = 'On this page' }: JumpLinkNavProps) {
   const [open, setOpen] = useState(false)
   const [activeHref, setActiveHref] = useState(links[0]?.href ?? '')
+  const navRef = useRef<HTMLElement>(null)
+
+  const jumpTo = useCallback((event: React.MouseEvent, href: string) => {
+    const target = document.getElementById(href.slice(1))
+    // No such section: leave it to the browser rather than swallowing the click.
+    if (!target) return
+    event.preventDefault()
+    setOpen(false)
+
+    const nav = navRef.current
+    /*
+     * The nav's own sticky offset, read from computed style so it can never
+     * drift from the `top-[…]` class, plus its rendered height — together that
+     * is everything covering the top of the viewport once the nav is stuck.
+     */
+    const stickyTop = nav ? parseFloat(getComputedStyle(nav).top) || 0 : 0
+    const chrome = stickyTop + (nav?.offsetHeight ?? 0)
+    const top = target.getBoundingClientRect().top + window.scrollY - chrome
+
+    window.scrollTo({
+      top: Math.max(top, 0),
+      // Honour an explicit request for less motion rather than overriding it.
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    })
+
+    // Keep the URL shareable, without the second jump a hash change would cause.
+    window.history.replaceState(null, '', href)
+  }, [])
 
   useEffect(() => {
     function onScroll() {
@@ -42,7 +83,7 @@ export default function JumpLinkNav({ links, mobileLabel }: JumpLinkNavProps) {
   }, [links])
 
   return (
-    <nav className="bg-white border-b border-border-light sticky top-[86px] z-30" aria-label="Page sections">
+    <nav ref={navRef} className="bg-white border-b border-border-light sticky top-[86px] z-30" aria-label="Page sections">
 
       {/* Mobile: toggle bar */}
       <div className="lg:hidden">
@@ -72,7 +113,7 @@ export default function JumpLinkNav({ links, mobileLabel }: JumpLinkNavProps) {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => jumpTo(e, link.href)}
                 aria-current={link.href === activeHref ? 'true' : undefined}
                 className={`block px-6 py-3.5 font-body font-semibold text-sm border-b border-border-light last:border-0 transition-colors
                   ${link.href === activeHref
@@ -93,6 +134,7 @@ export default function JumpLinkNav({ links, mobileLabel }: JumpLinkNavProps) {
             <li key={link.href} className="flex-shrink-0">
               <a
                 href={link.href}
+                onClick={(e) => jumpTo(e, link.href)}
                 aria-current={link.href === activeHref ? 'true' : undefined}
                 className={`link-underline-hover relative flex items-center font-body font-bold text-[17px] text-navy-bolder px-8 py-5 whitespace-nowrap
                            hover:text-[#0466c8] transition-colors

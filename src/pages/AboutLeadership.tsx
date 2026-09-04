@@ -42,7 +42,7 @@ export default function AboutLeadership() {
           deck="The executives, directors, trustees, and editors who steward the Naval Institute and its mission as The Independent Forum of the Sea Services."
           breadcrumbLabel="Leadership & Staff"
         />
-        <JumpLinkNav links={jumpLinks} mobileLabel="Leadership & Staff" />
+        <JumpLinkNav links={jumpLinks} />
 
         <LeadershipRoster
           id="executive-staff"
