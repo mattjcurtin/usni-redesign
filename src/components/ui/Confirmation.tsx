@@ -153,7 +153,7 @@ export function ConfirmationActions({ links }: { links: { label: string; href: s
           className={
             i === 0
               ? 'inline-flex items-center justify-center gap-2 bg-navy-bolder text-white font-body font-bold text-base px-6 py-4 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors'
-              : 'inline-flex items-center justify-center gap-2 font-body font-bold text-base text-navy-bolder px-6 py-4 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors'
+              : 'inline-flex items-center justify-center gap-2 font-body font-bold text-base text-navy-bolder px-6 py-4 border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors'
           }
         >
           {link.label}

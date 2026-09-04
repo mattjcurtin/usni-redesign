@@ -32,7 +32,7 @@ export default function GivingConferenceCenter() {
             </a>
             <a
               href="/conference-center"
-              className="inline-flex items-center justify-center bg-transparent text-navy-bolder border border-navy-bolder font-body font-bold text-sm tracking-[-0.3px] px-5 py-3.5 hover:bg-navy-bolder hover:text-white transition-colors"
+              className="inline-flex items-center justify-center bg-transparent text-navy-bolder border border-navy-bolder font-body font-bold text-sm tracking-[-0.3px] px-5 py-3.5 hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
             >
               Visit JCTCC Website
             </a>

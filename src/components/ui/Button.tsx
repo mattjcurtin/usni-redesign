@@ -20,7 +20,9 @@ const variants: Record<ButtonVariant, string> = {
   // account pages and their modals, where gold reads as secondary.
   navy: 'bg-navy-bolder text-white hover:bg-navy-bright border border-navy-bolder hover:border-navy-bright',
   outline: 'bg-transparent text-white border border-white hover:bg-white hover:text-navy-bright',
-  'outline-dark': 'bg-transparent text-navy-bolder border border-navy-bolder hover:bg-navy-bolder hover:text-white',
+  // Fills to navy-bright on hover, the same colour `navy` lands on — an
+  // outline and a solid button sitting side by side should agree on hover.
+  'outline-dark': 'bg-transparent text-navy-bolder border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright',
   link: 'bg-transparent p-0 text-link',
 }
 

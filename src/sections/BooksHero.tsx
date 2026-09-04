@@ -47,7 +47,7 @@ export default function BooksHero() {
           </a>
           <a
             href="/books/about"
-            className="flex items-center justify-center border border-navy-bolder text-navy-bolder font-body font-bold text-sm tracking-[-0.2px] px-6 py-4 hover:bg-navy-bolder hover:text-white transition-colors"
+            className="flex items-center justify-center border border-navy-bolder text-navy-bolder font-body font-bold text-sm tracking-[-0.2px] px-6 py-4 hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
           >
             Learn more about the Press
           </a>

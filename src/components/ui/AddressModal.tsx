@@ -110,7 +110,7 @@ export default function AddressModal({
           <button
             type="button"
             onClick={onClose}
-            className="font-body font-bold text-[16px] text-navy-bolder px-6 py-3 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
+            className="font-body font-bold text-[16px] text-navy-bolder px-6 py-3 border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
           >
             Cancel
           </button>

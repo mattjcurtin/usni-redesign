@@ -183,7 +183,7 @@ export default function AccountProfile() {
           </button>
           <a
             href="/account"
-            className="inline-flex items-center justify-center font-body font-bold text-base text-navy-bolder px-6 py-3.5 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
+            className="inline-flex items-center justify-center font-body font-bold text-base text-navy-bolder px-6 py-3.5 border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
           >
             Cancel
           </a>

@@ -77,7 +77,7 @@ export default function NavalHistory() {
             </a>
             <a
               href="/naval-history/all-issues"
-              className="flex items-center justify-center bg-transparent text-navy-bolder border border-navy-bolder font-body font-bold text-sm py-4 px-5 w-full hover:bg-navy-bolder hover:text-white transition-colors"
+              className="flex items-center justify-center bg-transparent text-navy-bolder border border-navy-bolder font-body font-bold text-sm py-4 px-5 w-full hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
             >
               Browse the full archive
             </a>

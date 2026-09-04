@@ -67,7 +67,7 @@ function ArticleTopics() {
           <a
             key={tag}
             href={`/proceedings/series?topic=${encodeURIComponent(tag.toLowerCase())}`}
-            className="font-body font-bold text-base text-[#023e7d] border border-[#023e7d] px-4 py-2 hover:bg-[#023e7d] hover:text-white transition-colors"
+            className="font-body font-bold text-base text-navy-bolder border border-navy-bolder px-4 py-2 hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
           >
             {tag}
           </a>

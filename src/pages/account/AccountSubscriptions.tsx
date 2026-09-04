@@ -68,13 +68,13 @@ export default function AccountSubscriptions() {
         <div className="flex flex-wrap gap-3">
           <Link
             to="/naval-history/subscribe"
-            className="inline-flex items-center justify-center font-body font-bold text-[15px] text-navy-bolder px-5 py-3 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
+            className="inline-flex items-center justify-center font-body font-bold text-[15px] text-navy-bolder px-5 py-3 border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
           >
             Naval History
           </Link>
           <Link
             to="/membership/join"
-            className="inline-flex items-center justify-center font-body font-bold text-[15px] text-navy-bolder px-5 py-3 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
+            className="inline-flex items-center justify-center font-body font-bold text-[15px] text-navy-bolder px-5 py-3 border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
           >
             Compare memberships
           </Link>

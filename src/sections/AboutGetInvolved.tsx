@@ -37,7 +37,7 @@ export default function AboutGetInvolved() {
             </a>
             <a
               href="/giving/donate"
-              className="inline-flex items-center justify-center bg-transparent text-navy-bolder font-body font-bold text-sm tracking-[-0.3px] px-5 py-3.5 border border-navy-bolder hover:bg-navy-bolder hover:text-white transition-colors"
+              className="inline-flex items-center justify-center bg-transparent text-navy-bolder font-body font-bold text-sm tracking-[-0.3px] px-5 py-3.5 border border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright transition-colors"
             >
               Support the Institute
             </a>
