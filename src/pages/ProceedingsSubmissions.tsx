@@ -3,6 +3,7 @@ import Footer from '@/components/layout/Footer'
 import ProceedingsSubNav from '@/sections/ProceedingsSubNav'
 import PageHero from '@/sections/PageHero'
 import ProceedingsSubmissionsContent from '@/sections/ProceedingsSubmissionsContent'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 
 /**
  * Proceedings submission guidelines.
@@ -25,20 +26,14 @@ export default function ProceedingsSubmissions() {
         <PageHero
           title="Proceedings Submission Guidelines"
           breadcrumb={
-            <nav
-              aria-label="Breadcrumb"
-              className="border-b border-[#C2DDFF] pb-4 flex items-center gap-2 text-sm"
-            >
-              <a href="/" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">
-                Home
-              </a>
-              <span className="text-neutral-subtle">/</span>
-              <a href="/proceedings" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">
-                Proceedings
-              </a>
-              <span className="text-neutral-subtle">/</span>
-              <span className="font-body italic text-neutral-subtle">Submission Guidelines</span>
-            </nav>
+            <Breadcrumb
+              trail={[
+                { label: 'Home', href: '/' },
+                { label: 'Proceedings', href: '/proceedings' },
+              ]}
+              current="Submission Guidelines"
+              className="border-b border-[#C2DDFF] pb-4"
+            />
           }
         />
 

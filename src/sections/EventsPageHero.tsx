@@ -1,3 +1,4 @@
+import Breadcrumb from '@/components/ui/Breadcrumb'
 interface EventsPageHeroProps {
   title: string
   description?: string
@@ -17,20 +18,14 @@ export default function EventsPageHero({
   return (
     <section className="bg-[#ebf4ff] pt-10 lg:pt-12 pb-12 lg:pb-16">
       <div className="container-site flex flex-col gap-4">
-        <nav
-          className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm pb-4 border-b border-[#C2DDFF]"
-          aria-label="Breadcrumb"
-        >
-          <a href="/" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">
-            Home
-          </a>
-          <span className="text-neutral-subtle">/</span>
-          <a href="/events" className="font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors">
-            Events
-          </a>
-          <span className="text-neutral-subtle">/</span>
-          <span className="font-body italic text-neutral-subtle">{breadcrumbLabel}</span>
-        </nav>
+        <Breadcrumb
+          trail={[
+            { label: 'Home', href: '/' },
+            { label: 'Events', href: '/events' },
+          ]}
+          current={breadcrumbLabel}
+          className="pb-4 border-b border-[#C2DDFF]"
+        />
 
         <h1 className="font-headline text-[32px] lg:text-[64px] text-navy-bolder leading-[1.1]">
           {title}

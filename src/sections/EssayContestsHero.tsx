@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import SiteBreadcrumb from '@/components/ui/Breadcrumb'
 
 interface EssayContestsHeroProps {
   title: string
@@ -24,29 +25,18 @@ interface EssayContestsHeroProps {
   panelSide?: 'left' | 'right'
 }
 
-/** Breadcrumb trail, styled for either a light or a dark ground. */
+/** Essay Contests trail. */
 function Breadcrumb({ label, dark }: { label: string; dark?: boolean }) {
-  const link = dark
-    ? 'font-body font-bold text-light-blue hover:text-white transition-colors'
-    : 'font-body font-bold text-navy-subtle hover:text-navy-bolder transition-colors'
-  const sep = dark ? 'text-white/40' : 'text-neutral-subtle'
-  const current = dark
-    ? 'font-body italic text-[#f4f4f6]'
-    : 'font-body italic text-neutral-subtle'
-
   return (
-    <nav
-      className={`flex flex-wrap items-center gap-x-2 gap-y-1 text-sm pb-4 border-b ${
-        dark ? 'border-white/25' : 'border-[#C2DDFF]'
-      }`}
-      aria-label="Breadcrumb"
-    >
-      <a href="/" className={link}>Home</a>
-      <span className={sep}>/</span>
-      <a href="/essay-contests" className={link}>Essay Contests</a>
-      <span className={sep}>/</span>
-      <span className={current}>{label}</span>
-    </nav>
+    <SiteBreadcrumb
+      trail={[
+        { label: 'Home', href: '/' },
+        { label: 'Essay Contests', href: '/essay-contests' },
+      ]}
+      current={label}
+      tone={dark ? 'dark' : 'light'}
+      className={`pb-4 border-b ${dark ? 'border-white/25' : 'border-[#C2DDFF]'}`}
+    />
   )
 }
 
