@@ -57,6 +57,7 @@ import NavalHistory from '@/pages/NavalHistory'
 import NavalHistoryCurrentIssue from '@/pages/NavalHistoryCurrentIssue'
 import NavalHistoryAllIssues from '@/pages/NavalHistoryAllIssues'
 import NavalHistorySubscribe from '@/pages/NavalHistorySubscribe'
+import NavalHistoryMembershipUpsell from '@/pages/NavalHistoryMembershipUpsell'
 import NavalHistorySubscribeCart from '@/pages/NavalHistorySubscribeCart'
 import NavalHistorySubscribeCheckout from '@/pages/NavalHistorySubscribeCheckout'
 import NavalHistorySubscribeConfirmation from '@/pages/NavalHistorySubscribeConfirmation'
@@ -129,7 +130,7 @@ export default function App() {
         <Route path="/books/checkout" element={<BooksCheckout />} />
         <Route path="/books/confirmation" element={<BooksConfirmation />} />
         <Route path="/books/professional-military-education" element={<BooksPME />} />
-        <Route path="/books/reading-lists" element={<BooksReadingLists />} />
+        <Route path="/books/military-reading-lists" element={<BooksReadingLists />} />
         {/* One template, nine series — see src/data/bookCollections.ts */}
         <Route path="/books/series/scarlet-and-gold" element={<BookSeriesPage slug="scarlet-and-gold" />} />
         <Route path="/books/series/blue-and-gold" element={<BookSeriesPage slug="blue-and-gold" />} />
@@ -144,6 +145,7 @@ export default function App() {
         <Route path="/naval-history/aug-2026" element={<NavalHistoryCurrentIssue />} />
         <Route path="/naval-history/all-issues" element={<NavalHistoryAllIssues />} />
         <Route path="/naval-history/subscribe" element={<NavalHistorySubscribe />} />
+        <Route path="/naval-history/subscribe/membership-upsell" element={<NavalHistoryMembershipUpsell />} />
         <Route path="/naval-history/subscribe/cart" element={<NavalHistorySubscribeCart />} />
         <Route path="/naval-history/subscribe/checkout" element={<NavalHistorySubscribeCheckout />} />
         <Route path="/naval-history/subscribe/confirmation" element={<NavalHistorySubscribeConfirmation />} />

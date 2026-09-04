@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import crossSellImg from '@/assets/images/sunset-ship-view-extend.png'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -39,15 +39,23 @@ function CheckIcon() {
 
 export default function NavalHistorySubscribe() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [region, setRegion] = useState<Region>('us')
   const [term, setTerm] = useState<Term>('1')
 
   const unit = term === '1' ? '/ yr' : '/ 3 yrs'
 
+  /*
+   * Step 2 is the membership cross-promotion, which self-skips for a signed-in
+   * member. The flag rides the URL because the prototype has no shared auth —
+   * append ?member=true here to see a member's path straight to the cart.
+   */
   const subscribe = (format: Format) => {
     const { price } = offerFor(format, region, term)
+    const member = searchParams.get('member') === 'true' ? '&member=true' : ''
     navigate(
-      `/naval-history/subscribe/cart?term=${term}&region=${region}&format=${format}&price=${price}`,
+      `/naval-history/subscribe/membership-upsell?term=${term}&region=${region}` +
+        `&format=${format}&price=${price}${member}`,
     )
   }
 
@@ -164,7 +172,7 @@ export default function NavalHistorySubscribe() {
                           className={`flex items-center justify-center gap-2 font-body font-bold text-base tracking-[-0.3px] px-6 py-4 border transition-colors ${
                             isPrint
                               ? 'bg-navy-bolder text-white border-navy-bolder hover:bg-navy-bright hover:border-navy-bright'
-                              : 'bg-white text-navy-bolder border-navy-bolder hover:bg-navy-bolder hover:text-white'
+                              : 'bg-white text-navy-bolder border-navy-bolder hover:bg-navy-bright hover:text-white hover:border-navy-bright'
                           }`}
                         >
                           Subscribe — {FORMAT_LABELS[format]}
