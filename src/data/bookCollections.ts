@@ -128,6 +128,8 @@ import markBlueGold from '../assets/images/books/series-marks/blue-and-gold.png'
 import markScarletGold from '../assets/images/books/series-marks/scarlet-and-gold.png'
 import markMarineCorps from '../assets/images/books/series-marks/marine-corps-history.jpg'
 import heroWarOnFilm from '../assets/images/run-silent-run-deep-movie-hero.png'
+// Midshipmen and Marine Corps SNCOs at an assembly. Source file as supplied:
+// 55423286094_70fdfe815a_k.jpg
 import heroPme from '../assets/images/books/pme-hero.jpg'
 
 export const blueAndGold: BookCollection = {

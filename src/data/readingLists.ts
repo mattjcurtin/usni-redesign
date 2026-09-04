@@ -35,8 +35,6 @@ export interface ReadingList {
   intro: string[]
   /** Attribution for a quoted introduction, e.g. a signed CSAF letter. */
   attribution?: { name: string; title: string[] }
-  /** Preamble above the titles, where the live page carries one. */
-  titlesIntro?: string
   /**
    * The Press titles on the list, as one flat set. The Commandant's list
    * divides its picks into four categories on the source site; the redesign
@@ -57,8 +55,6 @@ export const serviceLists: ReadingList[] = [
     intro: [
       'The Chief of Naval Operations’ Professional Reading Library supports the professional development of every sailor, from recruit to flag officer.',
     ],
-    titlesIntro:
-      'The following Naval Institute Press books appear in the CNO’s Professional Reading Library:',
     titles: [
           {
             title: 'War Transformed',
@@ -163,7 +159,6 @@ export const serviceLists: ReadingList[] = [
       'The FY26 Commandant’s Professional Reading List (CPRL) has been refined in preparation for the Corps’ 250th anniversary, aligning with the Commandant’s guidance to honor our heritage while preparing for the future fight. The updated list incorporates Semper Fidelis: 250 Years of U.S. Marine Corps Honor, Courage, and Commitment — a flagship publication from Marine Corps University’s History Division that serves as a centerpiece for 250th-anniversary communications and reflection.',
       'The Commandant’s Choice for FY26, Once an Eagle by Anton Myrer, has been reaffirmed as a timeless study in leadership and character. Its inclusion underscores the Commandant’s emphasis on integrity, moral courage, and the enduring responsibilities of command.',
     ],
-    titlesIntro: 'Below are the FY26 CPRL books:',
     titles: [
       {
         title: 'First to Fight',
@@ -241,8 +236,6 @@ export const serviceLists: ReadingList[] = [
       name: 'Col. Kenneth Klock, U.S. Space Force',
       title: ['Commandant, National Security Space Institute'],
     },
-    titlesIntro:
-      'The following Naval Institute Press books appear on the 2024 Space Professional Reading List:',
     titles: [
           {
             title: 'Sun Tzu in Space',

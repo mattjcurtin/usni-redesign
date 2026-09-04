@@ -97,6 +97,25 @@ export default function PmeIntro() {
               professional library to ensure that it evolves with the ever-changing
               nature of the sea services themselves.
             </p>
+
+            {/* Third paragraph and CTA. The reading lists get a full billboard
+                at the foot of the page, but that is a long scroll from here —
+                this repeats the route while the reader is still in the copy. */}
+            <p>
+              Press titles also appear across the services’ own professional
+              reading programs, from the CNO’s Professional Reading Library to the
+              Marine Corps Commandant’s list.
+            </p>
+
+            <div className="pt-1">
+              <a
+                href="/books/reading-lists"
+                className="inline-flex items-center gap-2.5 bg-navy-bolder text-white font-body font-bold text-sm tracking-[-0.2px] px-6 py-4 border border-navy-bolder hover:bg-navy-bright hover:border-navy-bright transition-colors"
+              >
+                View the Military Reading Lists
+                <i className="fa-solid fa-arrow-right text-xs" aria-hidden="true" />
+              </a>
+            </div>
           </div>
 
           {/* Covers */}

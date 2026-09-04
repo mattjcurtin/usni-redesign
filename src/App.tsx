@@ -128,7 +128,7 @@ export default function App() {
         <Route path="/books/cart" element={<BooksCart />} />
         <Route path="/books/checkout" element={<BooksCheckout />} />
         <Route path="/books/confirmation" element={<BooksConfirmation />} />
-        <Route path="/books/pme" element={<BooksPME />} />
+        <Route path="/books/professional-military-education" element={<BooksPME />} />
         <Route path="/books/reading-lists" element={<BooksReadingLists />} />
         {/* One template, nine series — see src/data/bookCollections.ts */}
         <Route path="/books/series/scarlet-and-gold" element={<BookSeriesPage slug="scarlet-and-gold" />} />

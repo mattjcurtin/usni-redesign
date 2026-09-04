@@ -30,11 +30,11 @@ export default function BooksReadingLists() {
         <CollectionHero
           title="Military Reading Lists"
           breadcrumbLabel="Military Reading Lists"
-          breadcrumbParent={{ label: 'Professional Military Education', href: '/books/pme' }}
+          breadcrumbParent={{ label: 'Professional Military Education', href: '/books/professional-military-education' }}
           hero={{ variant: 'light' }}
         />
 
-        <JumpLinkNav links={readingListsNav} mobileLabel="Reading lists" />
+        <JumpLinkNav links={readingListsNav} />
 
         {serviceLists.map((list, i) => (
           <ReadingListSection

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { BookCollection, CollectionEditor } from '@/data/bookCollections'
 
 /**
@@ -78,7 +79,7 @@ function EditorCard({ editor }: { editor: CollectionEditor }) {
         </p>
       </div>
 
-      <p className="font-body text-sm text-neutral-subtle leading-[1.65]">{editor.bio}</p>
+      <EditorBio bio={editor.bio} />
 
       {editor.email && (
         <div className="border-t border-light-blue pt-4 mt-1">
@@ -130,6 +131,38 @@ function ContactCard({
           {contact.email}
         </a>
       </div>
+    </div>
+  )
+}
+
+/**
+ * Series editor bio, clamped to four lines behind a "Read more" toggle.
+ *
+ * These run 700–1000 characters — a full CV paragraph — which pushed the
+ * proposals address, the one thing a prospective author is here for, well below
+ * the fold of the rail. `line-clamp` keeps the whole bio in the DOM, so it is
+ * still indexed and still findable with a browser search when collapsed.
+ */
+function EditorBio({ bio }: { bio: string }) {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <div className="flex flex-col gap-1.5 items-start">
+      <p
+        className={`font-body text-sm text-neutral-subtle leading-[1.65] ${
+          expanded ? '' : 'line-clamp-4'
+        }`}
+      >
+        {bio}
+      </p>
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
+        className="text-link font-body font-semibold text-sm"
+      >
+        {expanded ? '− Read less' : '+ Read more'}
+      </button>
     </div>
   )
 }

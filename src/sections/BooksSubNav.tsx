@@ -7,7 +7,7 @@ interface SubNavItem {
   /**
    * Extra path prefixes that should light this item up. The PME hub owns the
    * series pages and the reading lists, which live at their own routes rather
-   * than under /books/pme, so they need naming here to keep the section nav
+   * than under the hub's own path, so they need naming here to keep the nav
    * from going blank on a series page.
    */
   alsoActiveUnder?: string[]
@@ -19,7 +19,7 @@ const navItems: SubNavItem[] = [
   { label: 'Author Events', href: '/books/author-events' },
   {
     label: 'Professional Military Education',
-    href: '/books/pme',
+    href: '/books/professional-military-education',
     alsoActiveUnder: ['/books/series', '/books/reading-lists'],
   },
   { label: 'Oral Histories', href: '/books/oral-histories' },
@@ -45,7 +45,7 @@ export default function BooksSubNav() {
       <div className="lg:hidden">
         <button
           onClick={() => setOpen(o => !o)}
-          className="flex items-center justify-center gap-3 w-full h-[53px] px-4"
+          className="flex items-center gap-3 w-full h-[53px] px-6 text-left"
           aria-expanded={open}
           aria-label="Toggle Books section menu"
         >
